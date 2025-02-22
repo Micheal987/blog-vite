@@ -1,30 +1,26 @@
 <script setup lang="ts">
-import {
-  IconHome,
-  IconDown
-} from '@arco-design/web-vue/es/icon';
-import Blog_menu from '../../components/admin/blog_menu.vue';
-import Blog_tags from '../../components/admin/blog_tags.vue';
-import Blog_bread_crumb from '../../components/admin/blog_bread_crumb.vue';
-import Blog_theme from '@/components/common/blog_theme.vue';
-import {useRouter} from "vue-router"
-const router = useRouter()
-const goIndex =()=>{
+import { IconHome, IconDown } from "@arco-design/web-vue/es/icon";
+import Blog_menu from "../../components/admin/blog_menu.vue";
+import Blog_tags from "../../components/admin/blog_tags.vue";
+import Blog_bread_crumb from "../../components/admin/blog_bread_crumb.vue";
+import Blog_theme from "@/components/common/blog_theme.vue";
+import { useRouter } from "vue-router";
+import { useStoreConfig } from "@/store";
+import Blog_logo from "@/components/admin/blog_logo.vue";
+import Blog_user_menu_doption from "@/components/common/blog_user_menu_doption.vue";
+const store = useStoreConfig();
+const router = useRouter();
+const goIndex = () => {
   router.push({
-    path:"/"
-  })
-}
+    path: "/",
+  });
+};
 </script>
 <template>
   <div class="blog_admin">
-    <aside>
-      <div class="blog_log">
-        <img src="/image/log.jpg" alt="">
-        <div class="log_head">
-          <div>feng博客</div>
-          <div>fengwei博客</div>
-        </div>
-      </div>
+    <aside :class="{ collapsed: store.collapsed }">
+      <!-- logo -->
+      <Blog_logo />
       <!-- menu -->
       <Blog_menu />
     </aside>
@@ -37,21 +33,9 @@ const goIndex =()=>{
             <IconHome class="action_icon"></IconHome>
           </div>
           <!-- theme -->
-           <Blog_theme/>
-          <div class="user_info_menu">
-            <a-dropdown :popup-max-height="false">
-              <div class="user_info_menu_dropdown">
-                <img src="/image/user1.jpg" alt="">
-                <span class="user_info_menu_dropdown_name">fengwei</span>
-                <IconDown></IconDown>
-              </div>
-              <template #content>
-                <a-doption>Option 1</a-doption>
-                <a-doption>Option 2</a-doption>
-                <a-doption>Option 3</a-doption>
-              </template>
-            </a-dropdown>
-          </div>
+          <Blog_theme />
+          <!-- usermenu -->
+          <Blog_user_menu_doption />
         </div>
       </div>
       <!-- tag -->
@@ -77,32 +61,13 @@ const goIndex =()=>{
     height: 100vh;
     border-right: 1px solid var(--bg);
     background-color: var(--color-bg-1);
-
-    .blog_log {
-      height: 90px;
-      display: flex;
-      padding: 20px;
-      align-items: center;
-      border-bottom: 1px solid var(--bg);
-
-      img {
-        width: 60px;
-        height: 60px;
-        border-radius: 10px;
-      }
-
-      .log_head {
-        margin-left: 20px;
-
-        >div:nth-child(1) {
-          font-size: 22px;
-        }
-
-        >div:nth-child(2) {
-          margin-top: 10px;
-          font-size: 12px;
-        }
-      }
+    position: relative;
+    transition: all 1s;
+  }
+  aside.collapsed {
+    width: 48px;
+    & ~ main {
+      width: calc(100% - 48px);
     }
   }
 
@@ -111,6 +76,7 @@ const goIndex =()=>{
     overflow-x: hidden;
     overflow-y: auto;
     background-color: var(--color-bg-1);
+    transition: all 1s;
     .blog_head {
       width: 100%;
       height: 60px;
@@ -120,34 +86,11 @@ const goIndex =()=>{
       justify-content: space-between;
       border-bottom: 1px solid var(--bg);
 
-
       .blog_function_menu_area {
         display: flex;
         align-items: center;
-
-        
-
-        .user_info_menu {
-          .user_info_menu_dropdown {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-
-            img {
-              width: 30px;
-              height: 30px;
-              border-radius: 50%;
-            }
-
-            .user_info_menu_dropdown_name {
-              font-size: 16px;
-              margin: 0 5px;
-            }
-          }
-        }
       }
     }
-
 
     .blog_container {
       background-color: var(--bg);

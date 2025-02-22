@@ -1,5 +1,6 @@
 :root{
     --bg:#f0eeee;
+    --login_bg:rgba(255,255,255,0.5)
     
 }
 body{
@@ -7,4 +8,5 @@ body{
 }
 body[arco-theme="dark"]{
     --bg:#302e2e;
+    --login_bg:rgba(0,0,0,0.5)
 }

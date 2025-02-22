@@ -14,6 +14,11 @@ const routes: RouteRecordRaw[] = [
     ],
   },
   {
+    "path": "/login",
+    name: "login",
+    component: () => import("@/view/login/login.vue")
+  },
+  {
     path: "/admin",
     name: "admin",
     meta: { title: "首页" },
@@ -87,6 +92,12 @@ const routes: RouteRecordRaw[] = [
             name: "menu_list",
             meta: { title: "菜单列表" },
             component: () => import("@/view/admin/system/menu_list.vue"),
+          },
+          {
+            path: "log_list",
+            name: "log_list",
+            meta: { title: "系统日志" },
+            component: () => import("@/view/admin/system/log_list.vue"),
           },
         ],
       },

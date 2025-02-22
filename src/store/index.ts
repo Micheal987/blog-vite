@@ -1,10 +1,28 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
-export const usestoreConfig = defineStore(
+import { reactive, ref } from "vue";
+import { parseToken } from "@/utils/parseToken"
+import { Message } from "@arco-design/web-vue";
+export interface UserInfoType {
+  nick_name: string
+  user_id: number
+  role: number
+  token: string
+  avatar: string
+  exp: number
+}
+export const useStoreConfig = defineStore(
   "storeConfig",
   () => {
-    const someState = ref("hello pinia");
-    const theme = ref(true);
+    const collapsed = ref(false); //折叠
+    const theme = ref(true);//主题
+    let userInfo = reactive<UserInfoType>({
+      nick_name: "fengwei",
+      user_id: 0,
+      role: 0,
+      token: "",
+      avatar: "/image/user1.jpg",
+      exp: 0
+    })
     const themeString = (): string => {
       return theme.value ? "light" : "dark"
     }
@@ -31,9 +49,39 @@ export const usestoreConfig = defineStore(
       // }
       setTheme(val)
     }
-    return { someState, theme, setTheme, loadTheme };
+    const setCollapsed = (collapse: boolean) => {
+      collapsed.value = collapse
+    }
+    const setToken = (token: string) => {
+      userInfo.token = token
+      let info = parseToken(token)
+      Object.assign(userInfo, info)
+      localStorage.setItem("userInfo", JSON.stringify(userInfo))
+    }
+    // 加载token
+    const loadToken = () => {
+      let val = localStorage.getItem("userInfo")
+      if (val === null) {
+        return
+      }
+      try {
+        userInfo = JSON.parse(val)
+      } catch (e) {
+
+        return;
+      }
+      // 判断token是不是过期了
+      let exp = Number(userInfo.exp) * 1000
+      let nowTime = new Date().getTime()
+      if (exp - nowTime <= 0) {
+        // 过期
+        Message.warning("登录已过期")
+        return;
+      }
+    }
+    return { collapsed, setCollapsed, theme, setTheme, loadTheme, userInfo, setToken, loadToken };
   },
   {
-    persist: true,
+    persist: true,//持久化插件
   }
 );
