@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { reactive, ref } from "vue";
 import { parseToken } from "@/utils/parseToken"
 import { Message } from "@arco-design/web-vue";
+import { postLogOut } from "@/api/user/user_api"
 export interface UserInfoType {
   nick_name: string
   user_id: number
@@ -16,11 +17,11 @@ export const useStoreConfig = defineStore(
     const collapsed = ref(false); //折叠
     const theme = ref(true);//主题
     let userInfo = reactive<UserInfoType>({
-      nick_name: "fengwei",
+      nick_name: "",
       user_id: 0,
       role: 0,
       token: "",
-      avatar: "/image/user1.jpg",
+      avatar: "",
       exp: 0
     })
     const themeString = (): string => {
@@ -35,18 +36,18 @@ export const useStoreConfig = defineStore(
       document.documentElement.style.colorScheme = themeString()//滚动条颜色
       document.body.setAttribute('arco-theme', themeString()) //主题颜色
       //本地缓存持久化
-      // localStorage.setItem("theme", JSON.stringify(theme))
+      localStorage.setItem("theme", JSON.stringify(theme))
     };
     const loadTheme = () => {
       let val = themeString()
       //本地缓存持久化
-      // let value = localStorage.getItem("theme")
-      // try {
-      //   theme.value = JSON.parse(value as string)
-      //   setTheme(theme.value ? "light" : "dark")
-      // } catch (err) {
-      //   return
-      // }
+      let value = localStorage.getItem("theme")
+      try {
+        theme.value = JSON.parse(value as string)
+        setTheme(theme.value ? "light" : "dark")
+      } catch (err) {
+        return
+      }
       setTheme(val)
     }
     const setCollapsed = (collapse: boolean) => {
@@ -79,9 +80,30 @@ export const useStoreConfig = defineStore(
         return;
       }
     }
-    return { collapsed, setCollapsed, theme, setTheme, loadTheme, userInfo, setToken, loadToken };
+    //注销
+    const logOut = async () => {
+      await postLogOut()
+      userInfo = reactive<UserInfoType>({
+        nick_name: "",
+        user_id: 0,
+        role: 0,
+        token: "",
+        avatar: "",
+        exp: 0
+      })
+    }
+    const isLogin = (): boolean => {
+      return userInfo.role !== 0
+    }
+    const isAdmin = (): boolean => {
+      return userInfo.role !== 1
+    }
+    const isVisitor = (): boolean => {
+      return userInfo.role !== 3
+    }
+    return { collapsed, setCollapsed, theme, setTheme, loadTheme, userInfo, setToken, loadToken, logOut };
   },
-  {
-    persist: true,//持久化插件
-  }
+  // {
+  //   persist: true,//持久化插件
+  // }
 );

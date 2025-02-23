@@ -20,6 +20,10 @@ const dpList: menuList[] = [
 const selectMenu = (value: string | number | Record<string, any> | undefined | any) => {
   let val = value as string
   if (val == 'logout') {
+    store.logOut()
+    router.push({
+      name: 'index',
+    })
     return
   }
   router.push({

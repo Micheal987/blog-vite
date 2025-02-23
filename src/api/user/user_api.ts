@@ -6,3 +6,6 @@ interface loginType {
 export const postLoginEmail = (params: loginType) => {
     return ApiRequest.postRequest<loginType>("/user_login", {}, params)
 }
+export const postLogOut = () => {
+    return ApiRequest.postRequest<string>("user_logout", {})
+}

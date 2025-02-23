@@ -21,7 +21,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: "/admin",
     name: "admin",
-    meta: { title: "首页" },
+    meta: { title: "首页", isLogin: true },
     component: () => import("@/view/admin/index.vue"),
     children: [
       {
@@ -33,12 +33,12 @@ const routes: RouteRecordRaw[] = [
       {
         path: "user_center",
         name: "user_center",
-        meta: { title: "用户中心" },
+        meta: { title: "用户中心", isVisitor: false, isLogin: true },
         children: [
           {
             path: "user_info",
             name: "user_info",
-            meta: { title: "我的信息" },
+            meta: { title: "我的信息", isVisitor: false, isLogin: true },
             component: () => import("@/view/admin/user_center/user_info.vue"),
           },
         ],
@@ -46,7 +46,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: "article",
         name: "article",
-        meta: { title: "文章管理" },
+        meta: { title: "文章管理", isVisitor: false, isLogin: true },
         children: [
           {
             path: "article_list",
@@ -59,12 +59,12 @@ const routes: RouteRecordRaw[] = [
       {
         path: "users",
         name: "users",
-        meta: { title: "用户管理" },
+        meta: { title: "用户管理", isAdmin: true },
         children: [
           {
             path: "users_list",
             name: "users_list",
-            meta: { title: "用户列表" },
+            meta: { title: "用户列表", isAdmin: true },
             component: () => import("@/view/admin/users/user_list.vue"),
           },
         ],
@@ -72,7 +72,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: "chat_group",
         name: "chat_group",
-        meta: { title: "群聊管理" },
+        meta: { title: "群聊管理", isAdmin: true },
         children: [
           {
             path: "chat_list",
@@ -85,7 +85,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: "system",
         name: "system",
-        meta: { title: "系统管理" },
+        meta: { title: "系统管理", isAdmin: true },
         children: [
           {
             path: "menu_list",
@@ -96,7 +96,7 @@ const routes: RouteRecordRaw[] = [
           {
             path: "log_list",
             name: "log_list",
-            meta: { title: "系统日志" },
+            meta: { title: "系统日志", isAdmin: true },
             component: () => import("@/view/admin/system/log_list.vue"),
           },
         ],
