@@ -61,10 +61,11 @@ const rowSelection = reactive<TableRowSelection>({
   onlyCurrent: false,
 })
 //defineEmits
+export type RecordType<T> = T & {}
 const emit = defineEmits<{
   add: [null] //添加
-  edit: [record: TabData] //编辑
-  remove: [record: (number | string)[]] //删除
+  edit: [record: RecordType<any>] //编辑
+  remove: [idList: (number | string)[]] //删除
 }>()
 //init操作组
 const actionOptions = ref<actionOptionType[]>([{ label: '批量删除', value: 0 }]) //操作组选项之一
@@ -146,12 +147,12 @@ const filtelChange = (item: any, val: any) => {
 const add = () => {
   emit('add', null)
 }
-const edit = (record: TabData) => {
+const edit = (record: RecordType<any>) => {
   emit('edit', record)
 }
-const removes = async (record: UserInfoType) => {
+const removes = async (record: RecordType<any>) => {
   //id切片
-  let ids = record.id
+  let ids = record[userList.rowKey]
   resmoveIdsDate([ids])
 }
 //删除

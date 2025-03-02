@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import Blog_table from '@/components/admin/blog_table.vue'
-import { getUserList } from '@/api/user/user_api'
-import type { TabData } from '@arco-design/web-vue/es/tabs/interface'
+import { getUserList, type UserInfoType } from '@/api/user/user_api'
+import type { RecordType } from '@/components/admin/blog_table.vue'
 import { ref } from 'vue'
 import type { actionOptionType, filterOptionType } from '@/components/admin/blog_table.vue'
 import { getRoleList } from '@/api/role/role_api'
@@ -30,7 +30,7 @@ const filterGroup = ref<filterOptionType[]>([
 const add = () => {
   console.log('log')
 }
-const edit = (res: TabData) => {
+const edit = (res: RecordType<UserInfoType>) => {
   console.log(res)
 }
 const removes = (res: any) => {

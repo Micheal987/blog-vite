@@ -52,3 +52,13 @@ export const deleteUserIds = <T>(ids: T[]) => {
         }
     })
 }
+//创建
+interface CreateUserType {
+    nick_name: string
+    user_name: string
+    password: string
+    role: number
+}
+export const postCreateUser = (params: CreateUserType) => {
+    return ApiRequest.postRequest("users", { data: { params } })
+}

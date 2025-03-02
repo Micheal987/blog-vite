@@ -14,7 +14,7 @@ const form = reactive({
 })
 const formRef = ref()
 const props = defineProps<{
-  qqRedirectPath: string
+  qqRedirectPath?: string
 }>()
 const emits = defineEmits<{
   offEject: [value: boolean]
@@ -61,7 +61,7 @@ const loginQQ = async () => {
   //当前窗口跳转
   window.open(res.data, '_self')
 }
-const visibility = ref(false)
+const visibility = ref(false) //游客
 </script>
 <template>
   <div>
