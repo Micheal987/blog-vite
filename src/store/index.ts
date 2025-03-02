@@ -2,8 +2,9 @@ import { defineStore } from "pinia";
 import { reactive, ref } from "vue";
 import { parseToken } from "@/utils/parseToken"
 import { Message } from "@arco-design/web-vue";
-import { postLogOut } from "@/api/user/user_api"
-export interface UserInfoType {
+import { postLogOut, gettUserInfo } from "@/api/user/user_api"
+export interface userStoreInfoType {
+  user_name: string
   nick_name: string
   user_id: number
   role: number
@@ -16,12 +17,13 @@ export const useStoreConfig = defineStore(
   () => {
     const collapsed = ref(false); //折叠
     const theme = ref(true);//主题
-    let userInfo = reactive<UserInfoType>({
+    let userInfo = reactive<userStoreInfoType>({
+      user_name: "",
       nick_name: "",
       user_id: 0,
       role: 0,
       token: "",
-      avatar: "",
+      avatar: "image/user1.jpg",
       exp: 0
     })
     const themeString = (): string => {
@@ -53,10 +55,20 @@ export const useStoreConfig = defineStore(
     const setCollapsed = (collapse: boolean) => {
       collapsed.value = collapse
     }
-    const setToken = (token: string) => {
+    const setToken = async (token: string) => {
       userInfo.token = token
-      let info = parseToken(token)
-      Object.assign(userInfo, info)
+      let info = parseToken(token) //解析token
+      const res = await gettUserInfo()
+      let data = res.data
+      userInfo = {
+        user_name: data.user_name,
+        nick_name: data.nick_name,
+        user_id: info.user_id,
+        role: info.role,
+        token: token,
+        avatar: data.avatar,
+        exp: info.exp
+      }
       localStorage.setItem("userInfo", JSON.stringify(userInfo))
     }
     // 加载token
@@ -66,9 +78,10 @@ export const useStoreConfig = defineStore(
         return
       }
       try {
-        userInfo = JSON.parse(val)
+        userInfo.token = JSON.parse(val)
       } catch (e) {
-
+        //错误
+        clearUserInfo()
         return;
       }
       // 判断token是不是过期了
@@ -77,31 +90,32 @@ export const useStoreConfig = defineStore(
       if (exp - nowTime <= 0) {
         // 过期
         Message.warning("登录已过期")
+        //清除token
+        clearUserInfo()
         return;
       }
     }
     //注销
     const logOut = async () => {
       await postLogOut()
-      userInfo = reactive<UserInfoType>({
-        nick_name: "",
-        user_id: 0,
-        role: 0,
-        token: "",
-        avatar: "",
-        exp: 0
-      })
+      //清掉token
+      clearUserInfo()
+    }
+    //清楚token
+    const clearUserInfo = () => {
+      userInfo = userInfo
+      localStorage.removeItem("userInfo")
     }
     const isLogin = (): boolean => {
       return userInfo.role !== 0
     }
     const isAdmin = (): boolean => {
-      return userInfo.role !== 1
+      return userInfo.role === 1
     }
     const isVisitor = (): boolean => {
-      return userInfo.role !== 3
+      return userInfo.role === 3
     }
-    return { collapsed, setCollapsed, theme, setTheme, loadTheme, userInfo, setToken, loadToken, logOut };
+    return { collapsed, setCollapsed, theme, setTheme, loadTheme, userInfo, setToken, loadToken, logOut, isLogin, isAdmin, isVisitor };
   },
   // {
   //   persist: true,//持久化插件

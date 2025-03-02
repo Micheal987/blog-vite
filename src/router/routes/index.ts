@@ -33,12 +33,12 @@ const routes: RouteRecordRaw[] = [
       {
         path: "user_center",
         name: "user_center",
-        meta: { title: "用户中心", isVisitor: false, isLogin: true },
+        meta: { title: "用户中心", isVisitor: false, isLogin: true, isAdmin: true, },
         children: [
           {
             path: "user_info",
             name: "user_info",
-            meta: { title: "我的信息", isVisitor: false, isLogin: true },
+            meta: { title: "我的信息", isVisitor: false, isLogin: true, isAdmin: true, },
             component: () => import("@/view/admin/user_center/user_info.vue"),
           },
         ],
@@ -46,12 +46,12 @@ const routes: RouteRecordRaw[] = [
       {
         path: "article",
         name: "article",
-        meta: { title: "文章管理", isVisitor: false, isLogin: true },
+        meta: { title: "文章管理", isVisitor: false, isAdmin: true, isLogin: true },
         children: [
           {
             path: "article_list",
             name: "article_list",
-            meta: { title: "文章列表" },
+            meta: { title: "文章列表", isVisitor: false, isAdmin: true, isLogin: true },
             component: () => import("@/view/admin/article/article_list.vue"),
           },
         ],
@@ -77,7 +77,7 @@ const routes: RouteRecordRaw[] = [
           {
             path: "chat_list",
             name: "chat_list",
-            meta: { title: "聊天记录" },
+            meta: { title: "聊天记录", isLogin: true, isVisitor: false },
             component: () => import("@/view/admin/chat_group/chat_list.vue"),
           },
         ],
@@ -90,7 +90,7 @@ const routes: RouteRecordRaw[] = [
           {
             path: "menu_list",
             name: "menu_list",
-            meta: { title: "菜单列表" },
+            meta: { title: "菜单列表", isVisitor: true },
             component: () => import("@/view/admin/system/menu_list.vue"),
           },
           {

@@ -2,15 +2,20 @@
 import { IconLock, IconUser } from '@arco-design/web-vue/es/icon'
 import { reactive, ref } from 'vue'
 import '@/assets/font.css'
-import { postLoginEmail } from '@/api/user/user_api'
+import { getLoginQQ, postLoginEmail } from '@/api/user/user_api'
 import { Message } from '@arco-design/web-vue'
 import { useStoreConfig } from '@/store'
+import { useRoute } from 'vue-router'
+const route = useRoute()
 const store = useStoreConfig()
 const form = reactive({
   user_name: '',
   password: '',
 })
 const formRef = ref()
+const props = defineProps<{
+  qqRedirectPath: string
+}>()
 const emits = defineEmits<{
   offEject: [value: boolean]
 }>()
@@ -20,18 +25,43 @@ const loginEmails = async () => {
     return
   }
   const res = await postLoginEmail(form)
-  store.setToken(res.data as unknown as string)
+  store.setToken(res.data as any)
   if (res.data != null) {
     Message.success(res.msg)
     emits('offEject', false)
   }
 }
+//ref
 const clearFormRef = () => {
   formRef.value.resetFields(Object.keys(form)), formRef.value.clearValidate(Object.keys(form))
 }
+//暴露的方法
 defineExpose({
   clearFormRef,
 })
+//
+const loginQQ = async () => {
+  const res = await getLoginQQ()
+  if (res.code) {
+    Message.warning(res.msg)
+    return
+  }
+  if (res.data == '') {
+    Message.error('未配置qq登录')
+    return
+  }
+  //默认
+  let path = route.path
+  if (props.qqRedirectPath) {
+    //存在就赋值
+    path = props.qqRedirectPath
+  }
+  //存储点击的当前路径
+  localStorage.setItem('redirectPath', path)
+  //当前窗口跳转
+  window.open(res.data, '_self')
+}
+const visibility = ref(false)
 </script>
 <template>
   <div>
@@ -56,15 +86,15 @@ defineExpose({
         label="用户密码"
         :rules="[{ required: true, message: '密码称错误' }]"
         :validate-trigger="['blur']">
-        <a-input v-model="form.password" placeholder="请输入密码">
+        <a-input-password v-model="form.password" placeholder="请输入密码" :defaultVisibility="false" allow-clear>
           <template #prefix><IconLock></IconLock></template>
-        </a-input>
+        </a-input-password>
       </a-form-item>
       <a-button type="primary" status="success" @click="loginEmails">登录</a-button>
       <div class="other_login">
         <div class="label">第三方登录</div>
         <div class="icon">
-          <a href="">
+          <a href="javascript:void(0)" @click="loginQQ">
             <img src="/image/icon/qq.png" alt="" />
           </a>
         </div>

@@ -1,13 +1,6 @@
 import axios, { type AxiosRequestConfig } from "axios"
 import { useStoreConfig } from "@/store"
 import { Message } from "@arco-design/web-vue";
-interface ResponseResult<T> {
-    code: number
-    msg: string
-    type: 'success' | 'error'
-    data: T
-    result: T
-}
 class AxiosRequest {
     private instance
     constructor(config: AxiosRequestConfig) {
@@ -34,9 +27,9 @@ class AxiosRequest {
                 })
         })
     }
-    public postRequest<T, D = ResponseResult<T>>(url: string, config: AxiosRequestConfig, data?: any,): Promise<D> {
+    public postRequest<T>(url: string, config: AxiosRequestConfig, data?: any,): Promise<T> {
         return new Promise((resolve, reject) => {
-            this.instance.post<D>(url, data, config).
+            this.instance.post<T>(url, data, config).
                 then((response) => {
                     resolve(response.data)
                 }).catch((err) => {
@@ -47,6 +40,16 @@ class AxiosRequest {
     public pustRequest<T>(url: string, config: AxiosRequestConfig, data?: any,): Promise<T> {
         return new Promise((resolve, reject) => {
             this.instance.put<T>(url, data, config).
+                then((response) => {
+                    resolve(response.data)
+                }).catch((err) => {
+                    reject(err)
+                })
+        })
+    }
+    public deleteRequest<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
+        return new Promise((resolve, reject) => {
+            this.instance.delete<T>(url, config).
                 then((response) => {
                     resolve(response.data)
                 }).catch((err) => {

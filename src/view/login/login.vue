@@ -1,8 +1,23 @@
 <script lang="ts" setup>
+import { PostLoginQQ } from '@/api/user/user_api'
 import '@/assets/font.css'
 import Login_form from '@/components/common/login_form.vue'
-import { useRouter } from 'vue-router'
+import { Message } from '@arco-design/web-vue'
+import { useRouter, useRoute } from 'vue-router'
+import { useStoreConfig } from '@/store'
 const router = useRouter()
+const route = useRoute()
+const store = useStoreConfig()
+//back
+interface historyState {
+  back?: string
+}
+const back = (window.history.state as historyState).back
+//当前路由
+interface query {
+  flag?: string
+  code?: string
+}
 const ok = () => {
   let back = window.history.state.back
   if (back === null) {
@@ -12,11 +27,31 @@ const ok = () => {
   }
   router.push(back)
 }
+const init = async (query: query) => {
+  if (!query.code || !query.flag) {
+    return
+  }
+  let res = await PostLoginQQ(query.code)
+  if (res.code) {
+    Message.error(res.msg)
+    return
+  }
+  Message.success(res.msg)
+  //
+  store.setToken(res.data)
+  // 重定向到点击登录的页面
+  let path = localStorage.getItem('redirectPath')
+  if (path == '') {
+    path = '/'
+  }
+  router.push(path as string)
+}
+init(route.query)
 </script>
 <template>
   <div class="blog_login">
     <div class="blog_login_mask">
-      <Login_form @off-eject="ok" />
+      <Login_form @off-eject="ok" :qq-redirect-path="back" />
     </div>
   </div>
 </template>

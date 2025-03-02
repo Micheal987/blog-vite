@@ -1,20 +1,21 @@
 <script setup lang="ts">
-import { IconHome, IconDown } from "@arco-design/web-vue/es/icon";
-import Blog_menu from "../../components/admin/blog_menu.vue";
-import Blog_tags from "../../components/admin/blog_tags.vue";
-import Blog_bread_crumb from "../../components/admin/blog_bread_crumb.vue";
-import Blog_theme from "@/components/common/blog_theme.vue";
-import { useRouter } from "vue-router";
-import { useStoreConfig } from "@/store";
-import Blog_logo from "@/components/admin/blog_logo.vue";
-import Blog_user_menu_doption from "@/components/common/blog_user_menu_doption.vue";
-const store = useStoreConfig();
-const router = useRouter();
+import { IconHome } from '@arco-design/web-vue/es/icon'
+import Blog_menu from '../../components/admin/blog_menu.vue'
+import Blog_tags from '../../components/admin/blog_tags.vue'
+import Blog_bread_crumb from '../../components/admin/blog_bread_crumb.vue'
+import Blog_theme from '@/components/common/blog_theme.vue'
+import { useRouter } from 'vue-router'
+import { useStoreConfig } from '@/store'
+import Blog_logo from '@/components/admin/blog_logo.vue'
+import Blog_user_menu_doption from '@/components/common/blog_user_menu_doption.vue'
+const store = useStoreConfig()
+const router = useRouter()
 const goIndex = () => {
   router.push({
-    path: "/",
-  });
-};
+    path: '/',
+  })
+}
+store.loadToken()
 </script>
 <template>
   <div class="blog_admin">

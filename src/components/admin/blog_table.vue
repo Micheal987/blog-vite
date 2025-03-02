@@ -1,0 +1,388 @@
+<script lang="ts" setup>
+import type { ListDateType, PageParamType, ResponseResult } from '@/api/axios'
+import { deleteUserIds, type UserInfoType } from '@/api/user/user_api'
+import { IconRefresh } from '@arco-design/web-vue/es/icon'
+import { reactive, ref, type Component } from 'vue'
+import { Message, type TableColumnData, type TableRowSelection } from '@arco-design/web-vue'
+import { dateTimeFormat } from '@/utils/date'
+import type { TabData } from '@arco-design/web-vue/es/tabs/interface'
+import type { optionType } from '@/types'
+import { getRoleList } from '@/api/role/role_api'
+import { defaultOptionApi } from '@/api'
+
+//tab数据
+const data = reactive<ListDateType<UserInfoType>>({
+  list: [],
+  count: 0,
+})
+//批量操作组actionOption
+export interface actionOptionType extends optionType {
+  callback?: (idList: (string | number)[]) => Promise<boolean>
+}
+//过滤组
+type filterFn = (params?: PageParamType) => Promise<ResponseResult<optionType[]>>
+export interface filterOptionType extends optionType {
+  column: string
+  source: optionType[] | string | filterFn //可以是现成的数据也可以是url地址也可以是一个函数
+  options?: optionType[]
+}
+//props
+const props = defineProps<{
+  url: (parmas: PageParamType) => Promise<ResponseResult<ListDateType<UserInfoType>>>
+  columns: TableColumnData[] //定义的操作组
+  limit?: number //分页每一页几条
+  rowKey?: string //用户id
+  tablename?: string //创建用户
+  defualtDel?: boolean //默认删除
+  noActionGroup?: boolean //不启用操作组
+  actionGroup?: actionOptionType[] //操作组
+  noCheck?: boolean //不能选择
+  filterGroup?: filterOptionType[] //过滤组
+  noConfirm?: boolean //关闭操作组的确认
+  noadd?: boolean //没有添加按钮
+  noDelete?: boolean //没有删除按钮
+  noEdit?: boolean //没有编辑按钮
+  searchPlaceholder?: string //模糊搜索
+  defualtParams?: PageParamType & any //第一次查询的参数
+}>()
+//props 默认值
+const userList = reactive({
+  rowKey: props.rowKey ? props.rowKey : 'id',
+  tablename: props.tablename ? props.tablename : '添加',
+  defualtDel: props.defualtDel ? true : false,
+  searchPlaceholder: props.searchPlaceholder ? props.searchPlaceholder : '搜索',
+})
+//init
+//组件
+const selectedKeys = ref<(string | number)[]>([])
+const rowSelection = reactive<TableRowSelection>({
+  type: 'checkbox',
+  showCheckedAll: true,
+  onlyCurrent: false,
+})
+//defineEmits
+const emit = defineEmits<{
+  add: [null] //添加
+  edit: [record: TabData] //编辑
+  remove: [record: (number | string)[]] //删除
+}>()
+//init操作组
+const actionOptions = ref<actionOptionType[]>([{ label: '批量删除', value: 0 }]) //操作组选项之一
+const actionValue = ref<number | string | undefined | any>(undefined) //执行按钮定义
+//init操作组
+const initActionGroup = () => {
+  //判断props.actionGroup
+  if (!props.actionGroup) return
+  //vaule使用循环的index下标
+  for (let i = 0; i < props.actionGroup.length; i++) {
+    actionOptions.value.push({
+      label: props.actionGroup[i].label,
+      value: i + 1,
+      callback: props.actionGroup[i].callback,
+    })
+  }
+}
+initActionGroup()
+//执行方法
+const actionMethod = () => {
+  // 判断是不是1
+  if (actionValue.value == 0) {
+    if (selectedKeys.value.length == 0) {
+      Message.error('请选择删除的数据')
+      return
+    }
+    resmoveIdsDate(selectedKeys.value)
+    return
+  }
+  //执行操作
+  const action = actionOptions.value[actionValue.value as number]
+  //通过回调函数判断
+  if (!action.callback) return
+  action.callback(selectedKeys.value).then((res) => {
+    if (res) {
+      selectedKeys.value = []
+      getList()
+      return
+    } else {
+      Message.error('操作失败')
+    }
+  })
+}
+//过滤操作init
+const filterGroup = ref<filterOptionType[]>([])
+const initFilter = async () => {
+  if (!props.filterGroup) return
+  for (let i = 0; i < props.filterGroup.length; i++) {
+    //处理source的数据
+    const item = props.filterGroup[i]
+    let source: optionType[] = []
+    switch (typeof item.source) {
+      case 'object':
+        source = item.source as optionType[]
+        break
+      case 'string':
+        let res1 = await defaultOptionApi(item.source as string)
+        source = res1.data
+        break
+      case 'function':
+        let res = await getRoleList()
+        source = res.data
+        break
+    }
+    filterGroup.value.push({
+      label: item.label,
+      value: item.value ? item.value : i,
+      column: item.column,
+      options: source,
+      source: item.source,
+    })
+  }
+}
+initFilter()
+//过滤
+const filtelChange = (item: any, val: any) => {
+  getList({ [item.column]: val })
+}
+const add = () => {
+  emit('add', null)
+}
+const edit = (record: TabData) => {
+  emit('edit', record)
+}
+const removes = async (record: UserInfoType) => {
+  //id切片
+  let ids = record.id
+  resmoveIdsDate([ids])
+}
+//删除
+const resmoveIdsDate = async (idList: (string | number)[]) => {
+  //父组件传删除的bool
+  if (!props.defualtDel) {
+    Message.error('删除未配置')
+    return
+  }
+  //请求
+  let res = await deleteUserIds(idList)
+  if (res.code != 200) {
+    Message.error(res.msg)
+    return
+  }
+  Message.success(res.msg)
+  emit('remove', idList)
+  flush()
+}
+//api请求参数
+const params = reactive<PageParamType>({
+  page: 1,
+  limit: props.limit ? props.limit : 10,
+  key: '',
+})
+//页面loading变量
+const loading = ref()
+
+//api搜索
+//进页面至少调用一次
+const getList = async (p?: PageParamType & any) => {
+  if (p) {
+    Object.assign(params, p)
+  }
+  loading.value = true //loading
+  const res = await props.url(params)
+  data.count = res.data.count
+  data.list = res.data.list
+  loading.value = false //loding 关闭
+}
+//页码变化
+const pageChange = () => {
+  getList()
+}
+//搜索
+const search = () => {
+  //回到第一页
+  params.page = 1
+  getList()
+}
+//刷新
+const flush = () => {
+  getList()
+}
+//getList
+getList(props.defualtParams)
+</script>
+<template>
+  <div class="blog_table">
+    <a-spin class="blog_tabel_dataspin" :loading="loading" tip="加载中">
+      <div>
+        <div class="blog_table_head">
+          <div class="action_create">
+            <a-button type="primary" v-if="!props.noadd" @click="add">{{ userList.tablename }}</a-button>
+          </div>
+          <div class="action_group" v-if="!props.noActionGroup">
+            <a-select
+              v-model="actionValue"
+              placeholder="操作"
+              style="width: 150px"
+              :options="actionOptions"
+              allow-clear
+              value-key="vaule">
+              <!-- <a-option :value=""></a-option> -->
+            </a-select>
+            <a-popconfirm content="是否删除" @ok="actionMethod">
+              <a-button type="primary" status="danger" v-if="actionValue != undefined">执行</a-button>
+            </a-popconfirm>
+          </div>
+          <div class="action_search">
+            <a-input-search
+              :placeholder="userList.searchPlaceholder"
+              v-model="params.key"
+              @keyup.enter="search"
+              @search="search" />
+          </div>
+          <slot name="action_other_search"></slot>
+          <!-- 过滤 -->
+          <div class="action_filter" v-if="filterGroup.length">
+            <a-select
+              style="width: 150px"
+              :placeholder="item.label"
+              :options="item.options"
+              v-for="item in filterGroup"
+              @change="filtelChange(item, $event)"
+              allow-clear></a-select>
+          </div>
+          <slot name="action_filter_other"></slot>
+          <slot name="action_slot"></slot>
+          <div class="action_flush">
+            <a-button @click="flush"><IconRefresh></IconRefresh></a-button>
+          </div>
+        </div>
+        <div class="blog_tabel_data">
+          <div class="blog_table_source">
+            <a-table
+              :row-key="userList.rowKey"
+              :columns="props.columns"
+              v-model:selectedKeys="selectedKeys"
+              :row-selection="props.noCheck ? undefined : rowSelection"
+              :data="data.list"
+              :pagination="false">
+              <template #columns>
+                <template v-for="item in props.columns">
+                  <!-- render优先 -->
+                  <a-table-column v-if="item.render" :title="(item.title as string)">
+                    <template #cell="{ data }">
+                      <component :is="item.render(data)  as Component"></component>
+                    </template>
+                  </a-table-column>
+                  <!-- 没有render -->
+                  <a-table-column
+                    v-else-if="!item.slotName"
+                    :title="(item.title as string)"
+                    :data-index="item.dataIndex"></a-table-column>
+
+                  <!-- 自定义 slotName-->
+                  <a-table-column :title="(item.title as string)" v-else>
+                    <!-- action操作 -->
+                    <template #cell="{ record }" v-if="item.slotName == 'action'">
+                      <div class="blog_table_action">
+                        <slot name="action_left" :record="record"></slot>
+                        <a-button v-if="!props.noEdit" @click="edit(record)">编辑</a-button>
+                        <slot name="action_middle" :record="record"></slot>
+                        <a-popconfirm v-if="!props.noDelete" content="是否确认删除" @ok="removes(record)">
+                          <a-button>删除</a-button>
+                        </a-popconfirm>
+                        <slot name="right" :record="record"></slot>
+                      </div>
+                    </template>
+                    <!-- 时间处理 -->
+                    <template #cell="{ record }" v-else-if="item.slotName == 'created_at'">
+                      <span>{{ dateTimeFormat(record.created_at) }}</span>
+                    </template>
+                    <!--父组件的slot -->
+                    <template #cell="{ record }" v-else>
+                      <slot :name="item.slotName" :record="record"></slot>
+                    </template>
+                  </a-table-column>
+                </template>
+              </template>
+            </a-table>
+          </div>
+          <div class="blog_table_page">
+            <a-pagination
+              :total="data.count"
+              v-model:current="params.page"
+              @change="pageChange"
+              :default-page-size="params.limit"
+              show-total
+              show-jumper
+              show-page-size />
+          </div>
+        </div>
+      </div>
+    </a-spin>
+  </div>
+</template>
+<style lang="scss">
+.blog_table {
+  background-color: var(--color-bg-1);
+  border-radius: 10px;
+  .blog_tabel_dataspin {
+    width: 100%;
+    .blog_table_head {
+      padding: 20px 20px 10px 20px;
+      border-bottom: 1px solid var(--bg);
+      display: flex;
+      align-items: center;
+      position: relative;
+      > div {
+        margin-right: 10px;
+      }
+      .action_group {
+        display: flex;
+        button {
+          margin-left: 10px;
+          padding: 10px 10px;
+          border-radius: 5px;
+        }
+      }
+      .action_filter {
+        display: flex;
+        > .arco-select {
+          margin-right: 10px;
+        }
+      }
+      .action_create {
+        button {
+          border-radius: 5px;
+        }
+      }
+      .action_flush {
+        position: absolute;
+        right: 0;
+        margin-right: 10px;
+        button {
+          padding: 0 10px;
+          border-radius: 5px;
+        }
+      }
+    }
+    .blog_tabel_data {
+      padding: 10px 20px 20px 20px;
+      .blog_table_source {
+        font-size: 24px;
+        .blog_table_action {
+          > button {
+            margin-right: 10px;
+            &:last-child {
+              margin-right: 0;
+            }
+          }
+        }
+      }
+      .blog_table_page {
+        padding-top: 25px;
+        display: flex;
+        justify-content: center;
+      }
+    }
+  }
+}
+</style>
