@@ -17,7 +17,7 @@ export const useStoreConfig = defineStore(
   () => {
     const collapsed = ref(false); //折叠
     const theme = ref(true);//主题
-    let userInfo = {
+    let userInfo: userStoreInfoType = {
       user_name: "",
       nick_name: "",
       user_id: 0,
