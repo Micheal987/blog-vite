@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import type { ListDateType, PageParamType, ResponseResult } from '@/api/axios'
-import { deleteUserIds, type UserInfoType } from '@/api/user/user_api'
+import { deleteUserIds } from '@/api/user/user_api'
+import type { UserInfoType } from '@/api/user/user_api'
 import { IconRefresh } from '@arco-design/web-vue/es/icon'
 import { reactive, ref, type Component } from 'vue'
 import { Message, type TableColumnData, type TableRowSelection } from '@arco-design/web-vue'
 import { dateTimeFormat } from '@/utils/date'
-import type { TabData } from '@arco-design/web-vue/es/tabs/interface'
 import type { optionType } from '@/types'
 import { getRoleList } from '@/api/role/role_api'
 import { defaultOptionApi } from '@/api'
@@ -63,7 +63,7 @@ const rowSelection = reactive<TableRowSelection>({
 //defineEmits
 export type RecordType<T> = T & {}
 const emit = defineEmits<{
-  add: [null] //添加
+  add: [boolean] //添加
   edit: [record: RecordType<any>] //编辑
   remove: [idList: (number | string)[]] //删除
 }>()
@@ -145,7 +145,7 @@ const filtelChange = (item: any, val: any) => {
   getList({ [item.column]: val })
 }
 const add = () => {
-  emit('add', null)
+  emit('add', true)
 }
 const edit = (record: RecordType<any>) => {
   emit('edit', record)
@@ -164,7 +164,7 @@ const resmoveIdsDate = async (idList: (string | number)[]) => {
   }
   //请求
   let res = await deleteUserIds(idList)
-  if (res.code != 200) {
+  if (res.code != 0) {
     Message.error(res.msg)
     return
   }
@@ -209,6 +209,9 @@ const flush = () => {
 }
 //getList
 getList(props.defualtParams)
+defineExpose({
+  getList,
+})
 </script>
 <template>
   <div class="blog_table">

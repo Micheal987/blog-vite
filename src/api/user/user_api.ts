@@ -53,12 +53,20 @@ export const deleteUserIds = <T>(ids: T[]) => {
     })
 }
 //创建
-interface CreateUserType {
+export interface CreateUserRequest {
     nick_name: string
     user_name: string
     password: string
     role: number
 }
-export const postCreateUser = (params: CreateUserType) => {
-    return ApiRequest.postRequest("users", { data: { params } })
+export const postCreateUser = (params: CreateUserRequest) => {
+    return ApiRequest.postRequest<ResponseResult<CreateUserRequest>>("user_create", {}, params)
+}
+export interface UpdateUserRequest {
+    nick_name: string
+    user_id: number | string
+    role: number
+}
+export const putUpdateUser = (params: UpdateUserRequest) => {
+    return ApiRequest.pustRequest<ResponseResult<UpdateUserRequest>>("user_role", {}, params)
 }

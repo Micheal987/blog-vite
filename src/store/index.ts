@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { reactive, ref } from "vue";
+import { ref } from "vue";
 import { parseToken } from "@/utils/parseToken"
 import { Message } from "@arco-design/web-vue";
 import { postLogOut, gettUserInfo } from "@/api/user/user_api"
@@ -17,7 +17,7 @@ export const useStoreConfig = defineStore(
   () => {
     const collapsed = ref(false); //折叠
     const theme = ref(true);//主题
-    let userInfo = reactive<userStoreInfoType>({
+    let userInfo = {
       user_name: "",
       nick_name: "",
       user_id: 0,
@@ -25,7 +25,7 @@ export const useStoreConfig = defineStore(
       token: "",
       avatar: "image/user1.jpg",
       exp: 0
-    })
+    }
     const themeString = (): string => {
       return theme.value ? "light" : "dark"
     }
@@ -70,13 +70,12 @@ export const useStoreConfig = defineStore(
         exp: info.exp
       }
       localStorage.setItem("userInfo", JSON.stringify(userInfo))
+      loadToken()
     }
     // 加载token
     const loadToken = () => {
       let val = localStorage.getItem("userInfo")
-      if (val === null) {
-        return
-      }
+      if (val === null) return
       try {
         userInfo.token = JSON.parse(val)
       } catch (e) {
@@ -85,7 +84,7 @@ export const useStoreConfig = defineStore(
         return;
       }
       // 判断token是不是过期了
-      let exp = Number(userInfo.exp) * 1000
+      let exp = userInfo.exp * 10000
       let nowTime = new Date().getTime()
       if (exp - nowTime <= 0) {
         // 过期
@@ -103,7 +102,15 @@ export const useStoreConfig = defineStore(
     }
     //清楚token
     const clearUserInfo = () => {
-      userInfo = userInfo
+      userInfo = {
+        user_name: "",
+        nick_name: "",
+        user_id: 0,
+        role: 0,
+        token: "",
+        avatar: "image/user1.jpg",
+        exp: 0
+      }
       localStorage.removeItem("userInfo")
     }
     const isLogin = (): boolean => {
@@ -116,8 +123,5 @@ export const useStoreConfig = defineStore(
       return userInfo.role === 3
     }
     return { collapsed, setCollapsed, theme, setTheme, loadTheme, userInfo, setToken, loadToken, logOut, isLogin, isAdmin, isVisitor };
-  },
-  // {
-  //   persist: true,//持久化插件
-  // }
+  }
 );

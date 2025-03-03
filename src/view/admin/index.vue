@@ -15,7 +15,6 @@ const goIndex = () => {
     path: '/',
   })
 }
-store.loadToken()
 </script>
 <template>
   <div class="blog_admin">
