@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import type { ListDateType, PageParamType, ResponseResult } from '@/api/axios'
 import { deleteUserIds } from '@/api/user/user_api'
-import type { UserInfoType } from '@/api/user/user_api'
 import { IconRefresh } from '@arco-design/web-vue/es/icon'
 import { reactive, ref, type Component } from 'vue'
 import { Message, type TableColumnData, type TableRowSelection } from '@arco-design/web-vue'
@@ -11,7 +10,7 @@ import { getRoleList } from '@/api/role/role_api'
 import { defaultOptionApi } from '@/api'
 
 //tab数据
-const data = reactive<ListDateType<UserInfoType>>({
+const data = reactive<ListDateType<any>>({
   list: [],
   count: 0,
 })
@@ -28,7 +27,7 @@ export interface filterOptionType extends optionType {
 }
 //props
 const props = defineProps<{
-  url: (parmas: PageParamType) => Promise<ResponseResult<ListDateType<UserInfoType>>>
+  url: (parmas: PageParamType) => Promise<ResponseResult<ListDateType<any>>>
   columns: TableColumnData[] //定义的操作组
   limit?: number //分页每一页几条
   rowKey?: string //用户id
@@ -44,6 +43,7 @@ const props = defineProps<{
   noEdit?: boolean //没有编辑按钮
   searchPlaceholder?: string //模糊搜索
   defualtParams?: PageParamType & any //第一次查询的参数
+  nopage?: boolean
 }>()
 //props 默认值
 const userList = reactive({
@@ -148,6 +148,7 @@ const add = () => {
   emit('add', true)
 }
 const edit = (record: RecordType<any>) => {
+  console.log(record)
   emit('edit', record)
 }
 const removes = async (record: RecordType<any>) => {
@@ -189,6 +190,7 @@ const getList = async (p?: PageParamType & any) => {
   }
   loading.value = true //loading
   const res = await props.url(params)
+  console.log(res)
   data.count = res.data.count
   data.list = res.data.list
   loading.value = false //loding 关闭
@@ -207,21 +209,24 @@ const search = () => {
 const flush = () => {
   getList()
 }
-//getList
-getList(props.defualtParams)
 defineExpose({
   getList,
 })
+//getList
+getList(props.defualtParams)
 </script>
 <template>
   <div class="blog_table">
+    <!-- spin 加载 spin width100% -->
     <a-spin class="blog_tabel_dataspin" :loading="loading" tip="加载中">
       <div>
         <div class="blog_table_head">
           <div class="action_create">
+            <!-- 添加 -->
             <a-button type="primary" v-if="!props.noadd" @click="add">{{ userList.tablename }}</a-button>
           </div>
           <div class="action_group" v-if="!props.noActionGroup">
+            <!-- 选项 -->
             <a-select
               v-model="actionValue"
               placeholder="操作"
@@ -231,6 +236,7 @@ defineExpose({
               value-key="vaule">
               <!-- <a-option :value=""></a-option> -->
             </a-select>
+            <!-- 二次确认气泡框 -->
             <a-popconfirm content="是否删除" @ok="actionMethod">
               <a-button type="primary" status="danger" v-if="actionValue != undefined">执行</a-button>
             </a-popconfirm>
@@ -253,14 +259,18 @@ defineExpose({
               @change="filtelChange(item, $event)"
               allow-clear></a-select>
           </div>
+          <!-- slot -->
           <slot name="action_filter_other"></slot>
           <slot name="action_slot"></slot>
+          <!-- slot -->
+          <!-- 刷新 -->
           <div class="action_flush">
             <a-button @click="flush"><IconRefresh></IconRefresh></a-button>
           </div>
         </div>
         <div class="blog_tabel_data">
           <div class="blog_table_source">
+            <!-- table -->
             <a-table
               :row-key="userList.rowKey"
               :columns="props.columns"
@@ -270,30 +280,33 @@ defineExpose({
               :pagination="false">
               <template #columns>
                 <template v-for="item in props.columns">
-                  <!-- render优先 -->
+                  <!-- render -->
                   <a-table-column v-if="item.render" :title="(item.title as string)">
                     <template #cell="{ data }">
                       <component :is="item.render(data)  as Component"></component>
                     </template>
                   </a-table-column>
-                  <!-- 没有render -->
+                  <!-- 操作组 -->
                   <a-table-column
                     v-else-if="!item.slotName"
                     :title="(item.title as string)"
                     :data-index="item.dataIndex"></a-table-column>
-
                   <!-- 自定义 slotName-->
                   <a-table-column :title="(item.title as string)" v-else>
                     <!-- action操作 -->
                     <template #cell="{ record }" v-if="item.slotName == 'action'">
                       <div class="blog_table_action">
+                        <!-- action_left -->
                         <slot name="action_left" :record="record"></slot>
                         <a-button v-if="!props.noEdit" @click="edit(record)">编辑</a-button>
+                        <!-- action_middle -->
                         <slot name="action_middle" :record="record"></slot>
+                        <!-- 二次确认气泡框 -->
                         <a-popconfirm v-if="!props.noDelete" content="是否确认删除" @ok="removes(record)">
                           <a-button>删除</a-button>
                         </a-popconfirm>
-                        <slot name="right" :record="record"></slot>
+                        <!-- action_right -->
+                        <slot name="action_right" :record="record"></slot>
                       </div>
                     </template>
                     <!-- 时间处理 -->
@@ -309,7 +322,8 @@ defineExpose({
               </template>
             </a-table>
           </div>
-          <div class="blog_table_page">
+          <!-- 分页 -->
+          <div class="blog_table_page" v-if="!props.nopage">
             <a-pagination
               :total="data.count"
               v-model:current="params.page"

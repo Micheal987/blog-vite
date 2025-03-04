@@ -8,6 +8,8 @@ import { getRoleList } from '@/api/role/role_api'
 import User_create from '@/components/admin/user_create.vue'
 import { Message } from '@arco-design/web-vue'
 import { roleOption } from '@/global/role'
+
+// blog_table父组件 a-table 显示的字段--头部
 const columns = [
   { title: '用户名称', dataIndex: 'user_name' },
   { title: '用户昵称', dataIndex: 'nick_name' },
@@ -22,6 +24,7 @@ const columns = [
   { title: '操作', slotName: 'action' },
 ]
 
+//过滤组
 const filterGroup = ref<filterOptionType[]>([
   {
     label: '角色过滤',
@@ -30,10 +33,14 @@ const filterGroup = ref<filterOptionType[]>([
     source: getRoleList,
   },
 ])
+//更新
+const updateFrom = reactive<UpdateUserRequest>({
+  nick_name: '',
+  user_id: 0,
+  role: 2,
+})
 
-const removes = (res: any) => {
-  console.log(res)
-}
+//操作组
 const actionGroups = ref<actionOptionType[]>([
   {
     label: '批量拉黑',
@@ -43,40 +50,43 @@ const actionGroups = ref<actionOptionType[]>([
     },
   },
 ])
-const visible = ref(false)
 
-const blogTableRef = ref()
+const visible = ref(false) //modal开关
+const blogTableRef = ref() //父组件 ref
+
+//emits 调用父组的getlist
 const createOk = () => {
   blogTableRef.value.getlist()
 }
+//emit--upadte事件
 const visibleUpdate = (val: boolean) => {
-  console.log(val)
   visible.value = val
 }
-const updateFrom = reactive<UpdateUserRequest>({
-  nick_name: '',
-  user_id: 0,
-  role: 2,
-})
-const formRef = ref()
-const updatevisible = ref(false)
-const edit = async (res: RecordType<UserInfoType>) => {
+const formRef = ref() //表单的ref
+const updatevisible = ref(false) //updatevisible 编辑的modal
+//emits 的edit
+const edit = (res: RecordType<UserInfoType>) => {
+  //赋值 父组件传过来的tab值
   updateFrom.nick_name = res.nick_name
   updateFrom.user_id = res.id
-  updateFrom.user_id = res.role_id
-  updatevisible.value = true
+  updateFrom.role = res.role_id
+  updatevisible.value = true //关闭modal
 }
+//modla
+//v-on:before-ok 点击确定后触发 更新api
 const updateUserOk = async () => {
-  let val = await formRef.value.validate()
-  if (val) return false
-  // let res = await putUpdateUser(updateFrom)
-  // Message.success(res.msg)
-  // if (res.code != 0) {
-  //   Message.error(res.msg)
-  //   return
-  // }
-  return true
+  let val = await formRef.value.validate() //表单验证ref的validate
+  if (val) return false //有值代表校验不通过
+  let res = await putUpdateUser(updateFrom) //api
+  Message.success(res.msg)
+  if (res.code != 200) {
+    Message.error(res.msg)
+    return
+  }
+  return true //关闭modla
 }
+//删除
+const removes = (idList: (string | number)[]) => {}
 </script>
 <template>
   <div>

@@ -9,7 +9,7 @@ const props = defineProps<{
 }>()
 const emits = defineEmits<{
   update: [visible: boolean]
-  ok: [void]
+  ok: [vaule: boolean]
 }>()
 const form = reactive<CreateUserRequest & { re_password: string }>({
   user_name: '',
@@ -40,7 +40,7 @@ const createUser = async () => {
   Object.assign(form, clearField)
 
   emits('update', false)
-  emits('ok')
+  emits('ok', false)
   return true
 }
 const cancel = () => {
