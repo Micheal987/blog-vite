@@ -8,11 +8,11 @@ import { ref } from 'vue'
 const columns = [
   { title: '菜单标题', dataIndex: 'title' },
   { title: '路径', dataIndex: 'path' },
-  { title: 'slogan', slotName: 'slogan' },
+  { title: 'slogan', dataIndex: 'slogan' },
   { title: '简介', dataIndex: 'abstract' },
   { title: 'slogan切换时间', dataIndex: 'banner_time' },
   { title: '简介切换时间', dataIndex: 'abstract_time' },
-  { title: 'banners', dataIndex: 'banners' },
+  { title: 'banners', slotName: 'banners' },
   { title: '更新时间', dataIndex: 'created_at' },
   { title: '操作', slotName: 'action' },
 ]
@@ -44,7 +44,7 @@ const removes = (idList: (string | number)[]) => {
 }
 </script>
 <template>
-  <div>
+  <div class="menu_list_view">
     <Menu_create v-model:visible="visible" @update="visibleUpdate"></Menu_create>
     <Blog_table
       :url="gteMenuList as any"
@@ -61,11 +61,23 @@ const removes = (idList: (string | number)[]) => {
       :actionGroup="actionGroups"
       @remove="removes">
       <template #banners="{ record }: { record: Menutype }">
-        <div>
-          <a-image v-for="item in record.banners" height="40px" :key="item.id" :src="item.path"></a-image>
+        <div class="menu_cloumn_image">
+          <a-image v-for="item in record.banners" height="50px" :key="item.id" :src="item.path"></a-image>
         </div>
       </template>
     </Blog_table>
   </div>
 </template>
-<style lang="scss"></style>
+<style lang="scss">
+.menu_list_view {
+  .menu_cloumn_image {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+    row-gap: 5px;
+    .arco-image-img {
+      border-radius: 5px;
+    }
+  }
+}
+</style>

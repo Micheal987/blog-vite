@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
 import type { MenuCreateRequest } from '@/api/menu/menu_api'
+import type { ImageType } from '@/api/image/image_api'
+import { getImageInfo } from '@/api/image/image_api'
 //props
 const props = defineProps<{
   visible: boolean //modal
@@ -31,6 +33,12 @@ const createtMenu = async () => {
   if (val) return false //有值代表校验不通过
   form.abstract = form.abstractString.split('\n') //按\n分
 }
+let imageList = ref<ImageType[]>([])
+const imageInfo = async () => {
+  const res = await getImageInfo()
+  imageList.value = res.data
+}
+imageInfo()
 </script>
 <template>
   <div>
@@ -79,9 +87,28 @@ const createtMenu = async () => {
         </a-form-item>
         <!-- banners图 -->
         <a-form-item field="image_sort_list" label="banners图" :validate-trigger="['blur']">
-          <a-select v-model="form.image_sort_list" placeholder="选择banners图"></a-select>
+          <a-select v-model="form.image_sort_list" multiple placeholder="选择banners图">
+            <a-option v-for="item in imageList" :key="item.id" :value="item.id">
+              <div class="banners_image_div">
+                <img height="40px" :src="item.path" alt="" ></img>
+                <span>{{ item.name }}</span>
+              </div>
+            </a-option>
+          </a-select>
         </a-form-item>
       </a-form>
     </a-modal>
   </div>
 </template>
+<style lang="scss">
+.banners_image_div {
+  display: flex;
+  align-items: center;
+  position: 0 10px;
+  img {
+    height: 40px;
+    border-radius: 10px;
+    margin-right: 5px;
+  }
+}
+</style>

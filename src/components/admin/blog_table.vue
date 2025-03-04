@@ -102,7 +102,7 @@ const actionMethod = () => {
   action.callback(selectedKeys.value).then((res) => {
     if (res) {
       selectedKeys.value = []
-      getList()
+      infoList()
       return
     } else {
       Message.error('操作失败')
@@ -142,7 +142,7 @@ const initFilter = async () => {
 initFilter()
 //过滤
 const filtelChange = (item: any, val: any) => {
-  getList({ [item.column]: val })
+  infoList({ [item.column]: val })
 }
 const add = () => {
   emit('add', true)
@@ -184,7 +184,7 @@ const loading = ref()
 
 //api搜索
 //进页面至少调用一次
-const getList = async (p?: PageParamType & any) => {
+const infoList = async (p?: PageParamType & any) => {
   if (p) {
     Object.assign(params, p)
   }
@@ -197,23 +197,23 @@ const getList = async (p?: PageParamType & any) => {
 }
 //页码变化
 const pageChange = () => {
-  getList()
+  infoList()
 }
 //搜索
 const search = () => {
   //回到第一页
   params.page = 1
-  getList()
+  infoList()
 }
 //刷新
 const flush = () => {
-  getList()
+  infoList()
 }
 defineExpose({
-  getList,
+  infoList,
 })
-//getList
-getList(props.defualtParams)
+//infoList
+infoList(props.defualtParams)
 </script>
 <template>
   <div class="blog_table">

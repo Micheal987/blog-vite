@@ -54,9 +54,9 @@ const actionGroups = ref<actionOptionType[]>([
 const visible = ref(false) //modal开关
 const blogTableRef = ref() //父组件 ref
 
-//emits 调用父组的getlist
+//emits 调用父组的infolist
 const createOk = () => {
-  blogTableRef.value.getlist()
+  blogTableRef.value.infoList()
 }
 //emit--upadte事件
 const visibleUpdate = (val: boolean) => {
