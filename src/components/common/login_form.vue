@@ -2,7 +2,7 @@
 import { IconLock, IconUser } from '@arco-design/web-vue/es/icon'
 import { reactive, ref } from 'vue'
 import '@/assets/font.css'
-import { getLoginQQ, postLoginEmail } from '@/api/user/user_api'
+import { getLoginQQApi, postLoginEmailApi } from '@/api/user/user_api'
 import { Message } from '@arco-design/web-vue'
 import { useStoreConfig } from '@/store'
 import { useRoute } from 'vue-router'
@@ -24,7 +24,7 @@ const loginEmails = async () => {
   if (val) {
     return
   }
-  const res = await postLoginEmail(form)
+  const res = await postLoginEmailApi(form)
   store.setToken(res.data as any)
   if (res.data != null) {
     Message.success(res.msg)
@@ -41,7 +41,7 @@ defineExpose({
 })
 //
 const loginQQ = async () => {
-  const res = await getLoginQQ()
+  const res = await getLoginQQApi()
   if (res.code) {
     Message.warning(res.msg)
     return
@@ -86,7 +86,12 @@ const visibility = ref(false) //游客
         label="用户密码"
         :rules="[{ required: true, message: '密码称错误' }]"
         :validate-trigger="['blur']">
-        <a-input-password v-model="form.password" placeholder="请输入密码" :defaultVisibility="false" allow-clear>
+        <a-input-password
+          v-model="form.password"
+          placeholder="请输入密码"
+          :defaultVisibility="true"
+          autocomplete="off"
+          allow-clear>
           <template #prefix><IconLock></IconLock></template>
         </a-input-password>
       </a-form-item>

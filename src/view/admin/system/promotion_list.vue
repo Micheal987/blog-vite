@@ -1,20 +1,17 @@
 <script setup lang="ts">
-import { gteMenuListApi, type BannerType, type MenuCreateRequest, type MenuType } from '@/api/menu/menu_api'
+import { defaultPromotionForm, getAdvertListApi } from '@/api/promotion/promotion_api'
 import Blog_table from '@/components/admin/blog_table.vue'
 import type { RecordType } from '@/components/admin/blog_table.vue'
-import Menu_create from '@/components/admin/menu_create.vue'
 import { reactive, ref } from 'vue'
-import { defaultMenuFrom } from '@/api/menu/menu_api'
+import type { promotionCreateType, promotionType } from '@/api/promotion/promotion_api'
+import Promotion_create from '@/components/admin/promotion_create.vue'
 // blog_table父组件 a-table 显示的字段--头部
 const columns = [
-  { title: '序号', dataIndex: 'sort' },
-  { title: '菜单标题', dataIndex: 'title' },
-  { title: '路径', dataIndex: 'path' },
-  { title: 'slogan', dataIndex: 'slogan' },
-  { title: '简介', dataIndex: 'abstract' },
-  { title: 'slogan切换时间', dataIndex: 'banner_time' },
-  { title: '简介切换时间', dataIndex: 'abstract_time' },
-  { title: 'banners', slotName: 'banners' },
+  { title: '广告id', dataIndex: 'id' },
+  { title: '广告标题', dataIndex: 'title' },
+  { title: '图片', slotName: 'images' },
+  { title: '链接', slotName: 'href' },
+  { title: '是否显示', slotName: 'is_show' },
   { title: '更新时间', dataIndex: 'created_at' },
   { title: '操作', slotName: 'action' },
 ]
@@ -32,21 +29,16 @@ const actionGroups = ref([
   },
 ])
 //record
-const recordData = reactive<MenuCreateRequest & { banners: BannerType[]; id?: number }>({
+const recordData = reactive<promotionType>({
+  href: '',
+  images: '',
+  is_show: false,
   title: '',
-  path: '',
-  slogan: '',
-  abstract: [],
-  abstract_time: 1,
-  banner_time: 1,
-  sort: 1,
-  image_sort_list: [],
-  banners: [],
+  id: 0,
 })
 const add = () => {
-  Object.assign(recordData, defaultMenuFrom)
-  recordData.banners = []
-  recordData.id = undefined
+  Object.assign(recordData, defaultPromotionForm)
+  recordData.id = undefined as any
   visible.value = true
 }
 //emit --emit
@@ -67,29 +59,36 @@ const removes = (idList: (string | number)[]) => {
 </script>
 <template>
   <div class="menu_list_view">
-    <Menu_create
+    <Promotion_create
       v-model:visible="visible"
-      @update="visibleUpdate"
       @ok="blogTableRef.infoList()"
-      :record="recordData"></Menu_create>
+      @update="visibleUpdate"
+      :record="recordData"></Promotion_create>
     <Blog_table
-      :url="gteMenuListApi as any"
+      :url="getAdvertListApi as any"
       :columns="columns"
       ref="blogTableRef"
-      noCheck
-      search-placeholder="搜索菜单名称"
+      search-placeholder="搜索广告名称"
       :defualt-params="{ role: 1 }"
       defualtDel
-      nopage
       :limit="10"
       @add="add"
       @edit="edit"
       :actionGroup="actionGroups"
       @remove="removes">
-      <template #banners="{ record }: { record: MenuType }">
+      <template #images="{ record }: { record: promotionType }">
         <div class="menu_cloumn_image">
-          <a-image v-for="item in record.banners" height="50px" :key="item.id" :src="item.path"></a-image>
+          <a-image height="50px" :src="record.images"></a-image>
         </div>
+      </template>
+      <template #href="{ record }: { record: promotionType }">
+        <div class="menu_cloumn_image">
+          <a-link :href="record.href" target="_blank">{{ record.href }}</a-link>
+        </div>
+      </template>
+      <template #is_show="{ record }: { record: promotionType }">
+        <a-tag color="arcoblue" v-if="record.is_show">显示</a-tag>
+        <a-tag color="arcoblue" v-else>不显示</a-tag>
       </template>
     </Blog_table>
   </div>

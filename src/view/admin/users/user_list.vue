@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import Blog_table from '@/components/admin/blog_table.vue'
-import { getUserList, putUpdateUser, type UpdateUserRequest, type UserInfoType } from '@/api/user/user_api'
+import { getUserListApi, putUpdateUserApi, type UpdateUserRequest, type UserInfoType } from '@/api/user/user_api'
 import type { RecordType } from '@/components/admin/blog_table.vue'
 import { reactive, ref } from 'vue'
 import type { actionOptionType, filterOptionType } from '@/components/admin/blog_table.vue'
-import { getRoleList } from '@/api/role/role_api'
+import { getRoleListApi } from '@/api/role/role_api'
 import User_create from '@/components/admin/user_create.vue'
 import { Message } from '@arco-design/web-vue'
 import { roleOption } from '@/global/role'
@@ -30,7 +30,7 @@ const filterGroup = ref<filterOptionType[]>([
     label: '角色过滤',
     value: 0,
     column: 'role',
-    source: getRoleList,
+    source: getRoleListApi,
   },
 ])
 //更新
@@ -77,7 +77,7 @@ const edit = (res: RecordType<UserInfoType>) => {
 const updateUserOk = async () => {
   let val = await formRef.value.validate() //表单验证ref的validate
   if (val) return false //有值代表校验不通过
-  let res = await putUpdateUser(updateFrom) //api
+  let res = await putUpdateUserApi(updateFrom) //api
   Message.success(res.msg)
   if (res.code != 200) {
     Message.error(res.msg)
@@ -106,7 +106,7 @@ const removes = (idList: (string | number)[]) => {}
     </a-modal>
     <User_create v-model:visible="visible" @update="visibleUpdate" @ok="createOk"></User_create>
     <Blog_table
-      :url="getUserList"
+      :url="getUserListApi"
       :columns="columns"
       ref="blogTableRef"
       search-placeholder="搜索用户名称和昵称"

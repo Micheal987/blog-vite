@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { PostLoginQQ } from '@/api/user/user_api'
+import { postLoginQQApi } from '@/api/user/user_api'
 import '@/assets/font.css'
 import Login_form from '@/components/common/login_form.vue'
 import { Message } from '@arco-design/web-vue'
@@ -31,7 +31,7 @@ const init = async (query: query) => {
   if (!query.code || !query.flag) {
     return
   }
-  let res = await PostLoginQQ(query.code)
+  let res = await postLoginQQApi(query.code)
   if (res.code) {
     Message.error(res.msg)
     return

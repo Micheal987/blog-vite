@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import type { ListDateType, PageParamType, ResponseResult } from '@/api/axios'
-import { deleteUserIds } from '@/api/user/user_api'
+import { deleteUserIdsApi } from '@/api/user/user_api'
 import { IconRefresh } from '@arco-design/web-vue/es/icon'
 import { reactive, ref, type Component } from 'vue'
 import { Message, type TableColumnData, type TableRowSelection } from '@arco-design/web-vue'
 import { dateTimeFormat } from '@/utils/date'
 import type { optionType } from '@/types'
-import { getRoleList } from '@/api/role/role_api'
+import { getRoleListApi } from '@/api/role/role_api'
 import { defaultOptionApi } from '@/api'
 
 //tab数据
@@ -126,7 +126,7 @@ const initFilter = async () => {
         source = res1.data
         break
       case 'function':
-        let res = await getRoleList()
+        let res = await getRoleListApi()
         source = res.data
         break
     }
@@ -164,7 +164,7 @@ const resmoveIdsDate = async (idList: (string | number)[]) => {
     return
   }
   //请求
-  let res = await deleteUserIds(idList)
+  let res = await deleteUserIdsApi(idList)
   if (res.code != 0) {
     Message.error(res.msg)
     return

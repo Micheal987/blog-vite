@@ -4,17 +4,17 @@ interface loginType {
     user_name: string
     password: string
 }
-export const postLoginEmail = (params: loginType) => {
+export const postLoginEmailApi = (params: loginType) => {
     return ApiRequest.postRequest<ResponseResult<loginType>>("/user_login", {}, params)
 }
-export const postLogOut = () => {
+export const postLogOutApi = () => {
     return ApiRequest.postRequest<ResponseResult<string>>("/user_logout", {})
 }
-export const getLoginQQ = () => {
+export const getLoginQQApi = () => {
     return ApiRequest.getRequest<ResponseResult<string>>("/qq_login_path", {})
 }
 
-export const PostLoginQQ = (code: string) => {
+export const postLoginQQApi = (code: string) => {
     return ApiRequest.postRequest<ResponseResult<string>>("/qq_login", { params: code })
 }
 //
@@ -37,15 +37,15 @@ export interface UserInfoType {
     link: string // 跳转链接
 }
 //用户信息
-export const gettUserInfo = () => {
+export const gettUserInfoApi = () => {
     return ApiRequest.getRequest<ResponseResult<UserInfoType>>("/user", {})
 }
 //用户列表
-export const getUserList = (params?: PageParamType) => {
+export const getUserListApi = (params?: PageParamType) => {
     return ApiRequest.getRequest<ResponseResult<ListDateType<UserInfoType>>>("/user_list", { params: params })
 }
 //删除
-export const deleteUserIds = <T>(ids: T[]) => {
+export const deleteUserIdsApi = <T>(ids: T[]) => {
     return ApiRequest.deleteRequest<ResponseResult<string>>("/user_remove", {
         data: {
             id_list: ids
@@ -59,7 +59,7 @@ export interface CreateUserRequest {
     password: string
     role: number
 }
-export const postCreateUser = (params: CreateUserRequest) => {
+export const postCreateUserApi = (params: CreateUserRequest) => {
     return ApiRequest.postRequest<ResponseResult<CreateUserRequest>>("user_create", {}, params)
 }
 export interface UpdateUserRequest {
@@ -67,6 +67,6 @@ export interface UpdateUserRequest {
     user_id: number | string
     role: number
 }
-export const putUpdateUser = (params: UpdateUserRequest) => {
+export const putUpdateUserApi = (params: UpdateUserRequest) => {
     return ApiRequest.pustRequest<ResponseResult<UpdateUserRequest>>("user_role", {}, params)
 }

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { postCreateUser } from '@/api/user/user_api'
+import { postCreateUserApi } from '@/api/user/user_api'
 import type { CreateUserRequest } from '@/api/user/user_api'
 import { roleOption } from '@/global/role'
 import { Message } from '@arco-design/web-vue'
@@ -30,7 +30,7 @@ const resvalidatorPassword = (value: string | undefined, callback: (error?: stri
 const createUser = async () => {
   let val = await formRef.value.validate()
   if (val) return false
-  let res = await postCreateUser(form)
+  let res = await postCreateUserApi(form)
   Message.success(res.msg)
   console.log(res)
   if (res.code != 0) {

@@ -4,6 +4,6 @@ export interface ImageType {
     path: string
     name: string
 }
-export const getImageInfo = () => {
+export const getImageInfoApi = () => {
     return ApiRequest.getRequest<ResponseResult<ImageType[]>>("/image_name", {})
 }

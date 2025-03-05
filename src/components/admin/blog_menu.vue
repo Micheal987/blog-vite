@@ -94,6 +94,13 @@ const menuList: MenuType[] = [
       },
       {
         key: '5-2',
+        title: '广告列表',
+        icon: IconUser,
+        name: 'promotion_list',
+        child: [],
+      },
+      {
+        key: '5-3',
         title: '系统日志',
         icon: IconUser,
         name: 'log_list',
