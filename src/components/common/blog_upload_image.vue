@@ -2,15 +2,22 @@
 import { useStoreConfig } from '@/store'
 import { type FileItem, Message } from '@arco-design/web-vue'
 import type { ResponseResult } from '@/api/axios'
-import { ref, watch } from 'vue'
+import { reactive, ref, watch } from 'vue'
 const store = useStoreConfig()
 const props = defineProps<{
   modelVal: string
+  placeholder?: string
 }>()
-const imageStr = ref('')
-watch(()=>props.modelVal,()=>{
-  imageStr.value = props.modelVal
+const defaultProps = reactive({
+  placeholder: props.placeholder ? props.placeholder : '图片上传链接',
 })
+const imageStr = ref('')
+watch(
+  () => props.modelVal,
+  () => {
+    imageStr.value = props.modelVal
+  },
+)
 const emits = defineEmits<{
   updateImage: [value: string]
 }>()
@@ -21,7 +28,7 @@ const valueInput = (value: string) => {
 const setHeader = {
   token: store.userInfo.token,
 }
-const imageSuccessEnet = (file:FileItem)=>{
+const imageSuccessEnet = (file: FileItem) => {
   const response = file.response as ResponseResult<any>
   if (response.code) {
     Message.error(response.msg)
@@ -40,8 +47,13 @@ watch(imageStr, () => {
 <template>
   <div class="blog_upload_image">
     <div class="line">
-      <a-input placeholder="上传图片链接" v-model="imageStr" @input="valueInput"></a-input>
-      <a-upload :show-file-list="false" action="/api/images" name="images" :headers="setHeader"  @success="imageSuccessEnet" />
+      <a-input :placeholder="defaultProps.placeholder" v-model="imageStr" @input="valueInput"></a-input>
+      <a-upload
+        :show-file-list="false"
+        action="/api/images"
+        name="images"
+        :headers="setHeader"
+        @success="imageSuccessEnet" />
     </div>
     <a-image :src="imageStr" height="80px" v-if="imageStr"></a-image>
   </div>
@@ -56,7 +68,7 @@ watch(imageStr, () => {
     .arco-upload-wrapper {
       display: inherit;
     }
-    .arco-image-img{
+    .arco-image-img {
       margin-top: 10px;
       object-fit: cover;
       max-width: 100%;

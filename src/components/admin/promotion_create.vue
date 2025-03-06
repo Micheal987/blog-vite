@@ -49,7 +49,7 @@ const beforeOpen = () => {
 //创建菜单
 const okHandler = async () => {
   let val = await formRef.value.validate() //验证规则为undfind代表验证通过
-  console.log('ok',val)
+  console.log('ok', val)
   if (val) return false //有值代表校验不通过
   let res
   if (editId.value) {
@@ -67,9 +67,9 @@ const okHandler = async () => {
   emits('update', false)
 }
 //emits--updateImage
-const updateImage =(val:string)=>{
+const updateImage = (val: string) => {
   form.images = val
-  console.log("updateImage",val)
+  console.log('updateImage', val)
 }
 </script>
 <template>
@@ -105,7 +105,10 @@ const updateImage =(val:string)=>{
           label="图片链接"
           :rules="[{ required: true, message: '图片链接不能为空' }]"
           :validate-trigger="['blur']">
-          <blog_upload_image @updateImage="updateImage"  :model-val="form.images"></blog_upload_image>
+          <blog_upload_image
+            @updateImage="updateImage"
+            v-model="form.images"
+            :model-val="form.images"></blog_upload_image>
         </a-form-item>
         <!-- 是否显示 -->
         <a-form-item field="abstractString" label="是否显示" :validate-trigger="['blur']">

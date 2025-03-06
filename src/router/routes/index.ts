@@ -110,6 +110,39 @@ const routes: RouteRecordRaw[] = [
             name: "system_system",
             meta: { title: "系统配置", isAdmin: true },
             component: () => import("@/view/admin/system/system.vue"),
+            redirect: "/admin/system/system_system/site",
+            children: [
+              {
+                path: "site",
+                name: "site_config",
+                meta: { title: "网站配置", isAdmin: true },
+                component: () => import("@/view/admin/system/config/site_config.vue"),
+              },
+              {
+                path: "email",
+                name: "email_config",
+                meta: { title: "邮箱配置", isAdmin: true },
+                component: () => import("@/view/admin/system/config/email_config.vue"),
+              },
+              {
+                path: "qiniu",
+                name: "qiniu_config",
+                meta: { title: "网站配置", isAdmin: true },
+                component: () => import("@/view/admin/system/config/qiniu_config.vue"),
+              },
+              {
+                path: "qq",
+                name: "qq_config",
+                meta: { title: "网站配置", isAdmin: true },
+                component: () => import("@/view/admin/system/config/qq_config.vue"),
+              },
+              {
+                path: "jwt",
+                name: "jwt_config",
+                meta: { title: "网站配置", isAdmin: true },
+                component: () => import("@/view/admin/system/config/jwt_config.vue"),
+              }
+            ]
           },
         ],
       },

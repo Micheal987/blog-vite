@@ -21,11 +21,9 @@ const emits = defineEmits<{
 }>()
 const loginEmails = async () => {
   let val = await formRef.value.validate()
-  if (val) {
-    return
-  }
+  if (val) return
   const res = await postLoginEmailApi(form)
-  store.setToken(res.data as any)
+  store.setToken(res.data)
   if (res.data != null) {
     Message.success(res.msg)
     emits('offEject', false)
