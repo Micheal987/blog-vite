@@ -3,7 +3,7 @@ import { defaultPromotionForm, getAdvertListApi } from '@/api/promotion/promotio
 import Blog_table from '@/components/admin/blog_table.vue'
 import type { RecordType } from '@/components/admin/blog_table.vue'
 import { reactive, ref } from 'vue'
-import type { promotionCreateType, promotionType } from '@/api/promotion/promotion_api'
+import type { promotionCreateType,promotionType } from '@/api/promotion/promotion_api'
 import Promotion_create from '@/components/admin/promotion_create.vue'
 // blog_table父组件 a-table 显示的字段--头部
 const columns = [
@@ -29,7 +29,7 @@ const actionGroups = ref([
   },
 ])
 //record
-const recordData = reactive<promotionType>({
+const recordData = reactive<promotionCreateType>({
   href: '',
   images: '',
   is_show: false,
@@ -38,7 +38,7 @@ const recordData = reactive<promotionType>({
 })
 const add = () => {
   Object.assign(recordData, defaultPromotionForm)
-  recordData.id = undefined as any
+  recordData.id = undefined
   visible.value = true
 }
 //emit --emit

@@ -19,6 +19,7 @@ export interface promotionCreateType {
     images: string
     is_show: boolean
     title: string
+    id?: number|undefined
 }
 export const defaultPromotionForm = {
     href: "",
