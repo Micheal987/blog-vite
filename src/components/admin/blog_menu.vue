@@ -106,6 +106,13 @@ const menuList: MenuType[] = [
         name: 'log_list',
         child: [],
       },
+      {
+        key: '5-4',
+        title: '系统配置',
+        icon: IconUser,
+        name: 'system_system',
+        child: [],
+      },
     ],
   },
 ]
