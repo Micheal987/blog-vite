@@ -86,7 +86,9 @@ const updateUserOk = async () => {
   return true //关闭modla
 }
 //删除
-const removes = (idList: (string | number)[]) => {}
+//emit 传idList的
+const removes = () => {
+}
 </script>
 <template>
   <div>

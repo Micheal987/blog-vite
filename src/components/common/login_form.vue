@@ -61,7 +61,6 @@ const loginQQ = async () => {
   //当前窗口跳转
   window.open(res.data, '_self')
 }
-const visibility = ref(false) //游客
 </script>
 <template>
   <div>
