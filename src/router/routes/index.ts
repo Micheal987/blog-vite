@@ -105,6 +105,12 @@ const routes: RouteRecordRaw[] = [
             meta: { title: "系统日志", isAdmin: true },
             component: () => import("@/view/admin/system/log_list.vue"),
           },
+          {
+            path: "system_system",
+            name: "system_system",
+            meta: { title: "系统配置", isAdmin: true },
+            component: () => import("@/view/admin/system/system.vue"),
+          },
         ],
       },
     ],
