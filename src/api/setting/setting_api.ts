@@ -54,6 +54,9 @@ export interface QiniuType {
     record_dir: string
 }
 export type SettingType = 'qq' | 'qiniu' | 'setting' | 'email'
-export const getSettingInfoApi = <T extends [EmailType | QQType | JwtType | QiniuType]>(name: SettingType) => {
+export const getSettingInfoApi = <T extends EmailType | QQType | JwtType | QiniuType>(name: SettingType) => {
     return ApiRequest.getRequest<ResponseResult<T>>('/setting/' + name, {})
+}
+export const putSettingUpdateApi =  <T extends EmailType | QQType | JwtType | QiniuType>(name: SettingType,data:T) => {
+    return ApiRequest.pustRequest<ResponseResult<string>>('/setting/' + name, {},data)
 }

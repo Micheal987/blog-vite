@@ -2,6 +2,9 @@
 import type { EmailType } from '@/api/setting/setting_api'
 import { reactive, ref } from 'vue'
 import Blog_title from '@/components/common/blog_title.vue'
+import { getSettingInfoApi, putSettingUpdateApi } from '@/api/setting/setting_api.ts'
+import { Message } from '@arco-design/web-vue'
+import type { ResponseResult } from '@/api/axios'
 
 const form = reactive<EmailType>({
   host: '',
@@ -13,17 +16,24 @@ const form = reactive<EmailType>({
   user_tls: false,
 })
 const formRef = ref()
-const InfoDataList = async () => {}
+const InfoDataList = async () => {
+  let res = await getSettingInfoApi('email') as ResponseResult<EmailType>
+  if (res.code) {
+    Message.error(res.msg)
+    return
+  }
+  Object.assign(form, res.data)
+}
 InfoDataList()
 const emailInfoUpdate = async () => {
   let val = await formRef.value.validate()
   if (val) return
-  // let res = await putSiteInfoUpdateApi(siteForm)
-  // if (res.code) {
-  //   Message.error(res.msg)
-  //   return
-  // }
-  // Message.success(res.msg)
+  let res = await putSettingUpdateApi('email', form)
+  if (res.code) {
+    Message.error(res.msg)
+    return
+  }
+  Message.success(res.msg)
 }
 </script>
 <template>
@@ -32,7 +42,7 @@ const emailInfoUpdate = async () => {
       <div class="site_info">
         <a-alert style="margin: 5px 0">配置邮箱信息后,系统将通知-通知到你的邮箱-不配置则不通知</a-alert>
         <Blog_title title="邮箱配置"></Blog_title>
-        <a-form ref="formRef" :model="form" :label-col-props="{ span: 4 }" :wrapper-col-props="{ span: 20 }">
+        <a-form ref="formRef" :model="form" :label-col-props="{ span: 5 }" :wrapper-col-props="{ span: 19 }">
           <a-form-item
             field="host"
             label="邮箱域名"
@@ -80,25 +90,50 @@ const emailInfoUpdate = async () => {
         <a-button type="primary" @click="emailInfoUpdate">更新</a-button>
       </div>
     </div>
-    <div class="right"></div>
+    <div class="right">
+      <div class="blog_helper">
+        <Blog_title title="帮助信息" />
+        <div class="col">
+          <div class="title">
+            <p>绑定邮箱域名和邮箱端口</p>
+            <span>每个邮件的fmtp域名和端口都不一样,请仔细检查</span>
+          </div>
+          <div class="content">
+            参考链接
+            <a-link>HHH</a-link>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <style lang="scss">
 .email_config {
   display: flex;
+
   .left {
-    width: 50%;
+    width: 30%;
+
     .site_info {
     }
+
     .site_config_update {
       margin-top: 20px;
     }
   }
+
   .arco-form {
     margin-top: 20px;
   }
+
   .right {
-    width: 50%;
+    width: 70%;
+    margin-top: 10px;
+    margin-left: 20px;
+
+    .blog_helper {
+
+    }
   }
 }
 </style>
