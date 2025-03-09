@@ -53,10 +53,16 @@ export interface QiniuType {
     size: number
     record_dir: string
 }
-export type SettingType = 'qq' | 'qiniu' | 'setting' | 'email'
-export const getSettingInfoApi = <T extends EmailType | QQType | JwtType | QiniuType>(name: SettingType) => {
+export type SettingNameType = 'qq' | 'qiniu' | 'setting' | 'email' | 'jwt' | 'site'
+export type SettingType = EmailType | QQType | JwtType | QiniuType | SiteInfoType
+export const getSettingInfoApi = <T extends SettingType>(name: SettingNameType) => {
     return ApiRequest.getRequest<ResponseResult<T>>('/setting/' + name, {})
 }
-export const putSettingUpdateApi =  <T extends EmailType | QQType | JwtType | QiniuType>(name: SettingType,data:T) => {
-    return ApiRequest.pustRequest<ResponseResult<string>>('/setting/' + name, {},data)
+export const putSettingUpdateApi = <T extends SettingType>(name: SettingNameType, data: T) => {
+    return ApiRequest.pustRequest<ResponseResult<string>>('/setting/' + name, {}, data)
+}
+export interface HelpDataType {
+    column: string
+    abs: string
+    content: string
 }

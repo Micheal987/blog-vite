@@ -5,7 +5,7 @@ interface loginType {
     password: string
 }
 export const postLoginEmailApi = (params: loginType) => {
-    return ApiRequest.postRequest<ResponseResult<loginType>>("/user_login", {}, params)
+    return ApiRequest.postRequest<ResponseResult<string>>("/user_login", {}, params)
 }
 export const postLogOutApi = () => {
     return ApiRequest.postRequest<ResponseResult<string>>("/user_logout", {})

@@ -93,37 +93,35 @@ const siteInfoUpdate = async () => {
     </div>
     <div class="right">
       <div class="user_info">
-        <Blog_title title="用户信息">
-          <a-form ref="formRef" :model="siteForm" :label-col-props="{ span: 3 }" :wrapper-col-props="{ span: 20 }">
-            <a-form-item field="name" label="昵称" :validate-trigger="['blur']">
-              <a-input v-model="siteForm.name" placeholder="昵称" />
-            </a-form-item>
-            <a-form-item field="job" label="工作" :validate-trigger="['blur']">
-              <a-input v-model="siteForm.job" placeholder="工作" />
-            </a-form-item>
-            <a-form-item field="addr" label="地址" :validate-trigger="['blur']">
-              <a-input v-model="siteForm.addr" placeholder="地址" />
-            </a-form-item>
-            <a-form-item field="email" label="Email" :validate-trigger="['blur']">
-              <a-input v-model="siteForm.email" placeholder="Email" />
-            </a-form-item>
-          </a-form>
-        </Blog_title>
+        <Blog_title title="用户信息"> </Blog_title>
+        <a-form ref="formRef" :model="siteForm" :label-col-props="{ span: 4 }" :wrapper-col-props="{ span: 20 }">
+          <a-form-item field="name" label="昵称" :validate-trigger="['blur']">
+            <a-input v-model="siteForm.name" placeholder="昵称" />
+          </a-form-item>
+          <a-form-item field="job" label="工作" :validate-trigger="['blur']">
+            <a-input v-model="siteForm.job" placeholder="工作" />
+          </a-form-item>
+          <a-form-item field="addr" label="地址" :validate-trigger="['blur']">
+            <a-input v-model="siteForm.addr" placeholder="地址" />
+          </a-form-item>
+          <a-form-item field="email" label="Email" :validate-trigger="['blur']">
+            <a-input v-model="siteForm.email" placeholder="Email" />
+          </a-form-item>
+        </a-form>
       </div>
       <div class="user_link">
-        <Blog_title title="链接信息">
-          <a-form ref="formRef" :model="siteForm" :label-col-props="{ span: 3 }" :wrapper-col-props="{ span: 20 }">
-            <a-form-item field="bilibili_url" label="哗哩哗哩" :validate-trigger="['blur']">
-              <a-input v-model="siteForm.bilibili_url" placeholder="哗哩哗哩" />
-            </a-form-item>
-            <a-form-item field="gitee" label="Gitee" :validate-trigger="['blur']">
-              <a-input v-model="siteForm.gitee_url" placeholder="gitee" />
-            </a-form-item>
-            <a-form-item field="github_url" label="Github" :validate-trigger="['blur']">
-              <a-input v-model="siteForm.github_url" placeholder="Github" />
-            </a-form-item>
-          </a-form>
-        </Blog_title>
+        <Blog_title title="链接信息"> </Blog_title>
+        <a-form ref="formRef" :model="siteForm" :label-col-props="{ span: 4 }" :wrapper-col-props="{ span: 20 }">
+          <a-form-item field="bilibili_url" label="哗哩哗哩" :validate-trigger="['blur']">
+            <a-input v-model="siteForm.bilibili_url" placeholder="哗哩哗哩" />
+          </a-form-item>
+          <a-form-item field="gitee" label="Gitee" :validate-trigger="['blur']">
+            <a-input v-model="siteForm.gitee_url" placeholder="gitee" />
+          </a-form-item>
+          <a-form-item field="github_url" label="Github" :validate-trigger="['blur']">
+            <a-input v-model="siteForm.github_url" placeholder="Github" />
+          </a-form-item>
+        </a-form>
       </div>
     </div>
   </div>

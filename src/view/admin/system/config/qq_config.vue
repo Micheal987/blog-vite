@@ -1,105 +1,61 @@
 <script lang="ts" setup>
-import type { QiniuType, QQType } from '@/api/setting/setting_api'
-import { reactive, ref } from 'vue'
-import Blog_title from '@/components/common/blog_title.vue'
-import { getSettingInfoApi, putSettingUpdateApi } from '@/api/setting/setting_api.ts'
-import { Message } from '@arco-design/web-vue'
-import type { ResponseResult } from '@/api/axios'
-
-const form = reactive<QQType>({
-  app_id: "",
-  key: "",
-  redirect: ""
-})
-const formRef = ref()
-const InfoDataList = async () => {
-  let res = await getSettingInfoApi('qq') as ResponseResult<QiniuType>
-  if (res.code) {
-    Message.error(res.msg)
-    return
-  }
-  Object.assign(form, res.data)
-}
-InfoDataList()
-const emailInfoUpdate = async () => {
-  let val = await formRef.value.validate()
-  if (val) return
-  let res = await putSettingUpdateApi('qq', form)
-  if (res.code) {
-    Message.error(res.msg)
-    return
-  }
-  Message.success(res.msg)
-}
+import type { QQType } from '@/api/setting/setting_api'
+import Blog_config from '@/components/admin/blog_config.vue'
+import type { ConfigColumnType } from '@/types/setting'
+//帮助信息
+const helpList = [
+  {
+    column: 'app_id appKey',
+    abs: '去申请qq互联并且创建网站应用',
+    content: `注册开发者→创建应用→通过审核并获取接口权限-参考链接:<a-link
+    href="https://connect.qq.com/"
+    target="_blank">https://connect.qq.com
+    </a-link>`,
+  },
+  {
+    column: '回调地址',
+    abs: 'qq登录成功之后的回调地址',
+    content: ``,
+  },
+]
+const columns: ConfigColumnType<QQType>[] = [
+  {
+    label: 'AppID',
+    field: 'app_id',
+    rules: [{ required: true, message: '请输入key' }],
+    placeholder: 'Appid',
+    inputType: 'password',
+    type: 'string',
+  },
+  {
+    label: 'key',
+    field: 'key',
+    rules: [{ required: true, message: '请输入key' }],
+    placeholder: 'key',
+    type: 'string',
+  },
+  {
+    label: 'redirect',
+    field: 'redirect',
+    rules: [{ required: true, message: '请输入redirect' }],
+    placeholder: 'redirect',
+    type: 'string',
+  },
+]
 </script>
 <template>
-  <div class="email_config">
-    <div class="left">
-      <div class="site_info">
-        <a-alert style="margin: 5px 0">七牛云配置</a-alert>
-        <Blog_title title="qq配置"></Blog_title>
-        <a-form ref="formRef" :model="form" :label-col-props="{ span: 5 }" :wrapper-col-props="{ span: 19 }">
-          <a-form-item
-            field="app_id"
-            label="app_id"
-            :rules="[{ required: true, message: '请输入app_id' }]"
-            :validate-trigger="['blur']">
-            <a-input v-model="form.app_id" placeholder="app_id" />
-          </a-form-item>
-          <a-form-item
-            field="key"
-            label="key"
-            :rules="[{ required: true, message: '请输入key' }]"
-            :validate-trigger="['blur']">
-            <a-input v-model="form.key" placeholder="key" />
-          </a-form-item>
-          <a-form-item
-            field="redirect"
-            label="redirect"
-            :rules="[{ required: true, message: '请输入redirect' }]"
-            :validate-trigger="['blur']">
-            <a-input v-model="form.redirect" placeholder="redirect" />
-          </a-form-item>
-        </a-form>
-      </div>
-      <div class="site_config_update">
-        <a-button type="primary" @click="emailInfoUpdate">更新</a-button>
-      </div>
-    </div>
-    <div class="right">
-      <div class="blog_helper">
-        <Blog_title title="帮助信息" />
-      </div>
-    </div>
-  </div>
+  <Blog_config
+    title="qq配置"
+    name="qq"
+    :label-span="4"
+    :wrapper-span="20"
+    :left-width="45"
+    :right-width="55"
+    :cloumn="columns"
+    :help-data="helpList">
+    <template #alert>
+      <a-alert style="margin: 5px 0">qq互联配置了之后,点qq才能授权登录</a-alert>
+    </template>
+  </Blog_config>
 </template>
-<style lang="scss">
-.email_config {
-  display: flex;
-
-  .left {
-    width: 30%;
-
-    .site_info {
-    }
-
-    .site_config_update {
-      margin-top: 20px;
-    }
-  }
-
-  .arco-form {
-    margin-top: 20px;
-  }
-
-  .right {
-    width: 70%;
-    margin-top: 10px;
-    margin-left: 20px;
-
-    .blog_helper {
-
-    }
-  }
-}
-</style>
+<style lang="scss"></style>

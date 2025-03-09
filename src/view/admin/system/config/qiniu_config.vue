@@ -1,145 +1,112 @@
 <script lang="ts" setup>
+import type { ConfigColumnType } from '@/types/setting'
+import Blog_config from '@/components/admin/blog_config.vue'
 import type { QiniuType } from '@/api/setting/setting_api'
-import { reactive, ref } from 'vue'
-import Blog_title from '@/components/common/blog_title.vue'
-import { getSettingInfoApi, putSettingUpdateApi } from '@/api/setting/setting_api.ts'
-import { Message } from '@arco-design/web-vue'
-import type { ResponseResult } from '@/api/axios'
 
-const form = reactive<QiniuType>({
-  enable: false,
-  access_key: '',
-  secret_key: '',
-  bucket: '',
-  cdn: '',
-  zone: '',
-  prefix: '',
-  size: 2,
-  record_dir: '',
-})
-const formRef = ref()
-const InfoDataList = async () => {
-  let res = await getSettingInfoApi('qiniu') as ResponseResult<QiniuType>
-  if (res.code) {
-    Message.error(res.msg)
-    return
-  }
-  Object.assign(form, res.data)
-}
-InfoDataList()
-const emailInfoUpdate = async () => {
-  let val = await formRef.value.validate()
-  if (val) return
-  let res = await putSettingUpdateApi('qiniu', form)
-  if (res.code) {
-    Message.error(res.msg)
-    return
-  }
-  Message.success(res.msg)
-}
+//帮助信息
+const helpList = [
+  {
+    column: 'Access Key 和 Secret Key',
+    abs: '获取或者找到你的Access Key和Secret Key,可以先登录进入你的帐号,点击“个人面板”,面板中点击“密锁管理”',
+    content: `<img src="http://127.0.0.1:8000/uploads/file/key2.png" alt="" />`,
+  },
+  {
+    column: '桶信息',
+    abs: '登录之后前往控制台，找到资源管理-存储空间-新建存储空间即空间的名称',
+    content: `<img src="http://127.0.0.1:8000/uploads/file/key3.png" alt="" />`,
+  },
+  {
+    column: '域名',
+    abs: '七牛云的对象存储域名后面一定要加/',
+    content: ``,
+  },
+  {
+    column: '地区',
+    abs: '选择离你最近的区域并填写地区的代码',
+    content: `<img src="http://127.0.0.1:8000/uploads/file/key5.png" alt="" />`,
+  },
+  {
+    column: '图片前缀',
+    abs: '图片上传保存目录的前缀',
+    content: ``,
+  },
+  {
+    column: '是否启用SLL传输',
+    abs: '',
+    content: '启用SLL之后,对应的端口号可能要做出对应的调整',
+  },
+]
+const columns: ConfigColumnType<QiniuType>[] = [
+  {
+    label: 'access_key',
+    field: 'access_key',
+    rules: [{ required: true, message: '请输入access_key' }],
+    placeholder: 'secret_key',
+    inputType: 'password',
+    type: 'string',
+  },
+  {
+    label: 'secret_key',
+    field: 'secret_key',
+    rules: [{ required: true, message: '请输入secret_key' }],
+    placeholder: 'secret_key',
+    inputType: 'password',
+    type: 'string',
+  },
+  {
+    label: '桶信息',
+    field: 'bucket',
+    rules: [{ required: true, message: '请输入桶信息' }],
+    placeholder: '桶信息',
+    type: 'string',
+  },
+  {
+    label: '域名',
+    field: 'cdn',
+    rules: [{ required: true, message: '请输入域名' }],
+    placeholder: '域名',
+    type: 'string',
+  },
+  {
+    label: '地区zone',
+    field: 'zone',
+    rules: [{ required: true, message: '请输入发地区zone' }],
+    placeholder: '地区zone',
+    type: 'string',
+  },
+  {
+    label: '图片前缀地址',
+    field: 'prefix',
+    rules: [{ required: true, message: '请输入图片前缀地址' }],
+    placeholder: '图片前缀地址',
+    type: 'string',
+  },
+  {
+    label: '上传文件大小',
+    field: 'size',
+    placeholder: '上传文件大小',
+    type: 'number',
+  },
+  {
+    label: '是否启用',
+    field: 'enable',
+    type: 'boolean',
+  },
+]
 </script>
 <template>
-  <div class="email_config">
-    <div class="left">
-      <div class="site_info">
-        <a-alert style="margin: 5px 0">七牛云配置</a-alert>
-        <Blog_title title="qiniu"></Blog_title>
-        <a-form ref="formRef" :model="form" :label-col-props="{ span: 5 }" :wrapper-col-props="{ span: 19 }">
-          <a-form-item
-            field="access_key"
-            label="access_key"
-            :rules="[{ required: true, message: '请输入access_key' }]"
-            :validate-trigger="['blur']">
-            <a-input v-model="form.access_key" placeholder="access_key" />
-          </a-form-item>
-          <a-form-item
-            field="secret_key"
-            label="secret_key"
-            :rules="[{ required: true, message: '请输入secret_key' }]"
-            :validate-trigger="['blur']">
-            <a-input v-model="form.secret_key" placeholder="secret_key" />
-          </a-form-item>
-          <a-form-item
-            field="bucket"
-            label="bucket"
-            :rules="[{ required: true, message: '请输入bucket' }]"
-            :validate-trigger="['blur']">
-            <a-input v-model="form.bucket" placeholder="bucket" />
-          </a-form-item>
-          <a-form-item
-            field="cdn"
-            label="cdn"
-            :rules="[{ required: true, message: '请输入cdn' }]"
-            :validate-trigger="['blur']">
-            <a-input-password v-model="form.cdn" placeholder="cdn" />
-          </a-form-item>
-          <a-form-item
-            field="zone"
-            label="地区zone"
-            :rules="[{ required: true, message: '请输入发地区zone' }]"
-            :validate-trigger="['blur']">
-            <a-input v-model="form.zone" placeholder="地区zone" />
-          </a-form-item>
-          <a-form-item
-            field="prefix"
-            label="prefix"
-            :rules="[{ required: true, message: '请输入prefix' }]"
-            :validate-trigger="['blur']">
-            <a-input v-model="form.zone" placeholder="prefix" />
-          </a-form-item>
-          <a-form-item
-            field="size"
-            label="上传文件大小"
-            :validate-trigger="['blur']">
-            <a-input-number v-model="form.size" placeholder="上传文件大小" />
-          </a-form-item>
-          <a-form-item
-            field="record_dir"
-            label="上传目录"
-            :rules="[{ required: true, message: '请输上传目录' }]"
-            :validate-trigger="['blur']">
-            <a-input v-model="form.record_dir" placeholder="上传目录" />
-          </a-form-item>
-        </a-form>
-      </div>
-      <div class="site_config_update">
-        <a-button type="primary" @click="emailInfoUpdate">更新</a-button>
-      </div>
-    </div>
-    <div class="right">
-      <div class="blog_helper">
-        <Blog_title title="帮助信息" />
-      </div>
-    </div>
-  </div>
+  <Blog_config
+    title="七牛云配置"
+    name="qiniu"
+    :label-span="4"
+    :wrapper-span="20"
+    :left-width="50"
+    :right-width="50"
+    :cloumn="columns"
+    :help-data="helpList">
+    <template #alert>
+      <a-alert style="margin: 5px 0">启用七牛云配置之后,图片上传将上传至七牛云上</a-alert>
+    </template>
+  </Blog_config>
 </template>
-<style lang="scss">
-.email_config {
-  display: flex;
-
-  .left {
-    width: 30%;
-
-    .site_info {
-    }
-
-    .site_config_update {
-      margin-top: 20px;
-    }
-  }
-
-  .arco-form {
-    margin-top: 20px;
-  }
-
-  .right {
-    width: 70%;
-    margin-top: 10px;
-    margin-left: 20px;
-
-    .blog_helper {
-
-    }
-  }
-}
-</style>
+<style lang="scss"></style>

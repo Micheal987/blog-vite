@@ -62,7 +62,7 @@ const visibleUpdate = (val: boolean) => {
 
 //删除
 const removes = (idList: (string | number)[]) => {
-  console.log(idList)
+  console.log('del', idList)
 }
 </script>
 <template>

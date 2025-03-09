@@ -67,6 +67,12 @@ const routes: RouteRecordRaw[] = [
             meta: { title: "用户列表", isAdmin: true },
             component: () => import("@/view/admin/users/user_list.vue"),
           },
+          {
+            path: "messages_list",
+            name: "messages_list",
+            meta: { title: "消息列表", isAdmin: true },
+            component: () => import("@/view/admin/users/messages_list.vue"),
+          },
         ],
       },
       {
@@ -127,19 +133,19 @@ const routes: RouteRecordRaw[] = [
               {
                 path: "qiniu",
                 name: "qiniu_config",
-                meta: { title: "网站配置", isAdmin: true },
+                meta: { title: "七牛云配置", isAdmin: true },
                 component: () => import("@/view/admin/system/config/qiniu_config.vue"),
               },
               {
                 path: "qq",
                 name: "qq_config",
-                meta: { title: "网站配置", isAdmin: true },
+                meta: { title: "qq配置", isAdmin: true },
                 component: () => import("@/view/admin/system/config/qq_config.vue"),
               },
               {
                 path: "jwt",
                 name: "jwt_config",
-                meta: { title: "网站配置", isAdmin: true },
+                meta: { title: "jwt配置", isAdmin: true },
                 component: () => import("@/view/admin/system/config/jwt_config.vue"),
               }
             ]

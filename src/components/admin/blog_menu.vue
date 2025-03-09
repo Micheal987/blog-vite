@@ -62,6 +62,13 @@ const menuList: MenuType[] = [
         name: 'users_list',
         child: [],
       },
+      {
+        key: '3-2',
+        title: '消息列表',
+        icon: IconUser,
+        name: 'messages_list',
+        child: [],
+      },
     ],
   },
   {

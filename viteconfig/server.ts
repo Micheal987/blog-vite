@@ -9,7 +9,7 @@ const serverConfig = (host: string): ServerOptions => {
                 changeOrigin: true,
                 rewrite: (path) => path.replace(/^\/api/, ''),
             },
-            '/upload': {
+            '/uploads': {
                 target: host,
                 changeOrigin: true,
             },
