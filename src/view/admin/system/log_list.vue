@@ -1,23 +1,32 @@
 <script setup lang="ts">
-import { getLogList } from '@/api/log/log_api'
+import { getLogList, type LogType } from '@/api/log/log_api'
 import Blog_table from '@/components/admin/blog_table.vue'
 import type { RecordType } from '@/components/admin/blog_table.vue'
-import { reactive, ref } from 'vue'
+import { reactive, ref, h } from 'vue'
+import { Tag } from '@arco-design/web-vue'
 
 const cloumnDict = {
   1: [
     { title: 'id', dataIndex: 'id' },
     { title: 'ip', dataIndex: 'ip' },
     { title: '地址', dataIndex: 'address' },
-    { title: '登录记录', dataIndex: 'content' },
     { title: '等级', dataIndex: 'level' },
+    { title: '标题', dataIndex: 'title' },
     {
       title: '状态',
-      dataIndex: 'content',
+      dataIndex: 'status',
+      render: (data: any) => {
+        if (data == null || undefined) return
+        const record = data.record as LogType
+        if (record.status) {
+          return h(Tag, { color: 'blue' }, { default: () => '成功' })
+        }
+        return h(Tag, { color: 'red' }, { default: () => '失败' })
+      },
     },
-    { title: '用户名', dataIndex: 'user_name' },
-    { title: '密码', slotName: 'password' },
-    { title: '日志时间', dataIndex: 'createdAt' },
+    { title: '用户名', dataIndex: 'userName' },
+    { title: '密码', dataIndex: 'content' },
+    { title: '日志时间', dataIndex: 'created_at' },
     { title: '操作', slotName: 'action' },
   ],
   2: [
@@ -59,7 +68,7 @@ const params = reactive({
   userName: undefined,
 })
 //使用parmas 判断
-const columns = ref(cloumnDict[2])
+const columns = ref(cloumnDict[1])
 const statusOptions = [
   { label: '成功', value: true },
   { label: '失败', value: false },
@@ -81,14 +90,11 @@ const add = () => {
 }
 //emit --emit
 const edit = (record: RecordType<any>) => {
+  console.log(record)
   // Object.assign(recordData, record)
   visible.value = true
 }
 
-//emit --update
-const visibleUpdate = (val: boolean) => {
-  visible.value = val
-}
 
 //删除
 const removes = (idList: (string | number)[]) => {
@@ -143,6 +149,7 @@ const removes = (idList: (string | number)[]) => {
     grid-template-columns: repeat(3, 1fr);
     align-items: center;
     row-gap: 5px;
+
     .arco-image-img {
       border-radius: 5px;
     }
