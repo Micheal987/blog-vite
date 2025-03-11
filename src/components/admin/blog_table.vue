@@ -190,10 +190,13 @@ const infoList = async (p?: PageParamType & any) => {
   }
   loading.value = true //loading
   const res = await props.url(params)
-  console.log(res)
+  loading.value = false //loding 关闭
+  if (res.code) {
+    Message.error(res.msg)
+    return
+  }
   data.count = res.data.count
   data.list = res.data.list
-  loading.value = false //loding 关闭
 }
 //页码变化
 const pageChange = () => {
@@ -209,11 +212,17 @@ const search = () => {
 const flush = () => {
   infoList()
 }
+
+infoList(props.defualtParams)
+const clearData = () => {
+  data.list = []
+  data.count = 0
+}
 defineExpose({
   infoList,
+  clearData,
 })
 //infoList
-infoList(props.defualtParams)
 </script>
 <template>
   <div class="blog_table">
