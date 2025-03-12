@@ -87,8 +87,8 @@ const updateUserOk = async () => {
 }
 //删除
 //emit 传idList的
-const removes = (idList:number[]) => {
-  console.log("数组id",idList)
+const removes = (idList: number[]) => {
+  console.log('数组id', idList)
   //删除操作
 }
 </script>
@@ -114,8 +114,8 @@ const removes = (idList:number[]) => {
       :columns="columns"
       ref="blogTableRef"
       search-placeholder="搜索用户名称和昵称"
-      :defualt-params="{ role: 1 }"
-      defualtDel
+      :default-params="{ role: 1 }"
+      default-del
       :filter-group="filterGroup"
       :limit="10"
       @add="visible = true"

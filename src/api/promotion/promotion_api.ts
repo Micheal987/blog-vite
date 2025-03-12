@@ -1,5 +1,5 @@
 import { ApiRequest } from '@/api/axios'
-import type { ListRequest, PageParamType, ResponseResult } from "../axios"
+import type { ListRequest, PageParamType, ResponseResult } from "@/api/axios"
 export interface promotionType {
     href: string
     id: number
@@ -8,7 +8,7 @@ export interface promotionType {
     title: string
 }
 export const getAdvertListApi = (params: PageParamType) => {
-    return ApiRequest.getRequest<ResponseResult<ListRequest<promotionType>>>("/adverts", {
+    return ApiRequest.getRequest<ResponseResult<ListRequest<promotionType>>>("/advert", {
         params: params, headers: {
             "blog_Referer": location.pathname
         }
@@ -19,7 +19,7 @@ export interface promotionCreateType {
     images: string
     is_show: boolean
     title: string
-    id?: number|undefined
+    id?: number | undefined
 }
 export const defaultPromotionForm = {
     href: "",
@@ -28,9 +28,9 @@ export const defaultPromotionForm = {
     title: ""
 }
 export const postCreateAdvertApi = (params: promotionCreateType) => {
-    return ApiRequest.postRequest<ResponseResult<promotionCreateType>>("/adverts", {}, params)
+    return ApiRequest.postRequest<ResponseResult<promotionCreateType>>("/advert", {}, params)
 }
 
 export const putUpdateAdvertApi = (id: number, params: promotionCreateType) => {
-    return ApiRequest.putRequest<ResponseResult<promotionCreateType>>("/adverts/" + id.toString(), {}, params)
+    return ApiRequest.putRequest<ResponseResult<promotionCreateType>>("/advert/" + id.toString(), {}, params)
 }

@@ -51,7 +51,7 @@ const columns: ConfigColumnType<QQType>[] = [
     :wrapper-span="20"
     :left-width="45"
     :right-width="55"
-    :cloumn="columns"
+    :column="columns"
     :help-data="helpList">
     <template #alert>
       <a-alert style="margin: 5px 0">qq互联配置了之后,点qq才能授权登录</a-alert>

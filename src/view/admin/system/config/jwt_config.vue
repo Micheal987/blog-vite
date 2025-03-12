@@ -50,7 +50,7 @@ const columns: ConfigColumnType<JwtType>[] = [
     :wrapper-span="20"
     :left-width="45"
     :right-width="55"
-    :cloumn="columns"
+    :column="columns"
     :help-data="helpList">
     <template #alert>
       <a-alert style="margin: 5px 0">jwt配置之后,立即生效,注意保管jwt的密钥</a-alert>

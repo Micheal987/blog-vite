@@ -102,7 +102,7 @@ const columns: ConfigColumnType<QiniuType>[] = [
     :wrapper-span="20"
     :left-width="50"
     :right-width="50"
-    :cloumn="columns"
+    :column="columns"
     :help-data="helpList">
     <template #alert>
       <a-alert style="margin: 5px 0">启用七牛云配置之后,图片上传将上传至七牛云上</a-alert>

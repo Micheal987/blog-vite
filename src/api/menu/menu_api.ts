@@ -16,7 +16,7 @@ export interface MenuType {
     banners: BannerType[]
 }
 export const gteMenuListApi = (params: PageParamType) => {
-    return ApiRequest.getRequest<ResponseResult<ListRequest<MenuType>>>("/menus", { params: params })
+    return ApiRequest.getRequest<ResponseResult<ListRequest<MenuType>>>("/menu", { params: params })
 }
 export interface ImageSortType {
     image_id: number
@@ -33,10 +33,10 @@ export interface MenuCreateRequest {
     image_sort_list: ImageSortType[]
 }
 export const postMenuCreateApi = (params: MenuCreateRequest) => {
-    return ApiRequest.postRequest<ResponseResult<MenuCreateRequest>>("/menus", {}, params)
+    return ApiRequest.postRequest<ResponseResult<MenuCreateRequest>>("/menu", {}, params)
 }
 export const putMenuUpdateApi = (id: number, params: MenuCreateRequest) => {
-    return ApiRequest.putRequest<ResponseResult<MenuCreateRequest>>("/menus/" + id.toString(), {}, params)
+    return ApiRequest.putRequest<ResponseResult<MenuCreateRequest>>("/menu/" + id.toString(), {}, params)
 }
 export const defaultMenuFrom = {
     title: '',

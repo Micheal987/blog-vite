@@ -53,20 +53,20 @@ const menuList: MenuType[] = [
     key: '3',
     title: '用户管理',
     icon: IconUser,
-    name: 'users',
+    name: 'user',
     child: [
       {
         key: '3-1',
         title: '用户列表',
         icon: IconUser,
-        name: 'users_list',
+        name: 'user_list',
         child: [],
       },
       {
         key: '3-2',
         title: '消息列表',
         icon: IconUser,
-        name: 'messages_list',
+        name: 'message_list',
         child: [],
       },
     ],
@@ -103,7 +103,7 @@ const menuList: MenuType[] = [
         key: '5-2',
         title: '广告列表',
         icon: IconUser,
-        name: 'adverts_list',
+        name: 'advert_list',
         child: [],
       },
       {

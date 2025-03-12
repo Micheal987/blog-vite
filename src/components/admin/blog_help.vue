@@ -1,18 +1,16 @@
 <script lang="ts" setup>
-import { reactive } from 'vue'
 import Blog_title from '../common/blog_title.vue'
 import type { HelpDataType } from '@/api/setting/setting_api'
-const props = defineProps<{
+interface Props {
   helpTitle?: string
   data: HelpDataType[]
-}>()
-const defaultHelp = reactive({
-  helpTitle: props.helpTitle ? props.helpTitle : '帮助信息',
-})
+}
+const props = defineProps<Props>()
+const { helpTitle = '帮助信息' } = props
 </script>
 <template>
   <div class="blog_help">
-    <Blog_title :title="defaultHelp.helpTitle" />
+    <Blog_title :title="helpTitle" />
     <div class="col" v-for="item in props.data">
       <div class="title">
         <div class="column">{{ item.column }}</div>

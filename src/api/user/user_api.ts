@@ -68,5 +68,5 @@ export interface UpdateUserRequest {
     role: number
 }
 export const putUpdateUserApi = (params: UpdateUserRequest) => {
-    return ApiRequest.pustRequest<ResponseResult<UpdateUserRequest>>("user_role", {}, params)
+    return ApiRequest.putRequest<ResponseResult<UpdateUserRequest>>("user_role", {}, params)
 }

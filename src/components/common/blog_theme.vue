@@ -14,9 +14,7 @@ store.loadTheme()
 <style lang="scss">
 .blog_theme {
   .action_icon {
-    @page {
-      size: 16px;
-    }
+    size: 16px;
     margin: 0 10px;
     cursor: pointer;
 

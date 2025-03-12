@@ -202,10 +202,16 @@ const jsonPreview = () => {
             v-model="params.userName"
             placeholder="搜索用户名称"
             @change="infoList"
-            @keyup.enter="infoList"></a-input>
+            @keyup.enter="infoList"
+            allow-clear></a-input>
         </div>
         <div class="search_addr">
-          <a-input v-model="params.addr" placeholder="搜索地址" @change="infoList" @keyup.enter="infoList"></a-input>
+          <a-input
+            v-model="params.addr"
+            placeholder="搜索地址"
+            @change="infoList"
+            @keyup.enter="infoList"
+            allow-clear></a-input>
         </div>
         <!-- 状态过滤 -->
         <div class="filter_status" v-if="params.type == 1">
@@ -255,7 +261,7 @@ const jsonPreview = () => {
           @select="selectDropdown($event as string, 'addr')">
           <div style="cursor: pointer">{{ record.address }}</div>
           <template #content>
-            <a-doption :value="record.address">只看该用户的</a-doption>
+            <a-doption :value="record.address">只看该地址的</a-doption>
           </template>
         </a-dropdown>
       </template>
@@ -267,7 +273,7 @@ const jsonPreview = () => {
           @select="selectDropdown($event as string, 'date')">
           <div style="cursor: pointer">{{ dateTimeFormat(record.created_at) }}</div>
           <template #content>
-            <a-doption :value="record.created_at">只看该用户的</a-doption>
+            <a-doption :value="record.created_at">只看该时间的</a-doption>
           </template>
         </a-dropdown>
       </template>

@@ -57,19 +57,19 @@ const routes: RouteRecordRaw[] = [
         ],
       },
       {
-        path: "users",
-        name: "users",
+        path: "user",
+        name: "user",
         meta: { title: "用户管理", isAdmin: true },
         children: [
           {
-            path: "users_list",
-            name: "users_list",
+            path: "user_list",
+            name: "user_list",
             meta: { title: "用户列表", isAdmin: true },
             component: () => import("@/view/admin/users/user_list.vue"),
           },
           {
-            path: "messages_list",
-            name: "messages_list",
+            path: "message_list",
+            name: "message_list",
             meta: { title: "消息列表", isAdmin: true },
             component: () => import("@/view/admin/users/messages_list.vue"),
           },
@@ -102,7 +102,7 @@ const routes: RouteRecordRaw[] = [
           ///api/adverts
           {
             path: "promotion_list",
-            name: "adverts_list",
+            name: "advert_list",
             meta: { title: "广告列表", isVisitor: true },
             component: () => import("@/view/admin/system/promotion_list.vue"),
           },

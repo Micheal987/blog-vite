@@ -2,16 +2,16 @@
 import { useStoreConfig } from '@/store'
 import { type FileItem, Message } from '@arco-design/web-vue'
 import type { ResponseResult } from '@/api/axios'
-import { reactive, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 const store = useStoreConfig()
-const props = defineProps<{
+interface Props {
   modelVal: string
   placeholder?: string
-}>()
-const defaultProps = reactive({
-  placeholder: props.placeholder ? props.placeholder : '图片上传链接',
-})
+}
+const props = defineProps<Props>()
+const { placeholder = '图片上传链接' } = props
 const imageStr = ref('')
+//watch
 watch(
   () => props.modelVal,
   () => {
@@ -19,7 +19,7 @@ watch(
   },
 )
 const emits = defineEmits<{
-  updateImage: [value: string]
+  (e: 'updateImage', value: string): void
 }>()
 
 const valueInput = (value: string) => {
@@ -47,7 +47,7 @@ watch(imageStr, () => {
 <template>
   <div class="blog_upload_image">
     <div class="line">
-      <a-input :placeholder="defaultProps.placeholder" v-model="imageStr" @input="valueInput"></a-input>
+      <a-input :placeholder="placeholder" v-model="imageStr" @input="valueInput"></a-input>
       <a-upload
         :show-file-list="false"
         action="/api/images"

@@ -86,7 +86,7 @@ const columns: ConfigColumnType<EmailType>[] = [
     :wrapper-span="20"
     :left-width="40"
     :right-width="60"
-    :cloumn="columns"
+    :column="columns"
     :help-data="helpList">
     <template #alert>
       <a-alert style="margin: 5px 0">邮箱配置之后,将验证码通知发送到你的邮箱内,注意检查</a-alert>

@@ -6,7 +6,7 @@ import { Message, type TableColumnData, type TableRowSelection } from '@arco-des
 import { dateTimeFormat } from '@/utils/date'
 import type { optionType } from '@/types'
 import { getRoleListApi } from '@/api/role/role_api'
-import { defaultOptionApi } from '@/api'
+import { defaultDeleteApi, defaultOptionApi } from '@/api'
 import { useRoute } from 'vue-router'
 
 const routes = useRoute()
@@ -167,16 +167,17 @@ const removeIdsDate = async (idList: number[]) => {
     return
   }
   //请求
-  //应该使用path+统一的删除接口删除
+  //删除接口都是要传idlist
+  //接口都是按_分取第一部分即index为0
   let path = routes.name as string
   let url = path.split('_')
   console.log('url', url)
-  // let res = await defaultDeleteApi(path, idList)
-  // if (res.code != 0) {
-  //   Message.error(res.msg)
-  //   return
-  // }
-  // Message.success(res.msg)
+  let res = await defaultDeleteApi(url[0], idList)
+  if (res.code) {
+    Message.error(res.msg)
+    return
+  }
+  Message.success(res.msg)
   emit('remove', idList)
   flush()
 }
