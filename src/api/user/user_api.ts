@@ -1,5 +1,5 @@
-import { ApiRequest } from "../axios/index"
-import type { ResponseResult, PageParamType, ListDateType } from "../axios/index"
+import { ApiRequest } from '@/api/axios'
+import type { ResponseResult, PageParamType, ListDateType } from '@/api/axios'
 interface loginType {
     user_name: string
     password: string
@@ -37,7 +37,7 @@ export interface UserInfoType {
     link: string // 跳转链接
 }
 //用户信息
-export const gettUserInfoApi = () => {
+export const getUserInfoApi = () => {
     return ApiRequest.getRequest<ResponseResult<UserInfoType>>("/user", {})
 }
 //用户列表

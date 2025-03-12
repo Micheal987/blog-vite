@@ -17,8 +17,8 @@ const props = defineProps<{
 }>()
 //emits
 const emits = defineEmits<{
-  update: [visible: boolean]
-  ok: [vaule: boolean]
+  (e:'update',visible:boolean):void
+  (e:'ok',value:boolean):void
 }>()
 //default
 
@@ -32,7 +32,7 @@ const form = reactive<promotionCreateType>({
 //ref
 const formRef = ref()
 
-//eidt
+//edit
 const editId = ref<number | undefined>(undefined)
 
 let imageList = ref<ImageType[]>([])
@@ -48,7 +48,7 @@ const beforeOpen = () => {
 }
 //创建菜单
 const okHandler = async () => {
-  let val = await formRef.value.validate() //验证规则为undfind代表验证通过
+  let val = await formRef.value.validate() //验证规则为undefined代表验证通过
   console.log('ok', val)
   if (val) return false //有值代表校验不通过
   let res

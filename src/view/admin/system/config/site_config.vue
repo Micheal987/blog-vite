@@ -79,11 +79,11 @@ const siteInfoUpdate = async () => {
           <a-form-item field="qq_image" label="qq二维码" :validate-trigger="['blur']">
             <Blog_upload_image v-model="siteForm.qq_image" placeholder="qq二维码" :model-val="siteForm.qq_image" />
           </a-form-item>
-          <a-form-item field="wechat_image" label="WeCaht二维码" :validate-trigger="['blur']">
+          <a-form-item field="wechat_image" label="WeChat二维码" :validate-trigger="['blur']">
             <Blog_upload_image
               v-model="siteForm.wechat_image"
               :model-val="siteForm.wechat_image"
-              placeholder="WeCaht二维码" />
+              placeholder="WeChat二维码" />
           </a-form-item>
         </a-form>
       </div>

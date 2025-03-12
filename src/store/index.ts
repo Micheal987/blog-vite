@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { parseToken } from "@/utils/parseToken"
 import { Message } from "@arco-design/web-vue";
-import { postLogOutApi, gettUserInfoApi } from "@/api/user/user_api"
+import { postLogOutApi, getUserInfoApi } from "@/api/user/user_api"
 export interface userStoreInfoType {
   user_name: string
   nick_name: string
@@ -31,7 +31,7 @@ export const useStoreConfig = defineStore(
     }
     const setTheme = (str?: string) => {
       if (str != undefined) {
-        theme
+        theme.value
       } else {
         theme.value = !theme.value
       }
@@ -58,7 +58,7 @@ export const useStoreConfig = defineStore(
     const setToken = async (token: string) => {
       userInfo.token = token
       let info = parseToken(token) //解析token
-      const res = await gettUserInfoApi()
+      const res = await getUserInfoApi()
       let data = res.data
       userInfo = {
         user_name: data.user_name,

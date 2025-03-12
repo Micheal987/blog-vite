@@ -54,25 +54,25 @@ const actionGroups = ref<actionOptionType[]>([
 const visible = ref(false) //modal开关
 const blogTableRef = ref() //父组件 ref
 
-//emits 调用父组的infolist
+//emits 调用父组的infoList
 const createOk = () => {
   blogTableRef.value.infoList()
 }
-//emit--upadte事件
+//emit--update事件
 const visibleUpdate = (val: boolean) => {
   visible.value = val
 }
 const formRef = ref() //表单的ref
-const updatevisible = ref(false) //updatevisible 编辑的modal
+const updateVisible = ref(false) //updateVisible 编辑的modal
 //emits 的edit
 const edit = (res: RecordType<UserInfoType>) => {
   //赋值 父组件传过来的tab值
   updateFrom.nick_name = res.nick_name
   updateFrom.user_id = res.id
   updateFrom.role = res.role_id
-  updatevisible.value = true //关闭modal
+  updateVisible.value = true //关闭modal
 }
-//modla
+//modal
 //v-on:before-ok 点击确定后触发 更新api
 const updateUserOk = async () => {
   let val = await formRef.value.validate() //表单验证ref的validate
@@ -83,16 +83,18 @@ const updateUserOk = async () => {
     Message.error(res.msg)
     return
   }
-  return true //关闭modla
+  return true //关闭modal
 }
 //删除
 //emit 传idList的
-const removes = () => {
+const removes = (idList:number[]) => {
+  console.log("数组id",idList)
+  //删除操作
 }
 </script>
 <template>
   <div>
-    <a-modal title="编辑用户" v-model:visible="updatevisible" v-on:before-ok="updateUserOk">
+    <a-modal title="编辑用户" v-model:visible="updateVisible" v-on:before-ok="updateUserOk">
       <a-form ref="formRef" :model="updateFrom">
         <a-form-item
           field="nick_name"

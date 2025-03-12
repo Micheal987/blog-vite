@@ -8,8 +8,8 @@ const props = defineProps<{
   visible: boolean
 }>()
 const emits = defineEmits<{
-  update: [visible: boolean]
-  ok: [vaule: boolean]
+  (e:'update',visible: boolean):void
+  (e:'ok',value:boolean):void
 }>()
 const form = reactive<CreateUserRequest & { re_password: string }>({
   user_name: '',
@@ -21,8 +21,7 @@ const form = reactive<CreateUserRequest & { re_password: string }>({
 const formRef = ref()
 const clearField = { user_name: '', nick_name: '', password: '', role: 2, re_password: '' }
 
-const resvalidatorPassword = (value: string | undefined, callback: (error?: string) => void): void => {
-  console.log('valid', value)
+const validatePassword = (value: string | undefined, callback: (error?: string) => void): void => {
   if (value != form.password) {
     return callback('二次密码不一致')
   }
@@ -76,7 +75,7 @@ const cancel = () => {
         <a-form-item
           field="password"
           label="确认密码"
-          :rules="[{ required: true, message: '确认密码错误' }, { validator: resvalidatorPassword }]"
+          :rules="[{ required: true, message: '确认密码错误' }, { validator: validatePassword }]"
           :validate-trigger="['blur']">
           <a-input-password v-model="form.re_password" placeholder="请再输入密码" autocomplete="off" />
         </a-form-item>

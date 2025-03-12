@@ -115,7 +115,7 @@ const InfoUpdate = async () => {
   }
 
   .right {
-    width: calc(--col);
+    width: var(--col);
     margin-top: 10px;
     margin-left: 20px;
     img {

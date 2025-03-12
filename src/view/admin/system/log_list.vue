@@ -7,7 +7,7 @@ import { Tag } from '@arco-design/web-vue'
 import VueJsonPretty from 'vue-json-pretty'
 import 'vue-json-pretty/lib/styles.css'
 import { dateTimeFormat, dateFormat } from '@/utils/date'
-const cloumnDict = {
+const columnDict = {
   1: [
     { title: 'id', dataIndex: 'id' },
     { title: 'ip', dataIndex: 'ip' },
@@ -45,7 +45,7 @@ const cloumnDict = {
           case 'debug':
             return h(Tag, { color: 'blue' }, { default: () => 'debug' })
           case 'info':
-            return h(Tag, { color: 'grenn' }, { default: () => 'info' })
+            return h(Tag, { color: 'green' }, { default: () => 'info' })
           case 'warning':
             return h(Tag, { color: 'yellow' }, { default: () => 'warning' })
           case 'error':
@@ -72,7 +72,7 @@ const cloumnDict = {
           case 'debug':
             return h(Tag, { color: 'blue' }, { default: () => 'debug' })
           case 'info':
-            return h(Tag, { color: 'grenn' }, { default: () => 'info' })
+            return h(Tag, { color: 'green' }, { default: () => 'info' })
           case 'warning':
             return h(Tag, { color: 'yellow' }, { default: () => 'warning' })
           case 'error':
@@ -86,15 +86,14 @@ const cloumnDict = {
   ],
 }
 const logTypeOptions = [
-  { lable: '登录日志', value: 1 },
-  { lable: '操作日志', value: 2 },
-  { lable: '运行日志', value: 3 },
-  { lable: 'debug日志', value: 4 },
+  { label: '登录日志', value: 1 },
+  { label: '操作日志', value: 2 },
+  { label: '运行日志', value: 3 },
 ]
 const levelTypeOptions = [
-  { lable: 'warning', value: 1 },
-  { lable: 'error', value: 2 },
-  { lable: 'debug', value: 3 },
+  { label: 'warning', value: 1 },
+  { label: 'error', value: 2 },
+  { label: 'debug', value: 3 },
 ]
 // blog_table父组件 a-table 显示的字段--头部
 const params = reactive<LogRequestType>({
@@ -107,13 +106,13 @@ const params = reactive<LogRequestType>({
   status: undefined,
   userName: undefined,
 })
-//使用parmas 判断
-const columns = ref(cloumnDict[params.type as keyof typeof cloumnDict])
-const selectDropdown = (val: string, cloumn: 'userName' | 'addr' | 'date') => {
-  if (cloumn == 'date') {
+//使用params 判断
+const columns = ref(columnDict[params.type as keyof typeof columnDict])
+const selectDropdown = (val: string, column: 'userName' | 'addr' | 'date') => {
+  if (column == 'date') {
     val = dateFormat(val)
   }
-  params[cloumn] = val
+  params[column] = val
   infoList()
 }
 const statusOptions = [
@@ -126,7 +125,7 @@ const blogTableRef = ref()
 //
 const logTypeChange = () => {
   blogTableRef.value.clearData()
-  columns.value = cloumnDict[params.type as keyof typeof cloumnDict]
+  columns.value = columnDict[params.type as keyof typeof columnDict]
   blogTableRef.value.infoList(params)
 }
 const infoList = () => {
@@ -159,7 +158,7 @@ const readLog = async (record: LogType) => {
   }
   logContent.value = record.content
   visible.value = true
-  nextTick(() => {
+  await nextTick(() => {
     jsonPreview()
   })
 }
@@ -273,7 +272,7 @@ const jsonPreview = () => {
         </a-dropdown>
       </template>
       <template #title="{ record }: { record: LogType }">
-        <div class="log_cloumn_title">
+        <div class="log_column_title">
           <span @click="readLog(record)" :class="{ isRead: record.readStatus }">{{ record.title }}</span>
         </div>
       </template>
@@ -281,7 +280,7 @@ const jsonPreview = () => {
   </div>
 </template>
 <style lang="scss">
-@mixin logLable($title, $color: --color-text-2) {
+@mixin logLabel($title, $color: --color-text-2) {
   &::before {
     display: block;
     content: $title;
@@ -309,14 +308,14 @@ const jsonPreview = () => {
     }
   }
   .log_request_head {
-    @include logLable('请求头');
+    @include logLabel('请求头');
   }
   .log_request {
-    @include logLable('请求');
+    @include logLabel('请求');
     .log_request_head {
       .log_request_method {
         font-weight: 700;
-        &.deltel {
+        &.delete {
           color: var(--red-6);
           & ~ .log_request_path {
             color: rgb(var(---red-4));
@@ -363,19 +362,19 @@ const jsonPreview = () => {
     }
 
     &.info {
-      @include logLable('info', rgb(var(--arcoblue-5)));
+      @include logLabel('info', rgb(var(--arcoblue-5)));
     }
 
     &.warning {
-      @include logLable('warning', rgb(var(--orange-5)));
+      @include logLabel('warning', rgb(var(--orange-5)));
     }
 
     &.error {
-      @include logLable('error', rgb(var(--red-6)));
+      @include logLabel('error', rgb(var(--red-6)));
     }
   }
   .log_response {
-    @include logLable('响应');
+    @include logLabel('响应');
   }
   .vjs-tree-node.is-highlight,
   .vjs-tree-node:hover {
@@ -386,7 +385,7 @@ const jsonPreview = () => {
   }
 }
 .log_list_view {
-  .log_cloumn_title {
+  .log_column_title {
     span {
       color: var(--active);
       cursor: pointer;

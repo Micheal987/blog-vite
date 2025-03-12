@@ -1,16 +1,16 @@
 <script lang="ts" setup>
-import type { MesssageType, MesssageListType } from '@/api/user/message_api'
+import type { MessageListType } from '@/api/user/message_api'
 import { ref } from 'vue'
 
 interface Props {
-  data: MesssageListType[]
+  data: MessageListType[]
 }
 const props = defineProps<Props>()
 const emits = defineEmits<{
-  check: [value: MesssageListType]
+  check: [value: MessageListType]
 }>()
 let active = ref<number>(0)
-const checkItem = (record: MesssageListType) => {
+const checkItem = (record: MessageListType) => {
   active.value = record.id
   emits('check', record)
 }

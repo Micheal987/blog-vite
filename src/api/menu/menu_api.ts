@@ -1,4 +1,4 @@
-import { ApiRequest, type ListRequest, type PageParamType, type ResponseResult } from "../axios/index"
+import { ApiRequest, type ListRequest, type PageParamType, type ResponseResult } from '@/api/axios'
 export interface BannerType {
     id: number
     path: string
@@ -35,7 +35,7 @@ export interface MenuCreateRequest {
 export const postMenuCreateApi = (params: MenuCreateRequest) => {
     return ApiRequest.postRequest<ResponseResult<MenuCreateRequest>>("/menus", {}, params)
 }
-export const putMenuUpadteApi = (id: number, params: MenuCreateRequest) => {
+export const putMenuUpdateApi = (id: number, params: MenuCreateRequest) => {
     return ApiRequest.pustRequest<ResponseResult<MenuCreateRequest>>("/menus/" + id.toString(), {}, params)
 }
 export const defaultMenuFrom = {

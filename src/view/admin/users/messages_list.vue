@@ -1,15 +1,15 @@
 <script lang="ts" setup>
-import type { MessageRecodrdType, MesssageType, MesssageListType } from '@/api/user/message_api'
+import type { MessageRecordType, MessageListType } from '@/api/user/message_api'
 import Blog_message from '@/components/common/blog_message.vue'
 import { reactive, ref } from 'vue'
-import { getMessageAllApi, getMessagRecordApi, getMessageListApi } from '@/api/user/message_api'
+import { getMessageListApi } from '@/api/user/message_api'
 import type { ListDateType } from '@/api/axios'
 
-const messageData = reactive<ListDateType<MesssageListType>>({
+const messageData = reactive<ListDateType<MessageListType>>({
   list: [],
   count: 0,
 })
-const messageList = ref<MesssageListType[]>([])
+const messageList = ref<MessageListType[]>([])
 
 const infoMessageList = async () => {
   let res = await getMessageListApi()
@@ -17,7 +17,7 @@ const infoMessageList = async () => {
   messageData.count = res.data.count
 }
 infoMessageList()
-const recordList = reactive<MessageRecodrdType[] & { isMe: boolean }[]>([
+const recordList = reactive<MessageRecordType[] & { isMe: boolean }[]>([
   {
     id: 7,
     created_at: '2025-03-09T19:39:45.746+08:00',
@@ -45,7 +45,7 @@ const recordList = reactive<MessageRecodrdType[] & { isMe: boolean }[]>([
     isMe: false,
   },
 ])
-const messagecheck = (data: MesssageListType) => {
+const messageCheck = (data: MessageListType) => {
   console.log(data)
 }
 </script>
@@ -55,7 +55,7 @@ const messagecheck = (data: MesssageListType) => {
       <div class="head">
         <a-input-search placeholder="搜索用户名称"></a-input-search>
       </div>
-      <Blog_message :data="messageData.list" @check="messagecheck" />
+      <Blog_message :data="messageData.list" @check="messageCheck" />
       <div class="page">
         <a-pagination :total="messageData.count" simple />
       </div>
@@ -132,7 +132,8 @@ const messagecheck = (data: MesssageListType) => {
         .message_content {
           margin-left: 10px;
           .content {
-            position: 10px 0;
+            position: relative;
+            top: 10px;
           }
         }
         .text-message {

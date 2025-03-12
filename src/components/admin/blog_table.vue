@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import type { ListDateType, PageParamType, ResponseResult } from '@/api/axios'
-import { deleteUserIdsApi } from '@/api/user/user_api'
 import { IconRefresh } from '@arco-design/web-vue/es/icon'
 import { reactive, ref, type Component } from 'vue'
 import { Message, type TableColumnData, type TableRowSelection } from '@arco-design/web-vue'
@@ -8,53 +7,57 @@ import { dateTimeFormat } from '@/utils/date'
 import type { optionType } from '@/types'
 import { getRoleListApi } from '@/api/role/role_api'
 import { defaultOptionApi } from '@/api'
+import { useRoute } from 'vue-router'
 
+const routes = useRoute()
 //tab数据
 const data = reactive<ListDateType<any>>({
   list: [],
   count: 0,
 })
+
 //批量操作组actionOption
 export interface actionOptionType extends optionType {
   callback?: (idList: (string | number)[]) => Promise<boolean>
 }
+
 //过滤组
 type filterFn = (params?: PageParamType) => Promise<ResponseResult<optionType[]>>
+
 export interface filterOptionType extends optionType {
   column: string
   source: optionType[] | string | filterFn //可以是现成的数据也可以是url地址也可以是一个函数
   options?: optionType[]
 }
+
 //props
-const props = defineProps<{
-  url: (parmas: PageParamType) => Promise<ResponseResult<ListDateType<any>>>
+interface Props {
+  url: (params: PageParamType) => Promise<ResponseResult<ListDateType<any>>>
   columns: TableColumnData[] //定义的操作组
   limit?: number //分页每一页几条
   rowKey?: string //用户id
-  tablename?: string //创建用户
-  defualtDel?: boolean //默认删除
+  labelName?: string //创建用户
+  defaultDel?: boolean //默认删除
   noActionGroup?: boolean //不启用操作组
   actionGroup?: actionOptionType[] //操作组
   noCheck?: boolean //不能选择
   filterGroup?: filterOptionType[] //过滤组
   noConfirm?: boolean //关闭操作组的确认
-  noadd?: boolean //没有添加按钮
+  noAdd?: boolean //没有添加按钮
   noDelete?: boolean //没有删除按钮
   noEdit?: boolean //没有编辑按钮
   searchPlaceholder?: string //模糊搜索
-  defualtParams?: PageParamType & any //第一次查询的参数
-  nopage?: boolean
-}>()
+  defaultParams?: PageParamType & any //第一次查询的参数
+  noPage?: boolean
+}
+
+//props
+const props = defineProps<Props>()
 //props 默认值
-const userList = reactive({
-  rowKey: props.rowKey ? props.rowKey : 'id',
-  tablename: props.tablename ? props.tablename : '添加',
-  defualtDel: props.defualtDel ? true : false,
-  searchPlaceholder: props.searchPlaceholder ? props.searchPlaceholder : '搜索',
-})
+const { rowKey = 'id', labelName = '添加', searchPlaceholder = '搜索' } = props
 //init
 //组件
-const selectedKeys = ref<(string | number)[]>([])
+const selectedKeys = ref<(number)[]>([])
 const rowSelection = reactive<TableRowSelection>({
   type: 'checkbox',
   showCheckedAll: true,
@@ -65,7 +68,7 @@ export type RecordType<T> = T & {}
 const emit = defineEmits<{
   add: [boolean] //添加
   edit: [record: RecordType<any>] //编辑
-  remove: [idList: (number | string)[]] //删除
+  remove: [idList: (number)[]] //删除
 }>()
 //init操作组
 const actionOptions = ref<actionOptionType[]>([{ label: '批量删除', value: 0 }]) //操作组选项之一
@@ -74,7 +77,7 @@ const actionValue = ref<number | string | undefined | any>(undefined) //执行�
 const initActionGroup = () => {
   //判断props.actionGroup
   if (!props.actionGroup) return
-  //vaule使用循环的index下标
+  //val使用循环的index下标
   for (let i = 0; i < props.actionGroup.length; i++) {
     actionOptions.value.push({
       label: props.actionGroup[i].label,
@@ -92,7 +95,7 @@ const actionMethod = () => {
       Message.error('请选择删除的数据')
       return
     }
-    resmoveIdsDate(selectedKeys.value)
+    removeIdsDate(selectedKeys.value)
     return
   }
   //执行操作
@@ -141,7 +144,7 @@ const initFilter = async () => {
 }
 initFilter()
 //过滤
-const filtelChange = (item: any, val: any) => {
+const filterChange = (item: any, val: any) => {
   infoList({ [item.column]: val })
 }
 const add = () => {
@@ -151,25 +154,29 @@ const edit = (record: RecordType<any>) => {
   console.log(record)
   emit('edit', record)
 }
-const removes = async (record: RecordType<any>) => {
+const removes =  (record: RecordType<any>) => {
   //id切片
-  let ids = record[userList.rowKey]
-  resmoveIdsDate([ids])
+  let ids = record[rowKey]
+  removeIdsDate([ids])
 }
 //删除
-const resmoveIdsDate = async (idList: (string | number)[]) => {
+const removeIdsDate = async (idList: (number)[]) => {
   //父组件传删除的bool
-  if (!props.defualtDel) {
+  if (!props.defaultDel) {
     Message.error('删除未配置')
     return
   }
   //请求
-  let res = await deleteUserIdsApi(idList)
-  if (res.code != 0) {
-    Message.error(res.msg)
-    return
-  }
-  Message.success(res.msg)
+  //应该使用path+统一的删除接口删除
+  let path:string = routes.name
+  let url= path.split("_")
+  console.log(url)
+  // let res = await defaultDeleteApi(path, idList)
+  // if (res.code != 0) {
+  //   Message.error(res.msg)
+  //   return
+  // }
+  // Message.success(res.msg)
   emit('remove', idList)
   flush()
 }
@@ -190,7 +197,7 @@ const infoList = async (p?: PageParamType & any) => {
   }
   loading.value = true //loading
   const res = await props.url(params)
-  loading.value = false //loding 关闭
+  loading.value = false //loading 关闭
   if (res.code) {
     Message.error(res.msg)
     return
@@ -213,7 +220,7 @@ const flush = () => {
   infoList()
 }
 
-infoList(props.defualtParams)
+infoList(props.defaultParams)
 const clearData = () => {
   data.list = []
   data.count = 0
@@ -227,12 +234,12 @@ defineExpose({
 <template>
   <div class="blog_table">
     <!-- spin 加载 spin width100% -->
-    <a-spin class="blog_tabel_dataspin" :loading="loading" tip="加载中">
+    <a-spin class="blog_table_data_spin" :loading="loading" tip="加载中">
       <div>
         <div class="blog_table_head">
           <div class="action_create">
             <!-- 添加 -->
-            <a-button type="primary" v-if="!props.noadd" @click="add">{{ userList.tablename }}</a-button>
+            <a-button type="primary" v-if="!props.noAdd" @click="add">{{ labelName }}</a-button>
           </div>
           <div class="action_group" v-if="!props.noActionGroup">
             <!-- 选项 -->
@@ -242,7 +249,7 @@ defineExpose({
               style="width: 150px"
               :options="actionOptions"
               allow-clear
-              value-key="vaule">
+              value-key="value">
               <!-- <a-option :value=""></a-option> -->
             </a-select>
             <!-- 二次确认气泡框 -->
@@ -252,7 +259,7 @@ defineExpose({
           </div>
           <div class="action_search">
             <a-input-search
-              :placeholder="userList.searchPlaceholder"
+              :placeholder="searchPlaceholder"
               v-model="params.key"
               @keyup.enter="search"
               @search="search" />
@@ -265,7 +272,7 @@ defineExpose({
               :placeholder="item.label"
               :options="item.options"
               v-for="item in filterGroup"
-              @change="filtelChange(item, $event)"
+              @change="filterChange(item, $event)"
               allow-clear></a-select>
           </div>
           <!-- slot -->
@@ -274,14 +281,16 @@ defineExpose({
           <!-- slot -->
           <!-- 刷新 -->
           <div class="action_flush">
-            <a-button @click="flush"><IconRefresh></IconRefresh></a-button>
+            <a-button @click="flush">
+              <IconRefresh></IconRefresh>
+            </a-button>
           </div>
         </div>
-        <div class="blog_tabel_data">
+        <div class="blog_table_data">
           <div class="blog_table_source">
             <!-- table -->
             <a-table
-              :row-key="userList.rowKey"
+              :row-key="rowKey"
               :columns="props.columns"
               v-model:selectedKeys="selectedKeys"
               :row-selection="props.noCheck ? undefined : rowSelection"
@@ -332,7 +341,7 @@ defineExpose({
             </a-table>
           </div>
           <!-- 分页 -->
-          <div class="blog_table_page" v-if="!props.nopage">
+          <div class="blog_table_page" v-if="!props.noPage">
             <a-pagination
               :total="data.count"
               v-model:current="params.page"
@@ -351,59 +360,74 @@ defineExpose({
 .blog_table {
   background-color: var(--color-bg-1);
   border-radius: 10px;
-  .blog_tabel_dataspin {
+
+  .blog_table_data_spin {
     width: 100%;
+
     .blog_table_head {
       padding: 20px 20px 10px 20px;
       border-bottom: 1px solid var(--bg);
       display: flex;
       align-items: center;
       position: relative;
+
       > div {
         margin-right: 10px;
       }
+
       .action_group {
         display: flex;
+
         button {
           margin-left: 10px;
           padding: 10px 10px;
           border-radius: 5px;
         }
       }
+
       .action_filter {
         display: flex;
+
         > .arco-select {
           margin-right: 10px;
         }
       }
+
       .action_create {
         button {
           border-radius: 5px;
         }
       }
+
       .action_flush {
         position: absolute;
         right: 0;
         margin-right: 10px;
+
         button {
           padding: 0 10px;
           border-radius: 5px;
         }
       }
     }
-    .blog_tabel_data {
+
+    .blog_table_data {
       padding: 10px 20px 20px 20px;
+
       .blog_table_source {
         font-size: 24px;
+
         .blog_table_action {
           > button {
             margin-right: 10px;
+
             &:last-child {
               margin-right: 0;
             }
           }
         }
       }
+
       .blog_table_page {
         padding-top: 25px;
         display: flex;

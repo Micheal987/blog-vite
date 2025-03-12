@@ -103,7 +103,7 @@ const menuList: MenuType[] = [
         key: '5-2',
         title: '广告列表',
         icon: IconUser,
-        name: 'promotion_list',
+        name: 'adverts_list',
         child: [],
       },
       {

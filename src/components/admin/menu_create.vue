@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
-import { type BannerType, type ImageSortType, type MenuCreateRequest, postMenuCreateApi, putMenuUpadteApi } from '@/api/menu/menu_api'
+import { type BannerType, type ImageSortType, type MenuCreateRequest, postMenuCreateApi, putMenuUpdateApi } from '@/api/menu/menu_api'
 import type { ImageType } from '@/api/image/image_api'
 import { getImageInfoApi } from '@/api/image/image_api'
 import { Message } from '@arco-design/web-vue'
@@ -12,8 +12,8 @@ const props = defineProps<{
 }>()
 //emits
 const emits = defineEmits<{
-  update: [visible: boolean]
-  ok: [vaule: boolean]
+  (e:'update',visible: boolean):void
+  (e:'ok',value:boolean):void
 }>()
 //default
 
@@ -33,7 +33,7 @@ const form = reactive<MenuCreateRequest & { abstractString: string, imageIdList:
 //ref
 const formRef = ref()
 
-//eidt
+//edit
 const editId =ref<number|undefined>(undefined)
 
 let imageList = ref<ImageType[]>([])
@@ -57,7 +57,7 @@ const beforeOpen =()=>{
 }
 //创建菜单
 const okHandler = async () => {
-  let val = await formRef.value.validate() //验证规则为undfind代表验证通过
+  let val = await formRef.value.validate() //验证规则为undefined代表验证通过
   if (val) return false //有值代表校验不通过
   form.abstract = form.abstractString.split('\n') //按\n分
   //
@@ -73,7 +73,7 @@ const okHandler = async () => {
     console.log("imageSortIdList",imageSortIdList)
     let res
     if (editId.value){
-     res = await putMenuUpadteApi(editId.value as number,form)
+     res = await putMenuUpdateApi(editId.value as number,form)
     }else{
      res = await postMenuCreateApi(form)
     }
@@ -138,7 +138,7 @@ const okHandler = async () => {
           <a-select v-model="form.imageIdList" multiple placeholder="选择banners图" allow-clear>
             <a-option v-for="item in imageList" :key="item.id" :value="item.id">
               <div class="banners_image_div">
-                <img height="40px" :src="item.path" alt=""></img>
+                <img height="40px" :src="item.path" alt="" />
                 <span>{{ item.name }}</span>
               </div>
             </a-option>

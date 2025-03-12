@@ -1,4 +1,4 @@
-import { ApiRequest } from "../axios/index"
+import { ApiRequest } from '@/api/axios'
 import type { ListRequest, PageParamType, ResponseResult } from "../axios"
 export interface promotionType {
     href: string
@@ -7,9 +7,9 @@ export interface promotionType {
     is_show: boolean
     title: string
 }
-export const getAdvertListApi = (parmas: PageParamType) => {
+export const getAdvertListApi = (params: PageParamType) => {
     return ApiRequest.getRequest<ResponseResult<ListRequest<promotionType>>>("/adverts", {
-        params: parmas, headers: {
+        params: params, headers: {
             "blog_Referer": location.pathname
         }
     })

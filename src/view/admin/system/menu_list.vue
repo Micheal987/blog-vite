@@ -78,16 +78,16 @@ const removes = (idList: (string | number)[]) => {
       ref="blogTableRef"
       noCheck
       search-placeholder="搜索菜单名称"
-      :defualt-params="{ role: 1 }"
-      defualtDel
-      nopage
+      :default-params="{ role: 1 }"
+      default-del
+      no-page
       :limit="10"
       @add="add"
       @edit="edit"
       :actionGroup="actionGroups"
       @remove="removes">
       <template #banners="{ record }: { record: MenuType }">
-        <div class="menu_cloumn_image">
+        <div class="menu_column_image">
           <a-image v-for="item in record.banners" height="50px" :key="item.id" :src="item.path"></a-image>
         </div>
       </template>
@@ -96,7 +96,7 @@ const removes = (idList: (string | number)[]) => {
 </template>
 <style lang="scss">
 .menu_list_view {
-  .menu_cloumn_image {
+  .menu_column_image {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     align-items: center;

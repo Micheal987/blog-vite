@@ -1,13 +1,13 @@
-import { ApiRequest, type ListDateType, type ListRequest, type PageParamType, type ResponseResult } from "../axios"
+import { ApiRequest, type ListRequest, type PageParamType, type ResponseResult } from "../axios"
 
-export interface MesssageType {
+export interface MessageType {
     avatar: string
     count: number
     nickName: string
     userID: number
     userName: string
 }
-export interface MessageRecodrdType {
+export interface MessageRecordType {
     id: number
     created_at: string
     send_user_id: number
@@ -19,7 +19,7 @@ export interface MessageRecodrdType {
     is_read: boolean
     content: string
 }
-export interface MesssageListType {
+export interface MessageListType {
     id: number
     created_at: string
     send_user_id: number
@@ -39,13 +39,13 @@ export interface SendMessage {
 
 }
 export const getMessageListApi = () => {
-    return ApiRequest.getRequest<ListRequest<MesssageListType>>("messages", {})
+    return ApiRequest.getRequest<ListRequest<MessageListType>>("messages", {})
 }
-export const getMessagRecordApi = (user_id: number) => {
-    return ApiRequest.postRequest<ResponseResult<ListRequest<MesssageListType>>>("messages_record", {}, user_id)
+export const getMessageRecordApi = (user_id: number) => {
+    return ApiRequest.postRequest<ResponseResult<ListRequest<MessageListType>>>("messages_record", {}, user_id)
 }
 export const getMessageAllApi = (params: PageParamType) => {
-    return ApiRequest.getRequest<ResponseResult<ListRequest<MesssageListType>>>("messages_all", { params: params })
+    return ApiRequest.getRequest<ResponseResult<ListRequest<MessageListType>>>("messages_all", { params: params })
 }
 export const postSendMessageApi = (params: SendMessage) => {
     return ApiRequest.postRequest<ResponseResult<string>>("messages", {}, params)

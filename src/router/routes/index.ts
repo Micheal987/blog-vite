@@ -99,9 +99,10 @@ const routes: RouteRecordRaw[] = [
             meta: { title: "菜单列表", isVisitor: true },
             component: () => import("@/view/admin/system/menu_list.vue"),
           },
+          ///api/adverts
           {
             path: "promotion_list",
-            name: "promotion_list",
+            name: "adverts_list",
             meta: { title: "广告列表", isVisitor: true },
             component: () => import("@/view/admin/system/promotion_list.vue"),
           },

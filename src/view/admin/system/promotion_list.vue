@@ -69,33 +69,33 @@ const removes = (idList: (string | number)[]) => {
       :columns="columns"
       ref="blogTableRef"
       search-placeholder="搜索广告名称"
-      :defualt-params="{ role: 1 }"
-      defualtDel
+      :default-params="{ role: 1 }"
+      default-del
       :limit="10"
       @add="add"
       @edit="edit"
       :actionGroup="actionGroups"
       @remove="removes">
       <template #images="{ record }: { record: promotionType }">
-        <div class="menu_cloumn_image">
+        <div class="menu_column_image">
           <a-image height="50px" :src="record.images"></a-image>
         </div>
       </template>
       <template #href="{ record }: { record: promotionType }">
-        <div class="menu_cloumn_image">
+        <div class="menu_column_image">
           <a-link :href="record.href" target="_blank">{{ record.href }}</a-link>
         </div>
       </template>
       <template #is_show="{ record }: { record: promotionType }">
-        <a-tag color="arcoblue" v-if="record.is_show">显示</a-tag>
-        <a-tag color="arcoblue" v-else>不显示</a-tag>
+        <a-tag color="orangered" v-if="record.is_show">显示</a-tag>
+        <a-tag color="orangered" v-else>不显示</a-tag>
       </template>
     </Blog_table>
   </div>
 </template>
 <style lang="scss">
 .menu_list_view {
-  .menu_cloumn_image {
+  .menu_column_image {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     align-items: center;
