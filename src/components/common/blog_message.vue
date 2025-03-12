@@ -18,7 +18,7 @@ const checkItem = (record: MessageListType) => {
 <template>
   <div class="blog_message_list">
     <div
-      :class="{ item: true, active: active == item.id }"
+      :class="{ item: true, active:( active === item.id) }"
       @click="checkItem(item)"
       v-for="item in props.data"
       :key="item.id">

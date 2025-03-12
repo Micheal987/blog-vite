@@ -57,7 +57,7 @@ const props = defineProps<Props>()
 const { rowKey = 'id', labelName = '添加', searchPlaceholder = '搜索' } = props
 //init
 //组件
-const selectedKeys = ref<(number)[]>([])
+const selectedKeys = ref<number[]>([])
 const rowSelection = reactive<TableRowSelection>({
   type: 'checkbox',
   showCheckedAll: true,
@@ -68,7 +68,7 @@ export type RecordType<T> = T & {}
 const emit = defineEmits<{
   add: [boolean] //添加
   edit: [record: RecordType<any>] //编辑
-  remove: [idList: (number)[]] //删除
+  remove: [idList: number[]] //删除
 }>()
 //init操作组
 const actionOptions = ref<actionOptionType[]>([{ label: '批量删除', value: 0 }]) //操作组选项之一
@@ -154,13 +154,13 @@ const edit = (record: RecordType<any>) => {
   console.log(record)
   emit('edit', record)
 }
-const removes =  (record: RecordType<any>) => {
+const removes = (record: RecordType<any>) => {
   //id切片
   let ids = record[rowKey]
   removeIdsDate([ids])
 }
 //删除
-const removeIdsDate = async (idList: (number)[]) => {
+const removeIdsDate = async (idList: number[]) => {
   //父组件传删除的bool
   if (!props.defaultDel) {
     Message.error('删除未配置')
@@ -168,9 +168,9 @@ const removeIdsDate = async (idList: (number)[]) => {
   }
   //请求
   //应该使用path+统一的删除接口删除
-  let path:string = routes.name
-  let url= path.split("_")
-  console.log(url)
+  let path = routes.name as string
+  let url = path.split('_')
+  console.log('url', url)
   // let res = await defaultDeleteApi(path, idList)
   // if (res.code != 0) {
   //   Message.error(res.msg)

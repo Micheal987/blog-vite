@@ -4,32 +4,30 @@ import { ref, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import type { tabsType } from '@/types'
+
 const route = useRoute()
 const router = useRouter()
 
-const tabList = ref<tabsType[]>([{ name: 'home', title: '首页' }])
+const tableList = ref<tabsType[]>([{ name: 'home', title: '首页' }])
 const clickTab = (item: tabsType) => {
   router.push({
     name: item.name,
   })
 }
 const isName = (name: string): boolean => {
-  let count = tabList.value.filter((item) => {
+  let count = tableList.value.filter((item) => {
     return item.name === name
   })
-  if (count.length > 0) {
-    return true
-  }
-  return false
+  return count.length <= 0 ? false : true
 }
 //持久化
 const persistence = () => {
-  localStorage.setItem('tablist', JSON.stringify(tabList.value))
+  localStorage.setItem('tableList', JSON.stringify(tableList.value))
 }
 //持久化
 //取出本地缓存
 const loadTab = () => {
-  let value = localStorage.getItem('tablist')
+  let value = localStorage.getItem('tableList')
   if (value == null) {
     return
   }
@@ -39,12 +37,12 @@ const loadTab = () => {
   } catch (err) {
     return
   }
-  tabList.value = tabs
+  tableList.value = tabs
 }
 //持久化
 loadTab()
 watch(
-  () => tabList.value.length,
+  () => tableList.value.length,
   () => {
     persistence()
   },
@@ -77,19 +75,19 @@ const closeTab = (item: tabsType) => {
   if (item.name == 'home') {
     return
   }
-  let index = tabList.value.findIndex((tab) => item.name == tab.name)
+  let index = tableList.value.findIndex((tab) => item.name == tab.name)
   //删除
-  tabList.value.splice(index, 1)
+  tableList.value.splice(index, 1)
   //等于当前路由返回上一级的路由
   if (route.name == item.name) {
     let beforeIndex = index - 1
-    let beforeItem = tabList.value[beforeIndex]
+    let beforeItem = tableList.value[beforeIndex]
     clickTab(beforeItem)
   }
 }
 //关闭全部
-const closetabAll = () => {
-  tabList.value = [{ name: 'home', title: '首页' }]
+const closeTableAll = () => {
+  tableList.value = [{ name: 'home', title: '首页' }]
   router.push({ name: 'home' })
 }
 watch(
@@ -97,7 +95,7 @@ watch(
   () => {
     if (!isName(route.name as string)) {
       //表示路由不存在,将当前路由push上去
-      tabList.value.push({
+      tableList.value.push({
         name: route.name as string,
         title: route.meta.title as string,
       })
@@ -109,7 +107,7 @@ watch(
 <template>
   <div class="blog_tabs">
     <swiper :slides-per-view="slidesPerView" class="mySwiper">
-      <swiper-slide v-for="item in tabList" :key="item.name">
+      <swiper-slide v-for="item in tableList" :key="item.name">
         <span
           :class="{ blog_tab: true, active: route.name === item.name }"
           @click="clickTab(item)"
@@ -120,8 +118,8 @@ watch(
       </swiper-slide>
     </swiper>
     <span class="blog_tab_all"
-      >全部关闭
-      <IconClose @click="closetabAll"></IconClose>
+    >全部关闭
+      <IconClose @click="closeTableAll"></IconClose>
     </span>
   </div>
 </template>
@@ -131,6 +129,7 @@ watch(
   display: flex;
   align-items: center;
   border-bottom: 1px solid var(--bg);
+
   .mySwiper {
     width: calc(100% - 94px);
     overflow: hidden;
@@ -138,6 +137,7 @@ watch(
     height: 100%;
     display: flex;
     align-items: center;
+
     .swiper-wrapper {
       display: flex;
       justify-content: start;
@@ -148,6 +148,7 @@ watch(
       }
     }
   }
+
   .blog_tab {
     line-height: 25px;
     margin: 0 5px;

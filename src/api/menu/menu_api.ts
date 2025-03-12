@@ -36,7 +36,7 @@ export const postMenuCreateApi = (params: MenuCreateRequest) => {
     return ApiRequest.postRequest<ResponseResult<MenuCreateRequest>>("/menus", {}, params)
 }
 export const putMenuUpdateApi = (id: number, params: MenuCreateRequest) => {
-    return ApiRequest.pustRequest<ResponseResult<MenuCreateRequest>>("/menus/" + id.toString(), {}, params)
+    return ApiRequest.putRequest<ResponseResult<MenuCreateRequest>>("/menus/" + id.toString(), {}, params)
 }
 export const defaultMenuFrom = {
     title: '',

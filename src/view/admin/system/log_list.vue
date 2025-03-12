@@ -186,8 +186,8 @@ const jsonPreview = () => {
       :columns="columns"
       ref="blogTableRef"
       search-placeholder="搜索日志名称"
-      defualtDel
-      :defualt-params="params"
+      default-del
+      :default-params="params"
       :limit="10"
       @add="add"
       @edit="edit"

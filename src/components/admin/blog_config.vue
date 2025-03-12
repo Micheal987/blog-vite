@@ -21,7 +21,7 @@ let form = reactive<SettingType>({
 interface Props {
   title: string
   name: SettingNameType
-  cloumn: ConfigColumnType<any>[]
+  column: ConfigColumnType<any>[]
   form?: SettingType
   labelSpan?: number
   wrapperSpan?: number
@@ -67,7 +67,7 @@ const InfoUpdate = async () => {
           :label-col-props="{ span: labelSpan }"
           :wrapper-col-props="{ span: wrapperSpan }">
           <a-form-item
-            v-for="item in cloumn"
+            v-for="item in column"
             :label="item.label"
             :field="(item.field as keyof SettingType)"
             :rules="item.rules"
@@ -103,6 +103,7 @@ const InfoUpdate = async () => {
   .left {
     width: var(--col);
     .site_info {
+      white-space: normal;
     }
 
     .site_config_update {

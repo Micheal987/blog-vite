@@ -5,7 +5,7 @@ class AxiosRequest {
     private instance
     constructor(config: AxiosRequestConfig) {
         this.instance = axios.create(config)
-        this.intercptors()
+        this.interceptors()
     }
     public request<T>(config: AxiosRequestConfig): Promise<T> {
         return new Promise(async (resolve, reject) => {
@@ -37,7 +37,7 @@ class AxiosRequest {
                 })
         })
     }
-    public pustRequest<T>(url: string, config: AxiosRequestConfig, data?: any,): Promise<T> {
+    public putRequest<T>(url: string, config: AxiosRequestConfig, data?: any,): Promise<T> {
         return new Promise((resolve, reject) => {
             this.instance.put<T>(url, data, config).
                 then((response) => {
@@ -57,11 +57,11 @@ class AxiosRequest {
                 })
         })
     }
-    private intercptors() {
-        this.intercptorsRequest()
+    private interceptors() {
+        this.interceptorsRequest()
         this.interceptorsResponse()
     }
-    private intercptorsRequest() {
+    private interceptorsRequest() {
         // 添加请求拦截器
         this.instance.interceptors.request.use(
             (config) => {

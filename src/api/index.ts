@@ -1,5 +1,5 @@
 import type { optionType } from "@/types"
-import { ApiRequest, type PageParamType, type ResponseResult } from "./axios/index"
+import { ApiRequest, type PageParamType, type ResponseResult } from '@/api/axios'
 
 //删除
 export const defaultDeleteApi = <T>(url: string, ids: T[]) => {

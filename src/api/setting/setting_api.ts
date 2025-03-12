@@ -1,4 +1,4 @@
-import { ApiRequest, type ResponseResult } from "../axios/index"
+import { ApiRequest, type ResponseResult } from '@/api/axios'
 export interface SiteInfoType {
     created_at: string
     bei_an: string
@@ -21,7 +21,7 @@ export const getSiteInfoApi = () => {
     return ApiRequest.getRequest<ResponseResult<SiteInfoType>>("/setting/site", {})
 }
 export const putSiteInfoUpdateApi = (data: SiteInfoType) => {
-    return ApiRequest.pustRequest<ResponseResult<string>>('setting/site', {}, data)
+    return ApiRequest.putRequest<ResponseResult<string>>('setting/site', {}, data)
 }
 export interface EmailType {
     host: string
@@ -59,7 +59,7 @@ export const getSettingInfoApi = <T extends SettingType>(name: SettingNameType) 
     return ApiRequest.getRequest<ResponseResult<T>>('/setting/' + name, {})
 }
 export const putSettingUpdateApi = <T extends SettingType>(name: SettingNameType, data: T) => {
-    return ApiRequest.pustRequest<ResponseResult<string>>('/setting/' + name, {}, data)
+    return ApiRequest.putRequest<ResponseResult<string>>('/setting/' + name, {}, data)
 }
 export interface HelpDataType {
     column: string

@@ -1,4 +1,4 @@
-import { ApiRequest, type ResponseResult } from "../axios/index"
+import { ApiRequest, type ResponseResult } from '@/api/axios'
 export interface ImageType {
     id: number
     path: string

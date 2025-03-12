@@ -33,7 +33,7 @@ const defaultHelp = reactive({
       .abs {
         white-space: nowrap;
       }
-      .cloumn {
+      .column {
         font-weight: 600;
         margin-right: 10px;
         &::after {

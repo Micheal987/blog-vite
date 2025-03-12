@@ -32,5 +32,5 @@ export const postCreateAdvertApi = (params: promotionCreateType) => {
 }
 
 export const putUpdateAdvertApi = (id: number, params: promotionCreateType) => {
-    return ApiRequest.pustRequest<ResponseResult<promotionCreateType>>("/adverts/" + id.toString(), {}, params)
+    return ApiRequest.putRequest<ResponseResult<promotionCreateType>>("/adverts/" + id.toString(), {}, params)
 }
