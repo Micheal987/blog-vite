@@ -8,7 +8,7 @@ export interface promotionType {
     title: string
 }
 export const getAdvertListApi = (params: PageParamType) => {
-    return ApiRequest.getRequest<ResponseResult<ListRequest<promotionType>>>("/advert", {
+    return ApiRequest.getRequest<ListRequest<promotionType>>("/advert", {
         params: params, headers: {
             "blog_Referer": location.pathname
         }

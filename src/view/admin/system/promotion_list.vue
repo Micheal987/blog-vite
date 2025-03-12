@@ -3,7 +3,7 @@ import { defaultPromotionForm, getAdvertListApi } from '@/api/promotion/promotio
 import Blog_table from '@/components/admin/blog_table.vue'
 import type { RecordType } from '@/components/admin/blog_table.vue'
 import { reactive, ref } from 'vue'
-import type { promotionCreateType,promotionType } from '@/api/promotion/promotion_api'
+import type { promotionCreateType, promotionType } from '@/api/promotion/promotion_api'
 import Promotion_create from '@/components/admin/promotion_create.vue'
 // blog_table父组件 a-table 显示的字段--头部
 const columns = [
@@ -65,7 +65,7 @@ const removes = (idList: (string | number)[]) => {
       @update="visibleUpdate"
       :record="recordData"></Promotion_create>
     <Blog_table
-      :url="getAdvertListApi as any"
+      :url="getAdvertListApi"
       :columns="columns"
       ref="blogTableRef"
       search-placeholder="搜索广告名称"

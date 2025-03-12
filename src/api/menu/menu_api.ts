@@ -1,4 +1,4 @@
-import { ApiRequest, type ListRequest, type PageParamType, type ResponseResult } from '@/api/axios'
+import { ApiRequest, type ListDateType, type PageParamType, type ResponseResult } from '@/api/axios'
 export interface BannerType {
     id: number
     path: string
@@ -16,7 +16,7 @@ export interface MenuType {
     banners: BannerType[]
 }
 export const gteMenuListApi = (params: PageParamType) => {
-    return ApiRequest.getRequest<ResponseResult<ListRequest<MenuType>>>("/menu", { params: params })
+    return ApiRequest.getRequest<ResponseResult<ListDateType<MenuType>>>("/menu", { params: params })
 }
 export interface ImageSortType {
     image_id: number

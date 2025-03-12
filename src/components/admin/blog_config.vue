@@ -29,12 +29,8 @@ interface Props {
   rightWidth?: number
   helpData?: HelpDataType[]
 }
-const props = withDefaults(defineProps<Props>(), {
-  labelSpan: 5,
-  wrapperSpan: 20,
-  leftWidth: 50,
-  rightWidth: 50,
-})
+const props = defineProps<Props>()
+const { labelSpan = 5, wrapperSpan = 20, leftWidth = 50, rightWidth = 50 } = props
 const InfoDataList = async () => {
   let res = (await getSettingInfoApi(props.name)) as ResponseResult<SettingType>
   if (res.code) {

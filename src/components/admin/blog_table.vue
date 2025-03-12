@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { ListDateType, PageParamType, ResponseResult } from '@/api/axios'
+import type { ListDateType, ListRequest, PageParamType, ResponseResult } from '@/api/axios'
 import { IconRefresh } from '@arco-design/web-vue/es/icon'
 import { reactive, ref, type Component } from 'vue'
 import { Message, type TableColumnData, type TableRowSelection } from '@arco-design/web-vue'
@@ -32,7 +32,7 @@ export interface filterOptionType extends optionType {
 
 //props
 interface Props {
-  url: (params: PageParamType) => Promise<ResponseResult<ListDateType<any>>>
+  url: (params: PageParamType) => Promise<ResponseResult<ListDateType<any>> | ListRequest<any>>
   columns: TableColumnData[] //定义的操作组
   limit?: number //分页每一页几条
   rowKey?: string //用户id

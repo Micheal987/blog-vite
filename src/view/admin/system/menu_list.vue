@@ -73,7 +73,7 @@ const removes = (idList: (string | number)[]) => {
       @ok="blogTableRef.infoList()"
       :record="recordData"></Menu_create>
     <Blog_table
-      :url="gteMenuListApi as any"
+      :url="gteMenuListApi"
       :columns="columns"
       ref="blogTableRef"
       noCheck

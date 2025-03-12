@@ -182,7 +182,7 @@ const jsonPreview = () => {
       <div class="log_modal_content" v-html="logContent"></div>
     </a-modal>
     <Blog_table
-      :url="getLogList as any"
+      :url="getLogList"
       :columns="columns"
       ref="blogTableRef"
       search-placeholder="搜索日志名称"
