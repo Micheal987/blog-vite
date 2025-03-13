@@ -1,32 +1,32 @@
 <script lang="ts" setup>
-import type { MessageListType } from '@/api/user/message_api'
+import type {MessageType } from '@/api/user/message_api'
 import { ref } from 'vue'
 
 interface Props {
-  data: MessageListType[]
+  data: MessageType[]
 }
 const props = defineProps<Props>()
 const emits = defineEmits<{
-  check: [value: MessageListType]
+  (e:'check',value:MessageType): void
 }>()
 let active = ref<number>(0)
-const checkItem = (record: MessageListType) => {
-  active.value = record.id
+const checkItem = (record: MessageType) => {
+  active.value = record.userID
   emits('check', record)
 }
 </script>
 <template>
   <div class="blog_message_list">
     <div
-      :class="{ item: true, active:( active === item.id) }"
+      :class="{ item: true, active:( active === item.userID) }"
       @click="checkItem(item)"
       v-for="item in props.data"
-      :key="item.id">
+      :key="item.userID">
       <div class="avatar">
-        <img :src="item.send_user_avatar" alt="" />
+        <img :src="item.avatar" alt="" />
       </div>
-      <div class="nick_name">{{ item.send_user_nick_name }}</div>
-      <div class="count">{{ item.message_count }}</div>
+      <div class="nick_name">{{ item.nickName }}</div>
+      <div class="count">{{ item.count }}</div>
     </div>
   </div>
 </template>
