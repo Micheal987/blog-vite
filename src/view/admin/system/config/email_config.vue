@@ -15,7 +15,7 @@ const helpList = [
   {
     column: '授权码',
     abs: '登录的授权码不一定是你邮箱的密码',
-    content: `<img src="http://127.0.0.1:8000/api/uploads/file/qqemail.png" alt="" />`,
+    content: `<img src="http://127.0.0.1:8000/uploads/file/qqemail.png" alt="" />`,
   },
   {
     column: '发送人邮件名称',

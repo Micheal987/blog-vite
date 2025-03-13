@@ -123,7 +123,7 @@ const removes = (idList: number[]) => {
       :actionGroup="actionGroups"
       @remove="removes">
       <template #avatar="{ record }">
-        <a-avatar :imageUrl="record.avatar"></a-avatar>
+        <a-avatar :imageUrl="'http://127.0.0.1:8000/' + record.avatar"></a-avatar>
       </template>
       <template #action_middle="record">
         <a-button>点我{{ record.record.id }}</a-button>

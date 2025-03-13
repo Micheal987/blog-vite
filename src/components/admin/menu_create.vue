@@ -1,24 +1,30 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
-import { type BannerType, type ImageSortType, type MenuCreateRequest, postMenuCreateApi, putMenuUpdateApi } from '@/api/menu/menu_api'
+import {
+  type BannerType,
+  type ImageSortType,
+  type MenuCreateRequest,
+  postMenuCreateApi,
+  putMenuUpdateApi,
+} from '@/api/menu/menu_api'
 import type { ImageType } from '@/api/image/image_api'
 import { getImageInfoApi } from '@/api/image/image_api'
 import { Message } from '@arco-design/web-vue'
-import  {defaultMenuFrom} from "@/api/menu/menu_api"
+import { defaultMenuFrom } from '@/api/menu/menu_api'
 //props
 const props = defineProps<{
   visible: boolean //modal
-  record:MenuCreateRequest & {banners:BannerType[],id?:number}
+  record: MenuCreateRequest & { banners: BannerType[]; id?: number }
 }>()
 //emits
 const emits = defineEmits<{
-  (e:'update',visible: boolean):void
-  (e:'ok',value:boolean):void
+  (e: 'update', visible: boolean): void
+  (e: 'ok', value: boolean): void
 }>()
 //default
 
 //form
-const form = reactive<MenuCreateRequest & { abstractString: string, imageIdList: number[] }>({
+const form = reactive<MenuCreateRequest & { abstractString: string; imageIdList: number[] }>({
   title: '',
   path: '',
   slogan: '',
@@ -34,7 +40,7 @@ const form = reactive<MenuCreateRequest & { abstractString: string, imageIdList:
 const formRef = ref()
 
 //edit
-const editId =ref<number|undefined>(undefined)
+const editId = ref<number | undefined>(undefined)
 
 let imageList = ref<ImageType[]>([])
 const imageInfo = async () => {
@@ -43,17 +49,17 @@ const imageInfo = async () => {
 }
 imageInfo()
 
-const beforeOpen =()=>{
-  Object.assign(form,props.record)
+const beforeOpen = () => {
+  Object.assign(form, props.record)
   //abs
-  form.abstractString =props.record.abstract.join("\n")
+  form.abstractString = props.record.abstract.join('\n')
   //banners
-  const imageIdsList:number[] =[]
-  for(const banner of props.record.banners){
+  const imageIdsList: number[] = []
+  for (const banner of props.record.banners) {
     imageIdsList.push(banner.id)
   }
   form.imageIdList = imageIdsList //list
-  editId.value =props.record.id //edit
+  editId.value = props.record.id //edit
 }
 //创建菜单
 const okHandler = async () => {
@@ -70,28 +76,33 @@ const okHandler = async () => {
     })
   }
   form.image_sort_list = imageSortIdList
-    console.log("imageSortIdList",imageSortIdList)
-    let res
-    if (editId.value){
-     res = await putMenuUpdateApi(editId.value as number,form)
-    }else{
-     res = await postMenuCreateApi(form)
-    }
-    if (res.code) {
-      Message.error(res.msg)
-      return
-    }
-    Message.success(res.msg)
-    Object.assign(form, defaultMenuFrom)
-    emits('update',false)
-    emits('update', false)
-    return true
+  console.log('imageSortIdList', imageSortIdList)
+  let res
+  if (editId.value) {
+    res = await putMenuUpdateApi(editId.value as number, form)
+  } else {
+    res = await postMenuCreateApi(form)
+  }
+  if (res.code) {
+    Message.error(res.msg)
+    return
+  }
+  Message.success(res.msg)
+  Object.assign(form, defaultMenuFrom)
+  emits('update', false)
+  emits('update', false)
+  return true
 }
 </script>
 <template>
   <div>
     <!-- modal -->
-    <a-modal :title="editId?'编辑菜单':'创建菜单'" :visible="props.visible" @before-open="beforeOpen" @cancel="emits('update', false)" v-on:before-ok="okHandler">
+    <a-modal
+      :title="editId ? '编辑菜单' : '创建菜单'"
+      :visible="props.visible"
+      @before-open="beforeOpen"
+      @cancel="emits('update', false)"
+      v-on:before-ok="okHandler">
       <!-- form -->
       <a-form ref="formRef" :model="form">
         <!-- 菜单标题  required-->
@@ -133,12 +144,12 @@ const okHandler = async () => {
         <a-form-item field="slogan" label="slogan切换时间" :validate-trigger="['blur']">
           <a-input-number v-model="form.abstract_time" placeholder="选择slogan切换时间"></a-input-number>
         </a-form-item>
-        <!-- banners图 -->
+        <!-- 选择banners图 -->
         <a-form-item field="image_sort_list" label="banners图" :validate-trigger="['blur']">
           <a-select v-model="form.imageIdList" multiple placeholder="选择banners图" allow-clear>
             <a-option v-for="item in imageList" :key="item.id" :value="item.id">
               <div class="banners_image_div">
-                <img height="40px" :src="item.path" alt="" />
+                <img height="40px" :src="'http://127.0.0.1:8000/' + item.path" alt="" />
                 <span>{{ item.name }}</span>
               </div>
             </a-option>

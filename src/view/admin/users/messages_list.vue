@@ -2,7 +2,7 @@
 import type { MessageListType, MessageRecordType, MessageType } from '@/api/user/message_api'
 import BlogMessageList from '@/components/common/blog_message_list.vue'
 import { reactive, ref } from 'vue'
-import { getMessageUserApi,postMessageRecordApi,getMessageUserListApi } from '@/api/user/message_api'
+import { getMessageUserApi, postMessageRecordApi, getMessageUserListApi } from '@/api/user/message_api'
 import type { ListDateType } from '@/api/axios'
 
 const messageData = reactive<ListDateType<MessageType>>({
@@ -21,19 +21,19 @@ const infoMessageList = async () => {
 infoMessageList()
 const listTest: MessageType[] = [
   {
-    avatar:"http://127.0.0.1:8000/api/uploads/avatar/default.jpg",
-    count:1,
-    nickName:"admin",
-    userID:1,
-    userName:"admin",
+    avatar: 'http://127.0.0.1:8000/uploads/avatar/default.jpg',
+    count: 1,
+    nickName: 'admin',
+    userID: 1,
+    userName: 'admin',
   },
   {
-    avatar:"http://127.0.0.1:8000/api/uploads/avatar/default.jpg",
-    count:2,
-    nickName:"admin",
-    userID:2,
-    userName:"admin",
-  }
+    avatar: 'http://127.0.0.1:8000/uploads/avatar/default.jpg',
+    count: 2,
+    nickName: 'admin',
+    userID: 2,
+    userName: 'admin',
+  },
 ]
 const recordList = reactive<MessageRecordType[] & { isMe: boolean }[]>([
   {
@@ -61,11 +61,11 @@ const recordList = reactive<MessageRecordType[] & { isMe: boolean }[]>([
     isMe: false,
   },
 ])
-let messageUserData =reactive<ListDateType<MessageRecordType>>({
+let messageUserData = reactive<ListDateType<MessageRecordType>>({
   list: [],
   count: 0,
 })
-const messageRecordList = async (id:number) => {
+const messageRecordList = async (id: number) => {
   //改下struct结构
   let res = await postMessageRecordApi(id)
   messageUserData.list = res.data.list
@@ -73,14 +73,14 @@ const messageRecordList = async (id:number) => {
 }
 const messageCheck = (data: MessageType) => {
   console.log(data)
-  userId.value =data.userID
-  messageRecordList(data.userID)
+  userId.value = data.user_id
+  messageRecordList(data.user_id)
 }
-let messageRecordData =reactive<ListDateType<MessageRecordType &{isMe: boolean}>>({
+let messageRecordData = reactive<ListDateType<MessageRecordType & { isMe: boolean }>>({
   list: [],
   count: 0,
 })
-const messageUserCheck = async (data:MessageListType)=>{
+const messageUserCheck = async (data: MessageListType) => {
   //函数发送人的id和接收人的id
   let res = await postMessageRecordApi(data.id)
   messageRecordData.list = res.data.list
@@ -93,9 +93,9 @@ const messageUserCheck = async (data:MessageListType)=>{
       <div class="head">
         <a-input-search placeholder="搜索用户名称"></a-input-search>
       </div>
-      <BlogMessageList :data="listTest" @check="messageCheck" />
+      <BlogMessageList :data="messageData.list" @check="messageCheck" />
       <div class="page">
-        <a-pagination :total="listTest[0].count" simple />
+        <a-pagination :total="messageData.count" simple />
       </div>
     </div>
     <div class="user_menu">

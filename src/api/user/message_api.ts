@@ -3,9 +3,9 @@ import { ApiRequest, type ListDateType, type ListRequest, type PageParamType, ty
 export interface MessageType {
   avatar: string
   count: number
-  nickName: string
-  userID: number
-  userName: string
+  nick_name: string
+  user_id: number
+  user_name: string
 }
 
 export interface MessageRecordType {
@@ -46,14 +46,14 @@ export const getMessageListApi = () => {
 }
 //golang 需要新增接口
 export const getMessageUserApi = () => {
-  return ApiRequest.getRequest<ListRequest<MessageListType>>('message', {})
+  return ApiRequest.getRequest<ListRequest<MessageType>>('message_user', {})
 }
 //golang 需要新增接口
 export const getMessageUserListApi = () => {
-  return ApiRequest.getRequest<ResponseResult<ListDateType<MessageListType>>>('message_record', {}, {})
+  return ApiRequest.getRequest<ResponseResult<ListDateType<MessageListType>>>('message_record', {},)
 }
 export const postMessageRecordApi = (user_id: number) => {
-  return ApiRequest.postRequest<ResponseResult<ListDateType<MessageListType>>>('message_record', {}, {user_id: user_id})
+  return ApiRequest.postRequest<ResponseResult<ListDateType<MessageListType>>>('message_record', {}, { user_id: user_id })
 }
 export const getMessageAllApi = (params: PageParamType) => {
   return ApiRequest.getRequest<ResponseResult<ListDateType<MessageListType>>>('message_all', { params: params })
