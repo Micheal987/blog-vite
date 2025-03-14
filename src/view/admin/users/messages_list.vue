@@ -1,73 +1,42 @@
 <script lang="ts" setup>
-import type { MessageListType, MessageRecordType, MessageType } from '@/api/user/message_api'
+import {
+  type MessageParams,
+  type MessageRecordType,
+  type MessageType,
+} from '@/api/user/message_api'
 import BlogMessageList from '@/components/common/blog_message_list.vue'
 import { reactive, ref } from 'vue'
-import { getMessageUserApi, postMessageRecordApi, getMessageUserListApi } from '@/api/user/message_api'
+import { getMessageUserApi, getMessageUserInfoApi, postMessageRecordApi } from '@/api/user/message_api'
 import type { ListDateType } from '@/api/axios'
 
+const params = reactive<MessageParams>({
+  page: 1,
+  limit: 1,
+  nick_name: undefined,
+})
 const messageData = reactive<ListDateType<MessageType>>({
   list: [],
   count: 0,
 })
-const messageList = ref<MessageType[]>([])
 let userId = ref(0)
-let userInfoId = ref(0)
 const infoMessageList = async () => {
   //改下struct结构
-  let res = await getMessageUserApi()
+  let res = await getMessageUserApi(params)
   messageData.list = res.data.list
   messageData.count = res.data.count
 }
 infoMessageList()
-const listTest: MessageType[] = [
-  {
-    avatar: 'http://127.0.0.1:8000/uploads/avatar/default.jpg',
-    count: 1,
-    nickName: 'admin',
-    userID: 1,
-    userName: 'admin',
-  },
-  {
-    avatar: 'http://127.0.0.1:8000/uploads/avatar/default.jpg',
-    count: 2,
-    nickName: 'admin',
-    userID: 2,
-    userName: 'admin',
-  },
-]
-const recordList = reactive<MessageRecordType[] & { isMe: boolean }[]>([
-  {
-    created_at: '2025-03-09T19:39:45.746+08:00',
-    send_user_id: 2,
-    send_user_nick_name: 'admin',
-    send_user_avatar: '/api/uploads/avatar/default.jpg',
-    rev_user_id: 35,
-    rev_user_nick_name: 'wei',
-    rev_user_avatar: 'uploads/avatar/default.jpg',
-    content: 'sdadasdasdddddddddd',
-    message_count: 1,
-    isMe: true,
-  },
-  {
-    created_at: '2025-03-09T19:39:49.79+08:00',
-    send_user_id: 35,
-    send_user_nick_name: 'wei',
-    send_user_avatar: '/uploads/avatar/default.jpg',
-    rev_user_id: 2,
-    rev_user_nick_name: 'admin',
-    rev_user_avatar: '/uploads/avatar/default.png',
-    content: 'sdadasdasdddddddddd',
-    message_count: 1,
-    isMe: false,
-  },
-])
-let messageUserData = reactive<ListDateType<MessageRecordType>>({
+
+let messageUserData = reactive<ListDateType<MessageType>>({
   list: [],
   count: 0,
 })
 const messageRecordList = async (id: number) => {
   //改下struct结构
-  let res = await postMessageRecordApi(id)
+  let params = {
+    user_id: id,
+  }
+  let res = await getMessageUserInfoApi(params)
   messageUserData.list = res.data.list
   messageUserData.count = res.data.count
 }
@@ -76,13 +45,13 @@ const messageCheck = (data: MessageType) => {
   userId.value = data.user_id
   messageRecordList(data.user_id)
 }
-let messageRecordData = reactive<ListDateType<MessageRecordType & { isMe: boolean }>>({
+let messageRecordData = reactive<ListDateType<MessageRecordType>>({
   list: [],
   count: 0,
 })
-const messageUserCheck = async (data: MessageListType) => {
+const messageUserCheck = async (data: MessageType) => {
   //函数发送人的id和接收人的id
-  let res = await postMessageRecordApi(data.id)
+  let res = await postMessageRecordApi(data.user_id)
   messageRecordData.list = res.data.list
   messageUserData.count = res.data.count
 }
@@ -91,17 +60,17 @@ const messageUserCheck = async (data: MessageListType) => {
   <div class="message_list_view">
     <div class="user_list_menu">
       <div class="head">
-        <a-input-search placeholder="搜索用户名称"></a-input-search>
+        <a-input-search placeholder="搜索用户名称" @search="infoMessageList" @keydown="infoMessageList"></a-input-search>
       </div>
       <BlogMessageList :data="messageData.list" @check="messageCheck" />
       <div class="page">
-        <a-pagination :total="messageData.count" simple />
+        <a-pagination :total="messageData.count" @change="infoMessageList" v-model:current="params.page" :page-size="params.limit" simple />
       </div>
     </div>
-    <div class="user_menu">
+    <div class="user_menu" v-if="messageUserData.list">
       <BlogMessageList @check="messageUserCheck" :data="messageUserData.list" />
     </div>
-    <div class="user_record_menu">
+    <div class="user_record_menu" v-if="messageRecordData.list">
       <div :class="{ messages: true, isMe: item.isMe }" v-for="item in messageRecordData.list">
         <div class="avatar">
           <img :src="item.send_user_avatar" alt="" />

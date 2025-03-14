@@ -47,6 +47,13 @@ const menuList: MenuType[] = [
         name: 'article_list',
         child: [],
       },
+      {
+        key: '2-2',
+        title: '图片Image列表',
+        icon: IconUser,
+        name: 'images_list',
+        child: [],
+      },
     ],
   },
   {

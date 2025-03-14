@@ -1,5 +1,8 @@
 import { ApiRequest, type ListDateType, type ListRequest, type PageParamType, type ResponseResult } from '@/api/axios'
 
+export interface MessageParams extends PageParamType{
+  nick_name?:string
+}
 export interface MessageType {
   avatar: string
   count: number
@@ -17,7 +20,7 @@ export interface MessageRecordType {
   rev_user_avatar: string
   content: string
   created_at: string
-  message_count: number
+  isMe:boolean
 }
 
 export interface MessageListType {
@@ -45,15 +48,22 @@ export const getMessageListApi = () => {
   return ApiRequest.getRequest<ListRequest<MessageListType>>('message', {})
 }
 //golang 需要新增接口
-export const getMessageUserApi = () => {
-  return ApiRequest.getRequest<ListRequest<MessageType>>('message_user', {})
+export const getMessageUserApi = (params:MessageParams) => {
+  return ApiRequest.getRequest<ListRequest<MessageType>>('message_user', {
+    params: params,
+  })
 }
 //golang 需要新增接口
-export const getMessageUserListApi = () => {
-  return ApiRequest.getRequest<ResponseResult<ListDateType<MessageListType>>>('message_record', {},)
+export const postMessageRecordApi = (id:number) => {
+  return ApiRequest.postRequest<ResponseResult<ListDateType<MessageRecordType>>>('message_record', {},{
+    user_id: id,
+  })
 }
-export const postMessageRecordApi = (user_id: number) => {
-  return ApiRequest.postRequest<ResponseResult<ListDateType<MessageListType>>>('message_record', {}, { user_id: user_id })
+interface UserInfo extends PageParamType{
+user_id: number
+}
+export const getMessageUserInfoApi = (params: UserInfo) => {
+  return ApiRequest.getRequest<ResponseResult<ListDateType<MessageType>>>('message_user_info', {params: params})
 }
 export const getMessageAllApi = (params: PageParamType) => {
   return ApiRequest.getRequest<ResponseResult<ListDateType<MessageListType>>>('message_all', { params: params })

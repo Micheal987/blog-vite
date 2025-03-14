@@ -5,6 +5,7 @@ import { ref } from 'vue'
 interface Props {
   data: MessageType[]
 }
+
 const props = defineProps<Props>()
 const emits = defineEmits<{
   (e: 'check', value: MessageType): void
@@ -25,7 +26,11 @@ const checkItem = (record: MessageType) => {
       <div class="avatar">
         <img :src="'http://127.0.0.1:8000/' + item.avatar" alt="" />
       </div>
-      <div class="nick_name">{{ item.nick_name }}</div>
+      <div class="nick_name">
+        <a-typography-paragraph
+          :ellipsis="{ rows: 2,showTooltip: true,}">{{ item.nick_name }}
+        </a-typography-paragraph>
+      </div>
       <div class="count">{{ item.count }}</div>
     </div>
   </div>
@@ -38,6 +43,7 @@ const checkItem = (record: MessageType) => {
     align-items: center;
     justify-content: space-between;
     cursor: pointer;
+
     .avatar {
       img {
         width: 100%;
@@ -45,12 +51,16 @@ const checkItem = (record: MessageType) => {
         border-radius: 50%;
       }
     }
+
     .nick_name {
+      width: 120px;
       font-weight: 700;
     }
+
     .count {
       font-size: 16px;
     }
+
     &.active {
       background-color: var(--color-fill-2);
       border-radius: 5px;
