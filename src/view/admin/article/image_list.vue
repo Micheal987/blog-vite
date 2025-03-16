@@ -1,21 +1,42 @@
 <script lang="ts" setup>
 import Blog_table from '@/components/admin/blog_table.vue'
-import { getImageListApi, type ImageListData } from '@/api/image/image_api.ts'
+import { getImageListApi, type ImageListData, type ImagesUploadType } from '@/api/image/image_api.ts'
 
-import { ref } from 'vue'
+import { h, ref } from 'vue'
 import type { actionOptionType } from '@/components/admin/blog_table.vue'
-
-
+import { Message, Tag, type FileItem } from '@arco-design/web-vue'
+import { useStoreConfig } from '@/store'
+import type { ResponseResult } from '@/api/axios'
+const store = useStoreConfig()
 // blog_table父组件 a-table 显示的字段--头部
 const columns = [
   { title: '文件名称', dataIndex: 'name' },
-  { title: '上传文件类型', dataIndex: 'image_type' },
+  {
+    title: '上传文件类型',
+    dataIndex: 'image_type',
+    render: (data: any) => {
+      if (data == undefined || null) return
+      const record = data.record as ImageListData
+      let color = 'red'
+      if (record.image_type == '本地') {
+        color = 'blue'
+      }
+      return h(
+        Tag,
+        { color: color },
+        {
+          default: () => {
+            record.image_type
+          },
+        },
+      )
+    },
+  },
   { title: '文件路径', slotName: 'path' },
   { title: '上传时间', dataIndex: 'created_at' },
   { title: '操作', slotName: 'action' },
 ]
-
-
+const fileList = ref<FileItem[]>([])
 //操作组
 const actionGroups = ref<actionOptionType[]>([
   {
@@ -39,17 +60,45 @@ const visibleUpdate = (val: boolean) => {
   visible.value = val
 }
 
-
 //删除
 //emit 传idList的
 const removes = (idList: number[]) => {
   console.log('数组id', idList)
   //删除操作
 }
+const imagesUploadSuccessEvent = (fileItem: FileItem) => {
+  const response = fileItem.response as ResponseResult<ImagesUploadType[]>
+  if (response.data.length > 0) {
+    //is_success 处理 为false的值
+    response.data.forEach((item) => {
+      if (!item.is_success) {
+        Message.error(item.msg)
+        return
+      }
+      Message.success(item.msg)
+    })
+  }
+}
+//
+const beforeOpen = () => {
+  console.log(fileList.value)
+  fileList.value = []
+}
 </script>
 <template>
-  <div>
-
+  <div class="image_list_view">
+    <a-modal title="图片上传" v-model:visible="visible" @before-open="beforeOpen" @ok="createOk">
+      <a-upload
+        list-type="picture-card"
+        :headers="{ token: store.userInfo.token }"
+        action="/api/images"
+        v-model:file-list="fileList"
+        multiple
+        name="images"
+        class="image_upload"
+        @success="imagesUploadSuccessEvent"
+        image-preview></a-upload>
+    </a-modal>
     <Blog_table
       :url="getImageListApi"
       :columns="columns"
@@ -62,10 +111,21 @@ const removes = (idList: number[]) => {
       no-edit
       :actionGroup="actionGroups"
       @remove="removes">
-      <template #path="{record}:{record:ImageListData}">
-        <a-image :src="'http://127.0.0.1:8000/'+ record.path" height="50px"></a-image>
+      <template #path="{ record }: { record: ImageListData }">
+        <a-image :src="'http://127.0.0.1:8000/' + record.path" height="50px"></a-image>
+      </template>
+      <template #action_left="{ record }: { record: ImageListData }">
+        <a :href="record.path" :download="record.name" style="margin-right: 10px">
+          <a-button type="primary">下载</a-button>
+        </a>
       </template>
     </Blog_table>
   </div>
 </template>
-<style lang="scss"></style>
+<style lang="scss">
+.image_upload {
+  .arco-upload-list-picture {
+    width: inherit;
+  }
+}
+</style>

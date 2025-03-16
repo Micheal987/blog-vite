@@ -3,6 +3,7 @@ import { ref } from "vue";
 import { parseToken } from "@/utils/parseToken"
 import { Message } from "@arco-design/web-vue";
 import { postLogOutApi, getUserInfoApi } from "@/api/user/user_api"
+import type { Themes } from "md-editor-v3"
 export interface userStoreInfoType {
   user_name: string
   nick_name: string
@@ -26,7 +27,7 @@ export const useStoreConfig = defineStore(
       avatar: "image/user1.jpg",
       exp: 0
     }
-    const themeString = (): string => {
+    const themeString = (): Themes => {
       return theme.value ? "light" : "dark"
     }
     const setTheme = (str?: string) => {
@@ -122,6 +123,6 @@ export const useStoreConfig = defineStore(
     const isVisitor = (): boolean => {
       return userInfo.role === 3
     }
-    return { collapsed, setCollapsed, theme, setTheme, loadTheme, userInfo, setToken, loadToken, logOut, isLogin, isAdmin, isVisitor };
+    return { collapsed, setCollapsed, theme, setTheme, loadTheme, userInfo, setToken, loadToken, logOut, isLogin, isAdmin, isVisitor, themeString };
   }
 );

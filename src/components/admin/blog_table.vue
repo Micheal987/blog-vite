@@ -5,7 +5,6 @@ import { reactive, ref, type Component } from 'vue'
 import { Message, type TableColumnData, type TableRowSelection } from '@arco-design/web-vue'
 import { dateTimeFormat } from '@/utils/date'
 import type { optionType } from '@/types'
-import { getRoleListApi } from '@/api/role/role_api'
 import { defaultDeleteApi, defaultOptionApi } from '@/api'
 import { useRoute } from 'vue-router'
 
@@ -26,13 +25,14 @@ type filterFn = (params?: PageParamType) => Promise<ResponseResult<optionType[]>
 
 export interface filterOptionType extends optionType {
   column: string
-  source: optionType[] | string | filterFn //可以是现成的数据也可以是url地址也可以是一个函数
+  source: optionType[] | string | filterFn | Promise<ResponseResult<optionType[]>> //可以是现成的数据也可以是url地址也可以是一个函数
   options?: optionType[]
 }
 
 //props
+//Promise<ResponseResult<ListDateType<ArticleType>>>
 interface Props {
-  url: (params: PageParamType) => Promise<ResponseResult<ListDateType<any>> | ListRequest<any>>
+  url: (params: PageParamType) => Promise<ResponseResult<ListDateType<any>>> | ListRequest<any>
   columns: TableColumnData[] //定义的操作组
   limit?: number //分页每一页几条
   rowKey?: string //用户id
@@ -57,7 +57,7 @@ const props = defineProps<Props>()
 const { rowKey = 'id', labelName = '添加', searchPlaceholder = '搜索' } = props
 //init
 //组件
-const selectedKeys = ref<number[]>([])
+const selectedKeys = ref<number[] | string[]>([])
 const rowSelection = reactive<TableRowSelection>({
   type: 'checkbox',
   showCheckedAll: true,
@@ -66,13 +66,13 @@ const rowSelection = reactive<TableRowSelection>({
 //defineEmits
 export type RecordType<T> = T & {}
 const emit = defineEmits<{
-  add: [boolean] //添加
-  edit: [record: RecordType<any>] //编辑
-  remove: [idList: number[]] //删除
+  (e: 'add', value: boolean): void //添加
+  (e: 'edit', record: RecordType<any>): void //编辑
+  (e: 'remove', idList: number[]): void //组件传参删除
 }>()
 //init操作组
 const actionOptions = ref<actionOptionType[]>([{ label: '批量删除', value: 0 }]) //操作组选项之一
-const actionValue = ref<number | string | undefined | any>(undefined) //执行按钮定义
+const actionValue = ref<number | string | undefined | ''>(undefined) //执行按钮定义
 //init操作组
 const initActionGroup = () => {
   //判断props.actionGroup
@@ -88,14 +88,16 @@ const initActionGroup = () => {
 }
 initActionGroup()
 //执行方法
+//批量删除
 const actionMethod = () => {
-  // 判断是不是1
+  if (actionValue.value == undefined) return
   if (actionValue.value == 0) {
+    // 判断是不是1
     if (selectedKeys.value.length == 0) {
       Message.error('请选择删除的数据')
       return
     }
-    removeIdsDate(selectedKeys.value)
+    removeIdsDate(selectedKeys.value as number[])
     return
   }
   //执行操作
@@ -129,7 +131,9 @@ const initFilter = async () => {
         source = res1.data
         break
       case 'function':
-        let res = await getRoleListApi()
+        console.log('func')
+        let res = await (item.source as filterFn)()
+        console.log(res)
         source = res.data
         break
     }
@@ -157,6 +161,9 @@ const edit = (record: RecordType<any>) => {
 const removes = (record: RecordType<any>) => {
   //id切片
   let ids = record[rowKey]
+  if (ids == undefined) {
+    ids = record.ID
+  }
   removeIdsDate([ids])
 }
 //删除
@@ -179,6 +186,7 @@ const removeIdsDate = async (idList: number[]) => {
   }
   Message.success(res.msg)
   emit('remove', idList)
+  selectedKeys.value = [] //删除成功清空数据
   flush()
 }
 //api请求参数
@@ -196,6 +204,7 @@ const infoList = async (p?: PageParamType & any) => {
   if (p) {
     Object.assign(params, p)
   }
+  console.log(p, params)
   loading.value = true //loading
   const res = await props.url(params)
   loading.value = false //loading 关闭
@@ -254,8 +263,13 @@ defineExpose({
               <!-- <a-option :value=""></a-option> -->
             </a-select>
             <!-- 二次确认气泡框 -->
-            <a-popconfirm content="是否删除" @ok="actionMethod">
-              <a-button type="primary" status="danger" v-if="actionValue != undefined">执行</a-button>
+            <a-popconfirm content="是否删除" v-if="!props.noConfirm" @ok="actionMethod">
+              <a-button
+                type="primary"
+                status="danger"
+                v-if="actionValue !== undefined && actionValue !== '' && actionValue != null"
+                >执行</a-button
+              >
             </a-popconfirm>
           </div>
           <div class="action_search">
@@ -293,7 +307,7 @@ defineExpose({
             <a-table
               :row-key="rowKey"
               :columns="props.columns"
-              v-model:selectedKeys="selectedKeys"
+              v-model:selectedKeys="selectedKeys as number[]"
               :row-selection="props.noCheck ? undefined : rowSelection"
               :data="data.list"
               :pagination="false">
