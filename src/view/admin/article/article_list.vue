@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import Blog_table from '@/components/admin/blog_table.vue'
-
 import { reactive, ref } from 'vue'
 import type { filterOptionType } from '@/components/admin/blog_table.vue'
 import {
@@ -26,7 +25,7 @@ const columns = [
   { title: '操作', slotName: 'action' },
 ]
 
-//
+//filter操作组
 const filterGroup: filterOptionType[] = [
   {
     label: '文章分类',
@@ -39,6 +38,8 @@ const filterGroup: filterOptionType[] = [
     source: getTagOptionsApi,
   },
 ]
+
+//recordData
 const recordData = reactive<ArticleUpdateType>({
   title: '',
   abstract: '',
@@ -52,10 +53,12 @@ const recordData = reactive<ArticleUpdateType>({
 })
 
 const blogTableRef = ref() //父组件 ref
-const updateVisible = ref(false)
-const createVisible = ref(false)
-const articleConentenVisible = ref(false)
-const articleUpdateId = ref<string | undefined>(undefined)
+const updateVisible = ref(false) //
+const createVisible = ref(false) //
+const articleConentenVisible = ref(false) //
+const articleUpdateId = ref<string | undefined>(undefined) //
+
+//编辑正文
 const editArticleCoenten = (record: ArticleType) => {
   articleConentenVisible.value = true
   articleUpdateId.value = record.ID
@@ -64,7 +67,7 @@ const editArticleCoenten = (record: ArticleType) => {
 const infoList = () => {
   blogTableRef.value.infoList()
 }
-//
+//emits
 const editRecordData = (record: ArticleType) => {
   updateVisible.value = true
   console.log('编辑', record)
@@ -91,6 +94,7 @@ const removes = (idList: number[]) => {
   console.log('数组id', idList)
   //删除操作
 }
+//颜色
 const colorList = [
   'red',
   'orangered',
@@ -106,7 +110,8 @@ const colorList = [
   'magenta',
   'gray',
 ]
-const visiblefun = (val: boolean) => {
+//emit
+const add = (val: boolean) => {
   createVisible.value = val
 }
 </script>
@@ -130,11 +135,12 @@ const visiblefun = (val: boolean) => {
       default-del
       :limit="10"
       @edit="editRecordData"
-      @add="visiblefun"
+      @add="add"
       @remove="removes">
       <template #banner_url="{ record }: { record: ArticleType }">
         <a-image :src="record.banner_url" height="50px"></a-image>
       </template>
+      <!-- data -->
       <template #data="{ record }: { record: ArticleType }">
         <div class="article_data_col">
           <span>
@@ -155,14 +161,17 @@ const visiblefun = (val: boolean) => {
           </span>
         </div>
       </template>
+      <!-- tags -->
       <template #tags="{ record }: { record: ArticleType }">
         <div class="article_tags_col">
           <a-tag v-for="item in record.tags" :color="colorList[Mock.Random.integer(0, 12)]">{{ item }}</a-tag>
         </div>
       </template>
+      <!-- title -->
       <template #title="{ record }: { record: ArticleType }">
         <div class="article_title" v-html="record.title"></div>
       </template>
+      <!-- action_middle -->
       <template #action_middle="{ record }: { record: ArticleType }">
         <a-button type="outline" @click="editArticleCoenten(record)">编辑正文</a-button>
       </template>

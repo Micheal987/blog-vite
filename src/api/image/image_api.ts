@@ -6,13 +6,13 @@ export interface ImageType {
   name: string
 }
 
-export const getImageInfoApi = () => {
+export const getImageInfoApi1 = () => {
   return ApiRequest.getRequest<ResponseResult<ImageType[]>>('/image_name', {})
 }
 
-export const getImageInfoApi1:
+export const getImageInfoApi:
   () => Promise<ResponseResult<ImageType[]>> = cacheRequest(() =>
-    ApiRequest.getRequest<ResponseResult<ImageType[]>>('/tag_name', {}))
+    ApiRequest.getRequest<ResponseResult<ImageType[]>>('/image_name', {}))
 
 type image_type = '本地' | '七牛云'
 export interface ImageListData {

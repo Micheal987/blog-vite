@@ -82,8 +82,8 @@ export const postArticleCreateApi = (params: ArticleUpdateType) => {
     return ApiRequest.postRequest<ResponseResult<string>>('/article_update', {}, params)
 }
 
-export const getArticleTagsApi1: (params?: PageParamType) => Promise<ResponseResult<string[]>> = cacheRequest((params?: PageParamType) => ApiRequest.getRequest<ResponseResult<string[]>>('/article_tags', { params: params }))
-export const getArticleTagsApi = (params?: PageParamType) => {
+export const getArticleTagsApi: (params?: PageParamType) => Promise<ResponseResult<string[]>> = cacheRequest((params?: PageParamType) => ApiRequest.getRequest<ResponseResult<string[]>>('/article_tags', { params: params }))
+export const getArticleTagsApi1 = (params?: PageParamType) => {
     return ApiRequest.getRequest<ResponseResult<string[]>>('/article_tags', { params: params })
 }
 export const getArticleApi = (id: string) => {

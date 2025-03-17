@@ -90,13 +90,14 @@ const bannerChange = (val: number) => {
   form.banner_url = image?.path
 }
 const coverSrc = (value: number) => {
-  return computed((): string => {
-    return (
-      imageList.value.find((item) => {
-        return item.id === value
-      }) as ImageType
-    ).path
-  })
+  console.log('imageList', imageList.value[value])
+  // return computed((): string => {
+  //   return (
+  //     imageList.value.find((item) => {
+  //       return item.id === value
+  //     }) as ImageType
+  //   ).path
+  // })
 }
 const randomCover = () => {
   const image: ImageType = Random.pick(imageList.value)
@@ -110,6 +111,7 @@ const cancel = () => {
 </script>
 <template>
   <div>
+    <!-- modal-->
     <a-modal
       :title="title"
       width="30%"
@@ -156,11 +158,13 @@ const cancel = () => {
               </div>
             </a-option>
             <!-- bug -->
-            <!-- <template #label="{ data }">
-              {{ coverSrc(data.value).value }}
-              <img :src="coverSrc(data.value).value" style="height: 30px; border-radius: 5px" alt="" />
-              <span style="margin-left: 10px">{{ data.label }}</span>
-            </template> -->
+            <template #label="{ data }">
+              {{ data.value }}
+              {{ coverSrc(data.value) }}
+              <!-- <img :src="coverSrc(data.value)" style="height: 30px; border-radius: 5px" alt="" /> -->
+              <!-- <img :src="coverSrc(data.value).value" style="height: 30px; border-radius: 5px" alt="" />
+              <span style="margin-left: 10px">{{ data.label }}</span> -->
+            </template>
           </a-select>
         </a-form-item>
         <a-form-item field="link" label="原文地址" :validate-trigger="['blur']">

@@ -24,7 +24,7 @@ const loginEmails = async () => {
   let val = await formRef.value.validate()
   if (val) return
   const res = await postLoginEmailApi(form)
- await store.setToken(res.data)
+  store.setToken(res.data)
   if (res.data != null) {
     Message.success(res.msg)
     emits('offEject', false)
@@ -113,7 +113,7 @@ const loginQQ = async () => {
 <style lang="scss">
 .blog_login_form {
   .title {
-    font-family: BlexMonoNerd,serif;
+    font-family: BlexMonoNerd, serif;
     font-size: 24px;
     font-weight: 800;
     text-align: center;
