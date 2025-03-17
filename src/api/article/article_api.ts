@@ -60,9 +60,10 @@ export const getArticleListApi = (params: PageParamType) => {
     return ApiRequest.getRequest<ResponseResult<ListDateType<ArticleType[]>>>('/article_list', { params: params })
 }
 // Promise<ResponseResult<optionType[]>>
-export const getArticleCategory = (params?: PageParamType) => {
+export const getArticleCategory1 = (params?: PageParamType) => {
     return ApiRequest.getRequest<ResponseResult<optionType[]>>('/article_category', { params: params })
 }
+export const getArticleCategory: (params?: PageParamType) => Promise<ResponseResult<optionType[]>> = cacheRequest((params?: PageParamType) => ApiRequest.getRequest<ResponseResult<optionType[]>>('/article_category', { params: params }))
 export interface ArticleUpdateType {
     title: string
     abstract?: string
@@ -79,7 +80,7 @@ export const putArticleUpdateApi = (params: ArticleUpdateType) => {
     return ApiRequest.putRequest<ResponseResult<string>>('/article_update', {}, params)
 }
 export const postArticleCreateApi = (params: ArticleUpdateType) => {
-    return ApiRequest.postRequest<ResponseResult<string>>('/article_update', {}, params)
+    return ApiRequest.postRequest<ResponseResult<string>>('/article_create', {}, params)
 }
 
 export const getArticleTagsApi: (params?: PageParamType) => Promise<ResponseResult<string[]>> = cacheRequest((params?: PageParamType) => ApiRequest.getRequest<ResponseResult<string[]>>('/article_tags', { params: params }))

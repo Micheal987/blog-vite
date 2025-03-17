@@ -13,14 +13,6 @@ import { getTagOptionsApi } from '@/api/tags/tag_api'
 import Blog_article_update from '@/components/common/blog_article_update.vue'
 import Blog_article_drawer from '@/components/common/blog_article_drawer.vue'
 import Blog_article_content_drawer from '@/components/common/blog_article_content_drawer.vue'
-import type { PageParamType } from '@/api/axios'
-interface Props {
-  isUser?: boolean
-}
-
-const props = defineProps<Props>()
-
-const { isUser = false } = props
 // blog_table父组件 a-table 显示的字段--头部
 const columns = [
   { title: '标题', slotName: 'title' },
@@ -66,9 +58,6 @@ const createVisible = ref(false) //
 const articleConentenVisible = ref(false) //
 const articleUpdateId = ref<string | undefined>(undefined) //
 
-const params = reactive<PageParamType & { is_user: boolean }>({
-  is_user: isUser,
-})
 //编辑正文
 const editArticleCoenten = (record: ArticleType) => {
   articleConentenVisible.value = true
@@ -81,6 +70,7 @@ const infoList = () => {
 //emits
 const editRecordData = (record: ArticleType) => {
   updateVisible.value = true
+  console.log('编辑', record)
   recordData.title = record.title
   recordData.abstract = record.abstract
   recordData.content = record.content
@@ -94,6 +84,7 @@ const editRecordData = (record: ArticleType) => {
 }
 //emit--update事件
 const visibleUpdate = (val: boolean) => {
+  console.log('quxiao1')
   updateVisible.value = val
 }
 
@@ -135,25 +126,21 @@ const add = (val: boolean) => {
     <Blog_article_content_drawer
       v-model:visible="articleConentenVisible"
       :id="articleUpdateId as string"></Blog_article_content_drawer>
-    <!-- Blog_table -->
     <Blog_table
       :url="getArticleListApi"
       :columns="columns as any"
-      label-name="发布文章"
       ref="blogTableRef"
       search-placeholder="搜索文章名称"
-      no-confirm
       :filter-group="filterGroup"
       default-del
       :limit="10"
-      :default-params="params"
       @edit="editRecordData"
       @add="add"
       @remove="removes">
       <template #banner_url="{ record }: { record: ArticleType }">
-        <a-image :src="'http://127.0.0.1:8000/' + record.banner_url" height="50px"></a-image>
+        <a-image :src="record.banner_url" height="50px"></a-image>
       </template>
-      <!-- data图标 -->
+      <!-- data -->
       <template #data="{ record }: { record: ArticleType }">
         <div class="article_data_col">
           <span>

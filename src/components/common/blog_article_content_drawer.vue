@@ -13,31 +13,30 @@ import Blog_article_update from '@/components/common/blog_article_update.vue'
 const text = ref('# Hello Editor')
 const store = useStoreConfig()
 const updateVisible = ref<boolean>(false)
-
+//props
 interface Props {
   visible: boolean
   id?: string
 }
-
 const props = defineProps<Props>()
-const { id = '' } = props
+//emit
 const emits = defineEmits<{
   (e: 'update:visible', value: boolean): void
   (e: 'ok'): void
 }>()
+//date
 const data = reactive<ArticleUpdateType>({
   title: '',
   content: '',
   category: '',
 })
-
+//onUploadImg
 const onUploadImg = async (files: Array<File>, callback: (urls: Array<string>) => void): Promise<void> => {
   let resList: ResponseResult<string>[] = []
 
   try {
     resList = await Promise.all(files.map((file) => uploadImageApi(file)))
   } catch (e) {
-    // Message.error(e.message)
     return
   }
 
@@ -52,6 +51,7 @@ const onUploadImg = async (files: Array<File>, callback: (urls: Array<string>) =
   callback(urlList)
 }
 
+//createArticle
 const createArticle = async () => {
   if (data.title === '') {
     Message.warning('文章的标题不能为空')
@@ -73,8 +73,8 @@ const createArticle = async () => {
   data.content = ''
   emits('ok')
 }
+//获取
 const obtain = async () => {
-  console.log('id', id)
   const res = await getArticleApi(props.id as string)
   if (res.code) {
     Message.error(res.msg)
@@ -83,6 +83,14 @@ const obtain = async () => {
   data.content = res.data
   data.id = props.id
 }
+
+const openmodal = () => {
+  updateVisible.value = true
+}
+function okHandler(record: ArticleUpdateType) {
+  Object.assign(data, record)
+}
+//watch id
 watch(
   () => props.id,
   () => {
@@ -92,13 +100,6 @@ watch(
   },
   { immediate: true },
 )
-const openmodal = () => {
-  console.log('出发')
-  updateVisible.value = true
-}
-function okHandler(record: ArticleUpdateType) {
-  Object.assign(data, record)
-}
 </script>
 <template>
   <div class="blog_article_drawer">

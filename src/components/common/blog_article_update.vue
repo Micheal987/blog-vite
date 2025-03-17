@@ -7,21 +7,52 @@ import { getImageInfoApi, type ImageType } from '@/api/image/image_api'
 import { Message } from '@arco-design/web-vue'
 import Blog_article_item from './blog_article_item.vue'
 import { Random } from 'mockjs'
-
+//props
 interface Props {
   visible: boolean
   data: ArticleUpdateType
   title?: string
   type?: 'add' | 'update'
 }
-
+//props
 const props = defineProps<Props>()
-const { title = '更新文章信息', type = 'update' } = props
+const { title = '文章更新', type = 'update' } = props
 const emits = defineEmits<{
   (e: 'update:visible', value: boolean): void
-  (e: 'ok', value: ArticleUpdateType & ArticleDataType): void
+  (e: 'ok', value: any): void
 }>()
 
+//分类标签
+let categoryList = ref<optionType[]>([])
+let TagList = ref<string[]>([])
+//articleCategoryList
+const articleCategoryList = async () => {
+  let res = await getArticleCategory()
+  categoryList.value = res.data
+}
+//articleTagList 标签
+const articleTagList = async () => {
+  let res = await getArticleTagsApi()
+  TagList.value = res.data
+}
+articleCategoryList()
+articleTagList()
+//图片列表获取
+let imageList = ref<ImageType[]>([])
+const imageInfo = async () => {
+  const res = await getImageInfoApi()
+  imageList.value = res.data
+}
+imageInfo()
+
+//bannerChange
+const bannerChange = (val: number) => {
+  const image = imageList.value.find((item) => {
+    return item.id === val
+  })
+  form.banner_url = image?.path
+}
+//form
 const form = reactive<ArticleUpdateType & ArticleDataType>({
   title: '',
   abstract: '',
@@ -38,25 +69,8 @@ const form = reactive<ArticleUpdateType & ArticleDataType>({
   collects_count: 0,
   created_at: new Date().toDateString(),
 })
-let categoryList: optionType[] = []
-let TagList: string[] = []
-const articleCategoryList = async () => {
-  let res = await getArticleCategory()
-  categoryList = res.data
-}
-const articleTagList = async () => {
-  let res = await getArticleTagsApi()
-  TagList = res.data
-  console.log(TagList)
-}
-articleCategoryList()
-articleTagList()
-let imageList = ref<ImageType[]>([])
-const imageInfo = async () => {
-  const res = await getImageInfoApi()
-  imageList.value = res.data
-}
-imageInfo()
+
+//watch
 watch(
   () => props.data,
   () => {
@@ -64,10 +78,27 @@ watch(
   },
   { deep: true, immediate: true },
 )
-const formRef = ref()
+const formRef = ref() //表单验证
+
+const coverSrc = (value: number) => {
+  if (value == undefined) return
+  return computed((): string => {
+    let img = imageList.value.find((item) => item.id === value)?.path
+    if (img == undefined) return ''
+    return img
+  })
+}
+//随机图片
+const randomCover = () => {
+  const image: ImageType = Random.pick(imageList.value)
+  form.banner_id = image.id
+  form.banner_url = image.path
+}
+//表单事件
 const onHandler = async () => {
   let v = await formRef.value.validate()
   if (v) return
+  console.log('f', form.category)
   if (type === 'update') {
     let res = await putArticleUpdateApi(form)
     if (res.code) {
@@ -76,36 +107,16 @@ const onHandler = async () => {
     }
     Message.success(res.msg)
     emits('update:visible', false)
-    emits('ok', form)
+    emits('ok', null)
   }
   if (type == 'add') {
     emits('update:visible', false)
     emits('ok', form)
   }
 }
-const bannerChange = (val: number) => {
-  const image = imageList.value.find((item) => {
-    return item.id === val
-  })
-  form.banner_url = image?.path
-}
-const coverSrc = (value: number) => {
-  console.log('imageList', imageList.value[value])
-  // return computed((): string => {
-  //   return (
-  //     imageList.value.find((item) => {
-  //       return item.id === value
-  //     }) as ImageType
-  //   ).path
-  // })
-}
-const randomCover = () => {
-  const image: ImageType = Random.pick(imageList.value)
-  form.banner_id = image.id
-  form.banner_url = image.path
-}
+
+//关闭
 const cancel = () => {
-  console.log('取消')
   emits('update:visible', false)
 }
 </script>
@@ -119,11 +130,12 @@ const cancel = () => {
       :visible="props.visible"
       @cancel="cancel"
       v-on:before-ok="onHandler">
+      <!-- form -->
       <a-form ref="formRef" :model="form">
         <!-- 文章标题  required-->
         <a-form-item
           field="title"
-          label="广告标题"
+          label="文章标题"
           :rules="[{ required: true, message: '文章标题不能为空' }]"
           :validate-trigger="['blur']">
           <a-input v-model="form.title" placeholder="请输入文章标题"></a-input>
@@ -137,10 +149,11 @@ const cancel = () => {
         </a-form-item>
         <!-- 文章的分类 -->
         <a-form-item field="abstract" label="文件分类" :validate-trigger="['blur']">
+          {{ TagList }}
           <a-select allow-create v-model="form.category" :options="categoryList"></a-select>
         </a-form-item>
         <!-- 文章的标签 -->
-        <a-form-item field="tags" label="文件标签" :validate-trigger="['blur']">
+        <a-form-item field="tags" label="文章的标签" :validate-trigger="['blur']">
           <a-select v-model="form.tags" allow-create multiple :options="categoryList"></a-select>
         </a-form-item>
         <!-- 选择banners图 -->
@@ -150,26 +163,27 @@ const cancel = () => {
             @change="bannerChange(form.banner_id as number)"
             placeholder="选择文章封面"
             allow-clear>
-            <a-button type="outline" style="margin-left: 10px" @click="randomCover">随机图片</a-button>
             <a-option v-for="item in imageList" :key="item.id" :value="item.id">
               <div class="banners_image_div">
-                <img height="40px" :src="'http://127.0.0.1:8000/' + item.path" alt="" />
+                <img height="30px" :src="'http://127.0.0.1:8000/' + item.path" alt="" />
                 <span>{{ item.name }}</span>
               </div>
             </a-option>
-            <!-- bug -->
             <template #label="{ data }">
-              {{ data.value }}
-              {{ coverSrc(data.value) }}
-              <!-- <img :src="coverSrc(data.value)" style="height: 30px; border-radius: 5px" alt="" /> -->
-              <!-- <img :src="coverSrc(data.value).value" style="height: 30px; border-radius: 5px" alt="" />
-              <span style="margin-left: 10px">{{ data.label }}</span> -->
+              <img
+                :src="'http://127.0.0.1:8000/' + coverSrc(data.value)"
+                style="height: 40px; border-radius: 5px"
+                alt="" />
+              <span style="margin-left: 10px">{{ data.label }}</span>
             </template>
           </a-select>
+          <a-button type="outline" style="margin-left: 10px" @click="randomCover">随机图片</a-button>
         </a-form-item>
+        <!-- 原文地址 -->
         <a-form-item field="link" label="原文地址" :validate-trigger="['blur']">
           <a-input v-model="form.link" placeholder="原文地址" :auto-size="{ minRows: 4, maxRows: 10 }"></a-input>
         </a-form-item>
+        <!-- 文章来源 -->
         <a-form-item field="source" label="文章来源" :validate-trigger="['blur']">
           <a-input v-model="form.source" placeholder="文章来源" :auto-size="{ minRows: 4, maxRows: 10 }"></a-input>
         </a-form-item>
@@ -184,10 +198,11 @@ const cancel = () => {
             placeholder="请输入文章内容"
             :auto-size="{ minRows: 10, maxRows: 15 }"></a-textarea>
         </a-form-item>
+        <!-- 文章的预览 -->
         <a-form-item
           field="source"
           v-if="form.title && form.banner_url && form.category"
-          label="文章的预览"
+          label="文章预览"
           :validate-trigger="['blur']"
           content-class="preview_body">
           <Blog_article_item :data="form" />
@@ -201,14 +216,12 @@ const cancel = () => {
   display: flex;
   align-items: center;
   padding: 0 10px;
-
   img {
     height: 40px;
     border-radius: 10px;
     margin-right: 5px;
   }
 }
-
 .preview_body {
   max-width: inherit;
 }

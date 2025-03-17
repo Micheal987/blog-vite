@@ -142,6 +142,7 @@ const router = useRouter()
 const selectKeys = ref([route.name])
 const openKeys = ref([route.matched[1].name])
 const clickMenu = (name: string) => {
+  console.log('n', name)
   router.push({
     name: name,
   })

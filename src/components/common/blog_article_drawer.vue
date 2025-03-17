@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { MdEditor } from 'md-editor-v3'
 import 'md-editor-v3/lib/style.css'
-import { nextTick, reactive, ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { uploadImageApi } from '@/api/image/image_api.ts'
 import type { ResponseResult } from '@/api/axios'
 import { useStoreConfig } from '@/store'
