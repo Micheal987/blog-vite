@@ -1,7 +1,7 @@
 import { ApiRequest, type ListDateType, type ListRequest, type PageParamType, type ResponseResult } from '@/api/axios'
 
-export interface MessageParams extends PageParamType{
-  nick_name?:string
+export interface MessageParams extends PageParamType {
+  nick_name?: string
 }
 export interface MessageType {
   avatar: string
@@ -20,7 +20,7 @@ export interface MessageRecordType {
   rev_user_avatar: string
   content: string
   created_at: string
-  isMe:boolean
+  isMe: boolean
 }
 
 export interface MessageListType {
@@ -48,26 +48,32 @@ export const getMessageListApi = () => {
   return ApiRequest.getRequest<ListRequest<MessageListType>>('message', {})
 }
 //golang 需要新增接口
-export const getMessageUserApi = (params:MessageParams) => {
+export const getMessageUserApi = (params: MessageParams) => {
   return ApiRequest.getRequest<ListRequest<MessageType>>('message_user', {
     params: params,
   })
 }
 //golang 需要新增接口
-export const postMessageRecordApi = (id:number) => {
-  return ApiRequest.postRequest<ResponseResult<ListDateType<MessageRecordType>>>('message_record', {},{
+export const postMessageRecordApi = (id: number) => {
+  return ApiRequest.postRequest<ResponseResult<ListDateType<MessageRecordType>>>('message_record', {}, {
     user_id: id,
   })
 }
-interface UserInfo extends PageParamType{
-user_id: number
+interface UserInfo extends PageParamType {
+  user_id: number
 }
 export const getMessageUserInfoApi = (params: UserInfo) => {
-  return ApiRequest.getRequest<ResponseResult<ListDateType<MessageType>>>('message_user_info', {params: params})
+  return ApiRequest.getRequest<ResponseResult<ListDateType<MessageType>>>('message_user_info', { params: params })
 }
 export const getMessageAllApi = (params: PageParamType) => {
   return ApiRequest.getRequest<ResponseResult<ListDateType<MessageListType>>>('message_all', { params: params })
 }
 export const postSendMessageApi = (params: SendMessage) => {
   return ApiRequest.postRequest<ResponseResult<string>>('message', {}, params)
+}
+export const postUserListByMeApi = () => {
+  return ApiRequest.postRequest('', {})
+}
+export const postUserListMeRecordApi = (userId: number) => {
+  return ApiRequest.postRequest('', { params: userId })
 }
