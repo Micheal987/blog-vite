@@ -53,6 +53,12 @@ const routes: RouteRecordRaw[] = [
             meta: { title: '收藏文章', isVisitor: false, isLogin: true, isAdmin: true },
             component: () => import('@/view/admin/user_center/user_collect_list.vue'),
           },
+          {
+            path: 'message_list',
+            name: 'message_list_user',
+            meta: { title: '收藏文章', isVisitor: false, isLogin: true, isAdmin: true },
+            component: () => import('@/view/admin/user_center/user_message_list.vue'),
+          },
         ],
       },
       {
