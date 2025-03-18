@@ -90,3 +90,6 @@ export const getArticleTagsApi1 = (params?: PageParamType) => {
 export const getArticleApi = (id: string) => {
     return ApiRequest.getRequest<ResponseResult<string>>('/article_detail/' + id, {})
 }
+export const getArticleCollectApi = (params?: PageParamType) => {
+    return ApiRequest.getRequest<ResponseResult<ListDateType<ArticleType>>>('/article/collects/list', { params: params })
+}

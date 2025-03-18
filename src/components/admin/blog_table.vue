@@ -131,7 +131,6 @@ const initFilter = async () => {
         source = res1.data
         break
       case 'function':
-        console.log('func')
         let res = await (item.source as filterFn)()
         console.log(res)
         source = res.data
@@ -155,7 +154,6 @@ const add = () => {
   emit('add', true)
 }
 const edit = (record: RecordType<any>) => {
-  console.log(record)
   emit('edit', record)
 }
 const removes = (record: RecordType<any>) => {
@@ -178,7 +176,7 @@ const removeIdsDate = async (idList: number[]) => {
   //接口都是按_分取第一部分即index为0
   let path = routes.name as string
   let url = path.split('_')
-  console.log('url', url)
+  console.log(url, 'url')
   let res = await defaultDeleteApi(url[0], idList)
   if (res.code) {
     Message.error(res.msg)
