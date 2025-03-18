@@ -101,6 +101,7 @@ const onHandler = async () => {
   console.log('f', form.category)
   if (type === 'update') {
     let res = await putArticleUpdateApi(form)
+    console.log(form.banner_url, 'hhh')
     if (res.code) {
       Message.error(res.msg)
       return
@@ -170,8 +171,9 @@ const cancel = () => {
               </div>
             </a-option>
             <template #label="{ data }">
+              <!-- 请求问题 -->
               <img
-                :src="'http://127.0.0.1:8000/' + coverSrc(data.value)"
+                :src="'http://127.0.0.1:8000/' + coverSrc(data.value)?.value"
                 style="height: 40px; border-radius: 5px"
                 alt="" />
               <span style="margin-left: 10px">{{ data.label }}</span>

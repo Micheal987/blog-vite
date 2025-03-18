@@ -42,10 +42,16 @@ const routes: RouteRecordRaw[] = [
             component: () => import('@/view/admin/user_center/user_info.vue'),
           },
           {
-            path: 'article',
-            name: 'user-article_add_list',
+            path: 'article_add_user',
+            name: 'article_add_user',
             meta: { title: '我发布的文章', isVisitor: false, isLogin: true, isAdmin: true },
             component: () => import('@/view/admin/user_center/user_add_article_list.vue'),
+          },
+          {
+            path: 'article_collects_user',
+            name: 'article_collects_user',
+            meta: { title: '收藏文章', isVisitor: false, isLogin: true, isAdmin: true },
+            component: () => import('@/view/admin/user_center/user_collect_list.vue'),
           },
         ],
       },
