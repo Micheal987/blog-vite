@@ -21,6 +21,8 @@ interface Props {
 const props = defineProps<Props>()
 const { isUser = false } = props
 
+//params
+//判断是否是我发布的
 const params = reactive<PageParamType & { is_user: boolean }>({
   is_user: isUser,
 })
@@ -37,6 +39,8 @@ const columns = [
 ]
 
 //filter操作组
+//文章分类
+//文章标签
 const filterGroup: filterOptionType[] = [
   {
     label: '文章分类',
@@ -64,10 +68,10 @@ const recordData = reactive<ArticleUpdateType>({
 })
 
 const blogTableRef = ref() //父组件 ref
-const updateVisible = ref(false) //
-const createVisible = ref(false) //
-const articleConentenVisible = ref(false) //
-const articleUpdateId = ref<string | undefined>(undefined) //
+const updateVisible = ref(false) //更新 Blog_article_update的modal
+const createVisible = ref(false) //编辑页面 的modal
+const articleConentenVisible = ref(false) // 编辑正文的
+const articleUpdateId = ref<string | undefined>(undefined) //文章id
 
 //编辑正文
 const editArticleCoenten = (record: ArticleType) => {
@@ -78,7 +82,7 @@ const editArticleCoenten = (record: ArticleType) => {
 const infoList = () => {
   blogTableRef.value.infoList()
 }
-//emits
+//emits--edit
 const editRecordData = (record: ArticleType) => {
   updateVisible.value = true
   recordData.title = record.title
@@ -119,7 +123,7 @@ const colorList = [
   'magenta',
   'gray',
 ]
-//emit
+//emit-add
 const add = (val: boolean) => {
   createVisible.value = val
 }

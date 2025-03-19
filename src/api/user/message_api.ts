@@ -72,8 +72,15 @@ export const postSendMessageApi = (params: SendMessage) => {
   return ApiRequest.postRequest<ResponseResult<string>>('message', {}, params)
 }
 export const postUserListByMeApi = () => {
-  return ApiRequest.postRequest('', {})
+  return ApiRequest.postRequest<ResponseResult<ListDateType<MessageType>>>('', {})
 }
 export const postUserListMeRecordApi = (userId: number) => {
-  return ApiRequest.postRequest('', { params: userId })
+  return ApiRequest.postRequest<ResponseResult<ListDateType<MessageRecordType>>>('', { params: userId })
+}
+export interface MessagePublish {
+  conent: string,
+  rev_user_id: number
+}
+export const postMessageUserPublishApi = (data: MessagePublish) => {
+  return ApiRequest.postRequest<ResponseResult<ListDateType<MessageListType[]>>>('message/user', {}, data)
 }

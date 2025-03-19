@@ -22,7 +22,7 @@ const emits = defineEmits<{
   (e: 'ok', value: any): void
 }>()
 
-//分类标签
+//分类标签变量
 let categoryList = ref<optionType[]>([])
 let TagList = ref<string[]>([])
 //articleCategoryList
@@ -30,29 +30,31 @@ const articleCategoryList = async () => {
   let res = await getArticleCategory()
   categoryList.value = res.data
 }
+articleCategoryList()
 //articleTagList 标签
 const articleTagList = async () => {
   let res = await getArticleTagsApi()
   TagList.value = res.data
 }
-articleCategoryList()
 articleTagList()
 //图片列表获取
-let imageList = ref<ImageType[]>([])
+let imageIdList = ref<ImageType[]>([])
 const imageInfo = async () => {
   const res = await getImageInfoApi()
-  imageList.value = res.data
+  imageIdList.value = res.data
 }
 imageInfo()
 
 //bannerChange
 const bannerChange = (val: number) => {
-  const image = imageList.value.find((item) => {
+  //find对应id的信息
+  //可以用filter写
+  const image = imageIdList.value.find((item) => {
     return item.id === val
   })
   form.banner_url = image?.path
 }
-//form
+//form提交的内容
 const form = reactive<ArticleUpdateType & ArticleDataType>({
   title: '',
   abstract: '',
@@ -83,25 +85,24 @@ const formRef = ref() //表单验证
 const coverSrc = (value: number) => {
   if (value == undefined) return
   return computed((): string => {
-    let img = imageList.value.find((item) => item.id === value)?.path
+    let img = imageIdList.value.find((item) => item.id === value)?.path
     if (img == undefined) return ''
     return img
   })
 }
 //随机图片
 const randomCover = () => {
-  const image: ImageType = Random.pick(imageList.value)
+  const image: ImageType = Random.pick(imageIdList.value)
   form.banner_id = image.id
   form.banner_url = image.path
 }
 //表单事件
 const onHandler = async () => {
   let v = await formRef.value.validate()
-  if (v) return
-  console.log('f', form.category)
+  if (v) return //校验不通过
+  // 更新
   if (type === 'update') {
     let res = await putArticleUpdateApi(form)
-    console.log(form.banner_url, 'hhh')
     if (res.code) {
       Message.error(res.msg)
       return
@@ -110,6 +111,7 @@ const onHandler = async () => {
     emits('update:visible', false)
     emits('ok', null)
   }
+  //添加
   if (type == 'add') {
     emits('update:visible', false)
     emits('ok', form)
@@ -164,7 +166,7 @@ const cancel = () => {
             @change="bannerChange(form.banner_id as number)"
             placeholder="选择文章封面"
             allow-clear>
-            <a-option v-for="item in imageList" :key="item.id" :value="item.id">
+            <a-option v-for="item in imageIdList" :key="item.id" :value="item.id">
               <div class="banners_image_div">
                 <img height="30px" :src="'http://127.0.0.1:8000/' + item.path" alt="" />
                 <span>{{ item.name }}</span>

@@ -10,7 +10,7 @@ import { getArticleApi, putArticleUpdateApi } from '@/api/article/article_api.ts
 import { Message } from '@arco-design/web-vue'
 import Blog_article_update from '@/components/common/blog_article_update.vue'
 
-const text = ref('# Hello Editor')
+const text = ref(' Editor')
 const store = useStoreConfig()
 const updateVisible = ref<boolean>(false)
 //props

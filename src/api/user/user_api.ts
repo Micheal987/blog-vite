@@ -67,6 +67,30 @@ export interface UpdateUserRequest {
     user_id: number | string
     role: number
 }
-export const putUpdateUserApi = (params: UpdateUserRequest) => {
-    return ApiRequest.putRequest<ResponseResult<UpdateUserRequest>>("user_role", {}, params)
+export const putUpdateUserApi = (data: UpdateUserRequest) => {
+    return ApiRequest.putRequest<ResponseResult<UpdateUserRequest>>("user_role", {}, data)
+}
+export interface userInfoUpdateType {
+    link: string,
+    nick_name: string,
+    sign: string
+}
+export const putUserInfoUpdateApi = (data: userInfoUpdateType) => {
+    return ApiRequest.putRequest<ResponseResult<string>>('/user_info', {}, data)
+}
+export interface UserUpdatePasswordType {
+    old_pwd: string
+    new_pwd: string
+    re_pwd: string
+}
+export const putUserUpdatePasswordApi = (data: UserUpdatePasswordType) => {
+    return ApiRequest.putRequest<ResponseResult<string>>('/user_pwd', {}, data)
+}
+export interface UserBindingEmailType {
+    email: string
+    code?: string
+    password?: string
+}
+export const postUserBindingEmailApi = (data: UserBindingEmailType) => {
+    return ApiRequest.postRequest('/user_binding_email', {}, data)
 }

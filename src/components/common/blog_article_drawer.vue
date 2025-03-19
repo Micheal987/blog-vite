@@ -10,7 +10,7 @@ import type { ArticleUpdateType } from '@/api/article/article_api.ts'
 import { postArticleCreateApi } from '@/api/article/article_api.ts'
 import { Message } from '@arco-design/web-vue'
 
-const text = ref('# Hello Editor')
+const text = ref('#  Editor')
 const store = useStoreConfig()
 const updateVisible = ref<boolean>(false)
 
@@ -23,19 +23,19 @@ const emits = defineEmits<{
   (e: 'update:visible', value: boolean): void
   (e: 'ok'): void
 }>()
+//data
 const data = reactive<ArticleUpdateType>({
   title: '',
   content: '',
   category: '',
 })
-
+//图片请求
 async function onUploadImg(files: Array<File>, callback: (urls: Array<string>) => void): Promise<void> {
   let resList: ResponseResult<string>[] = []
 
   try {
     resList = await Promise.all(files.map((file) => uploadImageApi(file)))
   } catch (e) {
-    // Message.error(e.message)
     return
   }
 
@@ -55,11 +55,12 @@ interface ArticleSaveStoreType {
   tags: string[]
   date: Date
 }
-
+// emit--ok
 const okHandler = (record: ArticleUpdateType) => {
   console.log(record)
   Object.assign(data, record)
 }
+//接口请求
 const createArticle = async () => {
   if (data.title === '') {
     Message.warning('文章的标题不能为空')
@@ -87,9 +88,11 @@ const createArticle = async () => {
     tags: data.tags ? data.tags : [],
     date: new Date(),
   }
+  //存sessionStorage
   sessionStorage.setItem('saveStore', JSON.stringify(saveStore))
   emits('ok')
 }
+//获取标签
 const obtain = () => {
   let item = sessionStorage.getItem('saveStore')
   if (item == null) return
@@ -101,7 +104,6 @@ const obtain = () => {
     return
   }
 }
-
 obtain()
 </script>
 <template>

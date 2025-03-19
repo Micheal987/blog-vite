@@ -8,8 +8,8 @@ const props = defineProps<{
   visible: boolean
 }>()
 const emits = defineEmits<{
-  (e:'update',visible: boolean):void
-  (e:'ok',value:boolean):void
+  (e: 'update', visible: boolean): void
+  (e: 'ok', value: boolean): void
 }>()
 const form = reactive<CreateUserRequest & { re_password: string }>({
   user_name: '',

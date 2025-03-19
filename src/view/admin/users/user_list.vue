@@ -8,6 +8,7 @@ import { getRoleListApi } from '@/api/role/role_api'
 import User_create from '@/components/admin/user_create.vue'
 import { Message } from '@arco-design/web-vue'
 import { roleOption } from '@/global/role'
+import Blog_message_record_modal from '@/components/common/blog_message_record_modal.vue'
 
 // blog_table父组件 a-table 显示的字段--头部
 const columns = [
@@ -91,6 +92,12 @@ const removes = (idList: number[]) => {
   console.log('数组id', idList)
   //删除操作
 }
+const messageVisible = ref(false)
+const userID = ref(0)
+const checkMessage = (rescord: UserInfoType) => {
+  messageVisible.value = true
+  userID.value = rescord.id
+}
 </script>
 <template>
   <div>
@@ -109,6 +116,7 @@ const removes = (idList: number[]) => {
       </a-form>
     </a-modal>
     <User_create v-model:visible="visible" @update="visibleUpdate" @ok="createOk"></User_create>
+    <Blog_message_record_modal v-model:visible="messageVisible" :userID="userID"></Blog_message_record_modal>
     <Blog_table
       :url="getUserListApi"
       :columns="columns"
@@ -123,7 +131,7 @@ const removes = (idList: number[]) => {
       :actionGroup="actionGroups"
       @remove="removes">
       <template #avatar="{ record }">
-        <a-avatar :imageUrl="'http://127.0.0.1:8000/' + record.avatar"></a-avatar>
+        <a-avatar @click="checkMessage(record)" :imageUrl="'http://127.0.0.1:8000/' + record.avatar"></a-avatar>
       </template>
       <template #action_middle="record">
         <a-button>点我{{ record.record.id }}</a-button>
