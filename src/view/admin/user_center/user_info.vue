@@ -6,6 +6,8 @@ import Blog_title from '@/components/common/blog_title.vue'
 import { Message } from '@arco-design/web-vue'
 import Blog_update_password from '@/components/common/blog_update_password.vue'
 import Blog_binding_email from '@/components/common/blog_binding_email.vue'
+import Blog_user_info_preview from '@/components/common/blog_user_info_preview.vue'
+import { Random } from 'mockjs'
 const form = reactive<UserInfoType>({
   user_name: '',
   id: 0,
@@ -97,7 +99,19 @@ const userInfoUpdate = async () => {
     </div>
     <div class="right">
       <Blog_title title="个人信息预览"></Blog_title>
-      <div class="user_info_preview"></div>
+      <div class="user_info_preview">
+        <Blog_user_info_preview
+          :data="{
+            avatar: form.avatar,
+            nickName: form.nick_name,
+            sign: form.sign,
+            link: form.link,
+            look_count: Random.integer(1, 200),
+            comment_count: Random.integer(1, 200),
+            digg_count: Random.integer(1, 200),
+            collects_count: Random.integer(1, 200),
+          }" />
+      </div>
     </div>
   </div>
 </template>
@@ -121,7 +135,11 @@ const userInfoUpdate = async () => {
     }
   }
   .right {
-    width: 60%;
+    margin-left: 20px;
+    width: calc(60% - 20px);
+    .user_info_preview {
+      width: 200px;
+    }
   }
 }
 </style>
