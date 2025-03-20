@@ -92,5 +92,5 @@ export interface UserBindingEmailType {
     password?: string
 }
 export const postUserBindingEmailApi = (data: UserBindingEmailType) => {
-    return ApiRequest.postRequest('/user_binding_email', {}, data)
+    return ApiRequest.postRequest<ResponseResult<string>>('/user_binding_email', {}, data)
 }

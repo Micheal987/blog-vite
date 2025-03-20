@@ -5,6 +5,7 @@ import { getUserInfoApi, putUserInfoUpdateApi } from '@/api/user/user_api'
 import Blog_title from '@/components/common/blog_title.vue'
 import { Message } from '@arco-design/web-vue'
 import Blog_update_password from '@/components/common/blog_update_password.vue'
+import Blog_binding_email from '@/components/common/blog_binding_email.vue'
 const form = reactive<UserInfoType>({
   user_name: '',
   id: 0,
@@ -25,6 +26,7 @@ const form = reactive<UserInfoType>({
 })
 const formRef = ref()
 const updatePasswordVisible = ref(false)
+const bindingEmailVisible = ref(false)
 const userInfo = async () => {
   let res = await getUserInfoApi()
   Object.assign(form, res.data)
@@ -86,13 +88,17 @@ const userInfoUpdate = async () => {
       </a-form>
       <Blog_title title="操作"></Blog_title>
       <Blog_update_password v-model:visible="updatePasswordVisible"></Blog_update_password>
+      <Blog_binding_email v-model:visible="bindingEmailVisible"></Blog_binding_email>
       <div class="action_gruop">
-        <a-button type="primary">绑定邮箱</a-button>
+        <a-button type="primary" @click="bindingEmailVisible = true">绑定邮箱</a-button>
         <a-button type="primary" @click="updatePasswordVisible = true">修改密码</a-button>
         <a-button type="primary" status="danger">注销退出</a-button>
       </div>
     </div>
-    <div class="right"></div>
+    <div class="right">
+      <Blog_title title="个人信息预览"></Blog_title>
+      <div class="user_info_preview"></div>
+    </div>
   </div>
 </template>
 <style lang="scss">
