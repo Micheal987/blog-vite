@@ -27,8 +27,8 @@ const checkItem = (record: MessageType) => {
         <img :src="'http://127.0.0.1:8000/' + item.avatar" alt="" />
       </div>
       <div class="nick_name">
-        <a-typography-paragraph
-          :ellipsis="{ rows: 2,showTooltip: true,}">{{ item.nick_name }}
+        <a-typography-paragraph :ellipsis="{ rows: 2, showTooltip: true }"
+          >{{ item.nick_name }}
         </a-typography-paragraph>
       </div>
       <div class="count">{{ item.count }}</div>
