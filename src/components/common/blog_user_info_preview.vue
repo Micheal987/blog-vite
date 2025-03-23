@@ -66,8 +66,8 @@ const props = defineProps<Props>()
     height: 40px;
     content: '';
     display: block;
-    top: -50px;
-    right: -50px;
+    top: -6px;
+    right: 0;
     background-color: var(--color-fill-2);
     transform: rotate(45deg);
   }
@@ -96,15 +96,19 @@ const props = defineProps<Props>()
   .article_data {
     .item {
       display: flex;
-      width: 100%;
-      color: var(--color-text-2);
-      > span {
+      align-items: center;
+      .data {
         display: flex;
-        flex-direction: row-reverse;
-        align-items: center;
-        width: 25%;
-        i {
-          margin-top: 10px;
+        color: var(--color-text-2);
+        > span {
+          display: flex;
+          flex-direction: row-reverse;
+          align-items: center;
+          width: 45px;
+          i {
+            text-align: center;
+            margin-left: 5px;
+          }
         }
       }
     }

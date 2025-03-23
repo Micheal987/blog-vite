@@ -75,6 +75,13 @@ const menuList: MenuType[] = [
         name: 'images_list',
         child: [],
       },
+      {
+        key: '2-3',
+        title: '评论列表',
+        icon: IconUser,
+        name: 'comment_list',
+        child: [],
+      },
     ],
   },
   {

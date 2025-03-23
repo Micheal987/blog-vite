@@ -82,14 +82,17 @@ class AxiosRequest {
             (response) => {
                 // 2xx 范围内的状态码都会触发该函数。
                 // 对响应数据做点什么
-                return response;
+                if (response.status != 200) {
+                    Message.error(response.statusText)
+                    return Promise.reject(response.statusText)
+                }
+                return response
             },
             (error) => {
                 // 超出 2xx 范围的状态码都会触发该函数。
                 // 对响应错误做点什么
                 if (error.status !== 200) {
                     // 失败的
-                    console.log("服务失败", error)
                     Message.error(error.response.data.msg)
                 }
                 return Promise.reject(error);

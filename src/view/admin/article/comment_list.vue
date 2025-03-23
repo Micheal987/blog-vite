@@ -1,25 +1,43 @@
 <script lang="ts" setup>
-import type { ListDateType } from '@/api/axios'
+import type { ListDateType, PageParamType } from '@/api/axios'
 import type { CommentArticleType } from '@/api/comment/comment_api'
 import { reactive, ref } from 'vue'
 import { IconDelete } from '@arco-design/web-vue/es/icon'
-
-let active = ref<string>('')
+import { getcommentArticleListApi } from '@/api/comment/comment_api'
+import Blog_comment from '@/components/common/blog_comment.vue'
+import { useRouter, useRoute } from 'vue-router'
+const router = useRouter()
+const routes = useRoute()
+let articleID = ref<string>(routes.query.id as string)
 const articleListData = reactive<ListDateType<CommentArticleType>>({
   list: [],
   count: 0,
 })
-
+const articleParams = reactive<PageParamType>({})
+const articleList = async () => {
+  let res = await getcommentArticleListApi(articleParams)
+  articleListData.list = res.data.list
+  articleListData.count = res.data.count
+}
+articleList()
 const checkItem = (record: CommentArticleType) => {
-  active.value = record.id
+  articleID.value = record.id
+  router.push({
+    query: {
+      id: record.id,
+    },
+  })
 }
 </script>
 <template>
   <div class="comment_list_view">
     <div class="article">
+      <div class="head">
+        <a-input-search placeholder="搜索文章标题"></a-input-search>
+      </div>
       <div class="article_list">
         <div
-          :class="{ item: true, active: active === item.id }"
+          :class="{ item: true, active: articleID === item.id }"
           @click="checkItem(item)"
           v-for="item in articleListData.list"
           :key="item.id">
@@ -33,7 +51,13 @@ const checkItem = (record: CommentArticleType) => {
             <IconDelete />
           </div>
         </div>
+        <div class="page">
+          <a-pagination simple :total="articleListData.count"></a-pagination>
+        </div>
       </div>
+    </div>
+    <div class="comment" v-if="articleID">
+      <Blog_comment :article-id="articleID" />
     </div>
   </div>
 </template>
@@ -54,8 +78,33 @@ const checkItem = (record: CommentArticleType) => {
     width: 280px;
     margin-left: 20px;
     padding: 20px;
+    position: relative;
+    .article_list {
+      .item {
+        display: flex;
+        align-items: center;
+        padding: 20px;
+        &:hover {
+          cursor: pointer;
+          background-color: var(--color-fill-1);
+        }
+      }
+    }
+    .head {
+      margin-bottom: 10px;
+    }
+    .page {
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
   }
-  .blog_message_record_component {
+  .comment {
     width: calc(100% - 320px);
     margin-left: 20px;
   }

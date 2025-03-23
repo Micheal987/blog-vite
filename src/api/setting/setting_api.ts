@@ -1,4 +1,5 @@
 import { ApiRequest, type ResponseResult } from '@/api/axios'
+import type { CahtGroupConfigType } from '../chat/caht_api'
 export interface SiteInfoType {
     created_at: string
     bei_an: string
@@ -53,10 +54,10 @@ export interface QiniuType {
     size: number
     record_dir: string
 }
-export type SettingNameType = 'qq' | 'qiniu' | 'setting' | 'email' | 'jwt' | 'site'
-export type SettingType = EmailType | QQType | JwtType | QiniuType | SiteInfoType
+export type SettingNameType = 'qq' | 'qiniu' | 'setting' | 'email' | 'jwt' | 'site' | 'chat_group'
+export type SettingType = EmailType | QQType | JwtType | QiniuType | SiteInfoType | CahtGroupConfigType
 export const getSettingInfoApi = <T extends SettingType>(name: SettingNameType) => {
-    return ApiRequest.getRequest<ResponseResult<T>>('/setting/' + name, {})
+    return ApiRequest.getRequest<ResponseResult<T>>(`/setting/${name}`, {})
 }
 export const putSettingUpdateApi = <T extends SettingType>(name: SettingNameType, data: T) => {
     return ApiRequest.putRequest<ResponseResult<string>>('/setting/' + name, {}, data)

@@ -78,6 +78,12 @@ const routes: RouteRecordRaw[] = [
             meta: { title: '图片列表', isVisitor: false, isAdmin: true, isLogin: true },
             component: () => import('@/view/admin/article/image_list.vue'),
           },
+          {
+            path: 'comment_list',
+            name: 'comment_list',
+            meta: { title: '文章评论列表', isVisitor: false, isAdmin: true, isLogin: true },
+            component: () => import('@/view/admin/article/comment_list.vue'),
+          },
         ],
       },
       {
