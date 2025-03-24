@@ -2,8 +2,7 @@
 import { MdEditor } from 'md-editor-v3'
 import 'md-editor-v3/lib/style.css'
 import { reactive, ref, watch } from 'vue'
-import { uploadImageApi } from '@/api/image/image_api.ts'
-import type { ResponseResult } from '@/api/axios'
+import { onUploadImg } from '@/api/image/image_api.ts'
 import { useStoreConfig } from '@/store'
 import type { ArticleUpdateType } from '@/api/article/article_api.ts'
 import { getArticleApi, putArticleUpdateApi } from '@/api/article/article_api.ts'
@@ -31,25 +30,6 @@ const data = reactive<ArticleUpdateType>({
   category: '',
 })
 //onUploadImg
-const onUploadImg = async (files: Array<File>, callback: (urls: Array<string>) => void): Promise<void> => {
-  let resList: ResponseResult<string>[] = []
-
-  try {
-    resList = await Promise.all(files.map((file) => uploadImageApi(file)))
-  } catch (e) {
-    return
-  }
-
-  const urlList: string[] = []
-  resList.forEach((res) => {
-    if (res.code) {
-      Message.error(res.msg)
-      return
-    }
-    urlList.push(res.data)
-  })
-  callback(urlList)
-}
 
 //createArticle
 const createArticle = async () => {

@@ -4,9 +4,18 @@
     
 }
 body{
+    --bg:#f0eeee;
+    --login_bg:rgba(255,255,255,0.5)
     --active:rgb(var(--arcoblue-6));
+    --charts_color1:#d97559;
+    --charts_color2:#e4c477;
+    --charts_color3:#eb4d4b;
 }
 body[arco-theme="dark"]{
     --bg:#302e2e;
     --login_bg:rgba(0,0,0,0.5)
+    --charts_color1:#d97559;
+    --charts_color2:#e4c477;
+    --charts_color3:#eb4d4b;
+
 }

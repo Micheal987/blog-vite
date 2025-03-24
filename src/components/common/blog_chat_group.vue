@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { ListDateType, PageParamType } from '@/api/axios'
+import { onUploadImg } from '@/api/image/image_api.ts'
 import {
   getCahtgroupListApi,
   deleteChatApi,
@@ -12,6 +13,8 @@ import { Message } from '@arco-design/web-vue'
 import { nextTick, reactive, ref } from 'vue'
 import { IconFile, IconImage, IconRefresh } from '@arco-design/web-vue/es/icon'
 import { dateTimeFormat } from '@/utils/date'
+import { MdEditor, MdPreview } from 'md-editor-v3'
+import 'md-editor-v3/lib/style.css'
 let paramsConfig = reactive<PageParamType>({})
 let ChatListRecordData = reactive<ListDateType<CahtGruopType>>({
   list: [],
@@ -174,14 +177,21 @@ const websocketConnect = () => {
                     <div class="message_user">{{ item.nickname }}</div>
                     <div class="message_content">
                       <div class="content">
-                        <div class="text-message">{{ item.content }}</div>
+                        <div :class="{ text_message: true, is_md: configInfo.is_md }">
+                          <template v-if="!configInfo.is_md">
+                            {{ item.content }}
+                          </template>
+                          <template v-else>
+                            <MdPreview v-model="item.content" :editor-id="'md__' + item.id" :preview="true" />
+                          </template>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
               <div v-if="item.msg_type === 1 || item.msg_type === 5" :class="{ system: true, isManage: isManage }">
-                <div class="text-message">{{ item.content }}</div>
+                <div class="text_message">{{ item.content }}</div>
               </div>
             </div>
           </template>
@@ -196,6 +206,7 @@ const websocketConnect = () => {
           <div class="menu_icon" @click="imageSend"><IconImage></IconImage></div>
         </div>
         <a-textarea
+          v-if="!configInfo.is_md"
           show-word-limit
           :max-length="configInfo.content_length"
           placeholder="聊天内容"
@@ -203,6 +214,7 @@ const websocketConnect = () => {
           v-model="content"
           :auto-size="{ maxRows: 5, minRows: 6 }"
           style="height: 100%"></a-textarea>
+        <MdEditor v-else v-model="content" :toolbars="[]" :footers="[]" :preview="false" :onUploadImg="onUploadImg" />
         <a-button type="primary" class="send_buuton" @click="sendData">发送</a-button>
       </div>
     </a-spin>
@@ -291,7 +303,7 @@ const websocketConnect = () => {
             }
           }
 
-          .text-message {
+          .text_message {
             font-weight: 300;
             font-size: 19px;
             padding: 20px;
@@ -302,7 +314,19 @@ const websocketConnect = () => {
             min-height: 41px;
             white-space: break-spaces;
             word-break: break-all;
-
+            .md-editor {
+              background-color: inherit;
+              .md-editor-preview-wrapper {
+                padding: 0;
+                img {
+                  border: none;
+                }
+              }
+            }
+            &.is_md {
+              white-space: inherit;
+              word-break: inherit;
+            }
             &::before {
               content: '';
               display: block;
@@ -327,7 +351,7 @@ const websocketConnect = () => {
               text-align: right;
             }
 
-            .text-message {
+            .text_message {
               &::before {
                 content: '';
                 display: block;

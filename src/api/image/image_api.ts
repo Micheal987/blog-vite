@@ -1,5 +1,6 @@
 import { ApiRequest, type ListDateType, type PageParamType, type ResponseResult } from '@/api/axios'
 import { cacheRequest } from "@/api"
+import { Message } from '@arco-design/web-vue'
 export interface ImageType {
   id: number
   path: string
@@ -38,7 +39,7 @@ export const uploadImageApi = (file: File): Promise<ResponseResult<string>> => {
   return new Promise((resolve, reject) => {
     const form = new FormData()
     form.set('image', file)
-    ApiRequest.postRequest('/api/images', { headers: { 'Content-Type': 'multipart/form-data' } }, form)
+    return ApiRequest.postRequest('/image', { headers: { 'Content-Type': 'multipart/form-data' } }, form)
       .then((res: any) => resolve(res)).catch(err => reject(err))
     // useAxios.post('/api/images', form, {
     //   headers: {
@@ -46,4 +47,23 @@ export const uploadImageApi = (file: File): Promise<ResponseResult<string>> => {
     //   },
     // }).then((res: any) => resolve(res)).catch(err => reject(err))
   })
+}
+export const onUploadImg = async (files: Array<File>, callback: (urls: Array<string>) => void): Promise<void> => {
+  let resList: ResponseResult<string>[] = []
+
+  try {
+    resList = await Promise.all(files.map((file) => uploadImageApi(file)))
+  } catch (e) {
+    return
+  }
+
+  const urlList: string[] = []
+  resList.forEach((res) => {
+    if (res.code) {
+      Message.error(res.msg)
+      return
+    }
+    urlList.push(res.data)
+  })
+  callback(urlList)
 }

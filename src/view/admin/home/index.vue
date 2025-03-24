@@ -1,113 +1,14 @@
 <script setup lang="ts">
 import Blog_card from '@/components/common/blog_card.vue'
-import { IconMessage, IconSettings } from '@arco-design/web-vue/es/icon'
-import { onMounted, type Component } from 'vue'
+import { IconMessage, IconSettings, IconUser, IconFile, IconArchive } from '@arco-design/web-vue/es/icon'
+import { reactive, type Component } from 'vue'
 import { router } from '@/router'
 import { relativeCurrentTime } from '@/utils/date'
-import * as echarts from 'echarts'
-import type { EChartsOption } from 'echarts'
-onMounted(() => {
-  const chartDom = document.getElementById('statistics_log')!
-  const myChart = echarts.init(chartDom)
-  let option: EChartsOption
-  option = {
-    title: {
-      text: 'Stacked Area Chart',
-    },
-    tooltip: {
-      trigger: 'axis',
-      axisPointer: {
-        type: 'cross',
-        label: {
-          backgroundColor: '#6a7985',
-        },
-      },
-    },
-    legend: {
-      data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine'],
-    },
-    toolbox: {
-      feature: {
-        saveAsImage: {},
-      },
-    },
-    grid: {
-      left: '3%',
-      right: '4%',
-      bottom: '3%',
-      containLabel: true,
-    },
-    xAxis: [
-      {
-        type: 'category',
-        boundaryGap: false,
-        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-      },
-    ],
-    yAxis: [
-      {
-        type: 'value',
-      },
-    ],
-    series: [
-      {
-        name: 'Email',
-        type: 'line',
-        stack: 'Total',
-        areaStyle: {},
-        emphasis: {
-          focus: 'series',
-        },
-        data: [120, 132, 101, 134, 90, 230, 210],
-      },
-      {
-        name: 'Union Ads',
-        type: 'line',
-        stack: 'Total',
-        areaStyle: {},
-        emphasis: {
-          focus: 'series',
-        },
-        data: [220, 182, 191, 234, 290, 330, 310],
-      },
-      {
-        name: 'Video Ads',
-        type: 'line',
-        stack: 'Total',
-        areaStyle: {},
-        emphasis: {
-          focus: 'series',
-        },
-        data: [150, 232, 201, 154, 190, 330, 410],
-      },
-      {
-        name: 'Direct',
-        type: 'line',
-        stack: 'Total',
-        areaStyle: {},
-        emphasis: {
-          focus: 'series',
-        },
-        data: [320, 332, 301, 334, 390, 330, 320],
-      },
-      {
-        name: 'Search Engine',
-        type: 'line',
-        stack: 'Total',
-        label: {
-          show: true,
-          position: 'top',
-        },
-        areaStyle: {},
-        emphasis: {
-          focus: 'series',
-        },
-        data: [820, 932, 901, 934, 1290, 1330, 1320],
-      },
-    ],
-  }
-  option && myChart.setOption(option)
-})
+import Login_data_chat from '@/components/charts/login_data_charts.vue'
+import { getStatisticApi } from '@/api/data/data_api'
+import type { StatisticsType } from '@/api/data/data_api'
+import { useStoreConfig } from '@/store'
+const store = useStoreConfig()
 interface quickEntryType {
   bg: string //背景色
   color: string //文字颜色
@@ -168,6 +69,20 @@ const updateLogList: UpadteLogType[] = [
     created_at: '2025-03-024',
   },
 ]
+const StatisticDate = reactive<StatisticsType>({
+  user_count: 0,
+  article_count: 0,
+  message_count: 0,
+  chat_group_count: 0,
+  now_login_count: 0,
+  now_sing_count: 0,
+  flow_count: 0,
+})
+const statisticList = async () => {
+  let res = await getStatisticApi()
+  Object.assign(StatisticDate, res.data)
+}
+statisticList()
 const goLink = (record: quickEntryType) => {
   if (record.name) {
     router.push({
@@ -182,32 +97,38 @@ const goLink = (record: quickEntryType) => {
 <template>
   <div class="home_view">
     <div class="welcome">
-      <div class="title">早安XXX,请开始一天的工作吧</div>
+      <div class="title">早安{{ store.userInfo.nick_name }},请开始一天的工作吧</div>
       <div class="weather">天气天气</div>
       <div class="statistics">
         <span>
           <span><IconMessage /></span>
-          在线流量:2444
+          在线流量:{{ StatisticDate.flow_count }}
+        </span>
+        <span>
+          <span><IconUser /></span>
+          用户总数:{{ StatisticDate.user_count }}
+        </span>
+        <span>
+          <span><IconFile /></span>
+          文章总数:{{ StatisticDate.article_count }}
         </span>
         <span>
           <span><IconMessage /></span>
-          用户总数:2444
+          群聊消息:{{ StatisticDate.chat_group_count }}
+        </span>
+        <span>
+          <span><IconArchive /></span>
+          今日登录:{{ StatisticDate.now_login_count }}
         </span>
         <span>
           <span><IconMessage /></span>
-          文章总数:2444
-        </span>
-        <span>
-          <span><IconMessage /></span>
-          群聊消息:2444
-        </span>
-        <span>
-          <span><IconMessage /></span>
-          今日登录:2444
+          站内消息:{{ StatisticDate.message_count }}
         </span>
       </div>
       <div class="link">
         <div>前端教程:<a-link>xxxx</a-link></div>
+        <div>后端教程:<a-link>xxxx</a-link></div>
+        <div>nodejs教程:<a-link>xxxx</a-link></div>
       </div>
     </div>
     <div class="main">
@@ -226,7 +147,7 @@ const goLink = (record: quickEntryType) => {
           </div>
         </Blog_card>
         <Blog_card class="statistics" title="数据统计">
-          <div id="statistics_log"></div>
+          <Login_data_chat></Login_data_chat>
         </Blog_card>
       </div>
       <div class="right">
@@ -279,10 +200,25 @@ const goLink = (record: quickEntryType) => {
       font-size: 16px;
       > span {
         margin-right: 20px;
+        transform: all 0.3;
+        .arco-icon {
+          &:hover {
+            transform: scale(0.8);
+          }
+        }
+        &:hover {
+          cursor: pointer;
+        }
       }
     }
     .link {
       margin: 20px 0 20px 0;
+      > div {
+        margin-bottom: 20px;
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
     }
   }
   .main {
@@ -333,10 +269,6 @@ const goLink = (record: quickEntryType) => {
       }
       .statistics {
         margin-top: 20px;
-        #statistics_log {
-          width: 100%;
-          height: 500px;
-        }
       }
     }
     .right {
