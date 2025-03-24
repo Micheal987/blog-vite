@@ -1,8 +1,113 @@
 <script setup lang="ts">
 import Blog_card from '@/components/common/blog_card.vue'
 import { IconMessage, IconSettings } from '@arco-design/web-vue/es/icon'
-import { type Component } from 'vue'
+import { onMounted, type Component } from 'vue'
 import { router } from '@/router'
+import { relativeCurrentTime } from '@/utils/date'
+import * as echarts from 'echarts'
+import type { EChartsOption } from 'echarts'
+onMounted(() => {
+  const chartDom = document.getElementById('statistics_log')!
+  const myChart = echarts.init(chartDom)
+  let option: EChartsOption
+  option = {
+    title: {
+      text: 'Stacked Area Chart',
+    },
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'cross',
+        label: {
+          backgroundColor: '#6a7985',
+        },
+      },
+    },
+    legend: {
+      data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine'],
+    },
+    toolbox: {
+      feature: {
+        saveAsImage: {},
+      },
+    },
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true,
+    },
+    xAxis: [
+      {
+        type: 'category',
+        boundaryGap: false,
+        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      },
+    ],
+    yAxis: [
+      {
+        type: 'value',
+      },
+    ],
+    series: [
+      {
+        name: 'Email',
+        type: 'line',
+        stack: 'Total',
+        areaStyle: {},
+        emphasis: {
+          focus: 'series',
+        },
+        data: [120, 132, 101, 134, 90, 230, 210],
+      },
+      {
+        name: 'Union Ads',
+        type: 'line',
+        stack: 'Total',
+        areaStyle: {},
+        emphasis: {
+          focus: 'series',
+        },
+        data: [220, 182, 191, 234, 290, 330, 310],
+      },
+      {
+        name: 'Video Ads',
+        type: 'line',
+        stack: 'Total',
+        areaStyle: {},
+        emphasis: {
+          focus: 'series',
+        },
+        data: [150, 232, 201, 154, 190, 330, 410],
+      },
+      {
+        name: 'Direct',
+        type: 'line',
+        stack: 'Total',
+        areaStyle: {},
+        emphasis: {
+          focus: 'series',
+        },
+        data: [320, 332, 301, 334, 390, 330, 320],
+      },
+      {
+        name: 'Search Engine',
+        type: 'line',
+        stack: 'Total',
+        label: {
+          show: true,
+          position: 'top',
+        },
+        areaStyle: {},
+        emphasis: {
+          focus: 'series',
+        },
+        data: [820, 932, 901, 934, 1290, 1330, 1320],
+      },
+    ],
+  }
+  option && myChart.setOption(option)
+})
 interface quickEntryType {
   bg: string //背景色
   color: string //文字颜色
@@ -43,6 +148,24 @@ const quickEntryList: quickEntryType[] = [
     text: '日志更新',
     name: '',
     link: '',
+  },
+]
+interface UpadteLogType {
+  id?: number
+  title: string
+  conent: string
+  created_at: string
+}
+const updateLogList: UpadteLogType[] = [
+  {
+    title: '更新日志内容',
+    conent: '内容',
+    created_at: '2025-03-024',
+  },
+  {
+    title: '更新日志内容',
+    conent: '内容',
+    created_at: '2025-03-024',
   },
 ]
 const goLink = (record: quickEntryType) => {
@@ -102,10 +225,29 @@ const goLink = (record: quickEntryType) => {
             </div>
           </div>
         </Blog_card>
-        <Blog_card class="statistics" title="数据统计"></Blog_card>
+        <Blog_card class="statistics" title="数据统计">
+          <div id="statistics_log"></div>
+        </Blog_card>
       </div>
       <div class="right">
-        <Blog_card title="更新日志"></Blog_card>
+        <Blog_card title="更新日志" class="update_log">
+          <div class="item" v-for="(item, index) in updateLogList">
+            <span>
+              <span class="index">{{ index + 1 }}</span>
+              <span class="content">
+                <a-typography-paragraph
+                  :ellipsis="{
+                    rows: 1,
+                    showTooltip: true,
+                    css: true,
+                  }"
+                  >{{ item.title }}</a-typography-paragraph
+                >
+              </span>
+            </span>
+            <span class="date">{{ relativeCurrentTime(item.created_at) }}</span>
+          </div>
+        </Blog_card>
       </div>
     </div>
   </div>
@@ -191,10 +333,40 @@ const goLink = (record: quickEntryType) => {
       }
       .statistics {
         margin-top: 20px;
+        #statistics_log {
+          width: 100%;
+          height: 500px;
+        }
       }
     }
     .right {
       width: calc(30% - 20px);
+      .update_log {
+        .item {
+          display: flex;
+          align-items: center;
+          height: 40px;
+          > span {
+            display: flex;
+            align-items: center;
+          }
+          .index {
+            margin-right: 10px;
+          }
+          .content {
+            display: flex;
+            align-items: center;
+            .arco-typography {
+              margin-bottom: 0;
+              display: inline-block;
+            }
+          }
+          .date {
+            margin-left: 10px;
+            white-space: nowrap;
+          }
+        }
+      }
     }
   }
 }
