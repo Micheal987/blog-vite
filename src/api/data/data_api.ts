@@ -22,3 +22,19 @@ export interface StatisticsType {
 export const getStatisticApi = () => {
     return ApiRequest.getRequest<ResponseResult<StatisticsType>>('/login_data_sum', {})
 }
+export interface WeatherType {
+    province: string
+    city: string
+    adcode?: string
+    weather: string
+    temperature: string
+    winddirection: string
+    windpower: string
+    humidity: string
+    reporttime: string
+    temperature_float?: string
+    humidity_float?: string
+}
+export const getWeatherApi = () => {
+    return ApiRequest.getRequest<ResponseResult<WeatherType>>('/wether', {})
+}

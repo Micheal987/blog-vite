@@ -120,9 +120,12 @@ export const useStoreConfig = defineStore(
     const isAdmin = (): boolean => {
       return userInfo.role === 1
     }
+    const isGeneral = (): boolean => {
+      return userInfo.role === 2
+    }
     const isVisitor = (): boolean => {
       return userInfo.role === 3
     }
-    return { collapsed, setCollapsed, theme, setTheme, loadTheme, userInfo, setToken, loadToken, logOut, isLogin, isAdmin, isVisitor, themeString };
+    return { collapsed, setCollapsed, theme, setTheme, loadTheme, userInfo, setToken, loadToken, logOut, isLogin, isAdmin, isVisitor, themeString, isGeneral };
   }
 );
