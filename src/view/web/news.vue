@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Blog_banner from '@/components/web/blog_banner.vue'
 import Blog_nav from '@/components/web/blog_nav.vue'
+import Blog_banner from '@/components/web/blog_banner.vue'
 </script>
 <template>
   <div class="index_view">
@@ -8,9 +8,4 @@ import Blog_nav from '@/components/web/blog_nav.vue'
     <Blog_banner></Blog_banner>
   </div>
 </template>
-<style lang="scss">
-.index_view {
-  background-color: #302f2f;
-  height: 200vh;
-}
-</style>
+<style lang="scss"></style>

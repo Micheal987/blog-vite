@@ -77,14 +77,15 @@ const columns: ConfigColumnType<EmailType>[] = [
     type: 'boolean',
   },
 ]
+const isLaptops1 = isLaptops
 </script>
 <template>
   <Blog_config
     title="邮箱配置"
     name="email"
-    :label-span="4"
-    :wrapper-span="20"
-    :left-width="40"
+    :label-span="isLaptops1 ? 5 : 4"
+    :wrapper-span="isLaptops1 ? 19 : 20"
+    :left-width="isLaptops1 ? 50 : 40"
     :right-width="60"
     :column="columns"
     :help-data="helpList">

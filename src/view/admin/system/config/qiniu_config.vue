@@ -93,15 +93,16 @@ const columns: ConfigColumnType<QiniuType>[] = [
     type: 'boolean',
   },
 ]
+const isLaptops1 = isLaptops
 </script>
 <template>
   <Blog_config
     title="七牛云配置"
     name="qiniu"
-    :label-span="4"
-    :wrapper-span="20"
-    :left-width="50"
-    :right-width="50"
+    :label-span="isLaptops1 ? 5 : 4"
+    :wrapper-span="isLaptops1 ? 19 : 20"
+    :left-width="isLaptops1 ? 60 : 60"
+    :right-width="isLaptops1 ? 50 : 55"
     :column="columns"
     :help-data="helpList">
     <template #alert>

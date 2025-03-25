@@ -50,3 +50,14 @@ export const defaultMenuFrom = {
     abstractString: '',
     imageIdList: [],
 }
+export interface MenuNameType {
+    id: number
+    title: string
+    path: string
+}
+export const getMenuNameApi = () => {
+    return ApiRequest.getRequest<ResponseResult<MenuNameType[]>>('/menu_name', {})
+}
+export const getMenuDetailPatheApi = (path: string) => {
+    return ApiRequest.getRequest<ResponseResult<MenuType>>('/menu_path', { params: { path: path } })
+}

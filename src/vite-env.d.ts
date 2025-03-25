@@ -7,7 +7,9 @@ declare module '*.vue' {
 
     export default component
 }
-
+declare global {
+    const isLaptops: boolean
+}
 export interface ImportMetaEnv {
     VITE_SERVICE_HOST: string
     APP_ENV: string

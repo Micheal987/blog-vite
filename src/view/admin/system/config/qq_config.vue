@@ -42,13 +42,14 @@ const columns: ConfigColumnType<QQType>[] = [
     type: 'string',
   },
 ]
+const isLaptops1 = isLaptops
 </script>
 <template>
   <Blog_config
     title="qq配置"
     name="qq"
-    :label-span="4"
-    :wrapper-span="20"
+    :label-span="isLaptops1 ? 5 : 4"
+    :wrapper-span="isLaptops1 ? 19 : 20"
     :left-width="45"
     :right-width="55"
     :column="columns"

@@ -41,15 +41,16 @@ const columns: ConfigColumnType<JwtType>[] = [
     type: 'number',
   },
 ]
+const isLaptops1 = isLaptops
 </script>
 <template>
   <Blog_config
     title="Jwt配置"
     name="jwt"
-    :label-span="4"
-    :wrapper-span="20"
-    :left-width="45"
-    :right-width="55"
+    :label-span="isLaptops1 ? 5 : 4"
+    :wrapper-span="isLaptops1 ? 19 : 20"
+    :left-width="isLaptops1 ? 45 : 50"
+    :right-width="isLaptops1 ? 60 : 55"
     :column="columns"
     :help-data="helpList">
     <template #alert>

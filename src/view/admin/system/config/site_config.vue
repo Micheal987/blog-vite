@@ -39,13 +39,18 @@ const siteInfoUpdate = async () => {
   }
   Message.success(res.msg)
 }
+const isLaptops1 = isLaptops
 </script>
 <template>
   <div class="site_config">
     <div class="left">
       <div class="site_info">
         <Blog_title title="站点信息"></Blog_title>
-        <a-form ref="formRef" :model="siteForm" :label-col-props="{ span: 4 }" :wrapper-col-props="{ span: 19 }">
+        <a-form
+          ref="formRef"
+          :model="siteForm"
+          :label-col-props="{ span: isLaptops1 ? 6 : 4 }"
+          :wrapper-col-props="{ span: isLaptops1 ? 18 : 19 }">
           <a-form-item
             field="title"
             label="网站标题"

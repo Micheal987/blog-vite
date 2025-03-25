@@ -401,4 +401,9 @@ const jsonPreview = () => {
     }
   }
 }
+.isLaptops {
+  .search_date {
+    display: none;
+  }
+}
 </style>

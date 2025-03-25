@@ -15,6 +15,8 @@ const goIndex = () => {
     path: '/',
   })
 }
+const isLaptops1 = isLaptops
+console.log('isLaptops1', isLaptops1)
 </script>
 <template>
   <div class="blog_admin">
@@ -24,7 +26,7 @@ const goIndex = () => {
       <!-- menu -->
       <Blog_menu />
     </aside>
-    <main>
+    <main :class="{ isLaptops: isLaptops1 }">
       <div class="blog_head">
         <!-- bread -->
         <Blog_bread_crumb />
