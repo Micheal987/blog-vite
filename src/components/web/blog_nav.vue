@@ -7,6 +7,11 @@ import Blog_user_menu_doption from '@/components/common/blog_user_menu_doption.v
 import { getMenuNameApi } from '@/api/menu/menu_api'
 import type { MenuNameType } from '@/api/menu/menu_api'
 import { onUnmounted, ref } from 'vue'
+interface Props {
+  noScroll?: boolean
+}
+const props = defineProps<Props>()
+const { noScroll = false } = props
 const store = useStoreConfig()
 const navList = ref<MenuNameType[]>([])
 const listInfo = async () => {
@@ -22,7 +27,7 @@ const listInfo = async () => {
   sessionStorage.setItem('navList', JSON.stringify(navList.value))
 }
 listInfo()
-const isShow = ref(false)
+const isShow = ref(true)
 const scrollFn = () => {
   let top = document.documentElement.scrollTop
   if (top >= 200) {
@@ -31,9 +36,14 @@ const scrollFn = () => {
     isShow.value = false
   }
 }
-window.addEventListener('scroll', scrollFn)
+if (!noScroll) {
+  isShow.value = false
+  window.addEventListener('scroll', scrollFn)
+}
 onUnmounted(() => {
-  window.removeEventListener('scroll', scrollFn)
+  if (!noScroll) {
+    window.removeEventListener('scroll', scrollFn)
+  }
 })
 </script>
 <template>
@@ -93,7 +103,7 @@ onUnmounted(() => {
     }
   }
   .blog_nav_container {
-    width: 1400px;
+    width: var(--containter_width);
     height: 60px;
     display: flex;
     align-items: center;

@@ -12,6 +12,7 @@ body{
     --charts_color2:#e4c477;
     --charts_color3:#eb4d4b;
     --nav_text_color:rgb(245, 245, 245);
+    --containter_width:1400px;
 }
 body[arco-theme="dark"]{
     --bg:#302e2e;
@@ -20,5 +21,6 @@ body[arco-theme="dark"]{
     --charts_color1:#d97559;
     --charts_color2:#e4c477;
     --charts_color3:#eb4d4b;
+    --containter_width: 1400px;
 
 }
