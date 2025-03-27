@@ -1,9 +1,10 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { reactive, ref } from "vue";
 import { parseToken } from "@/utils/parseToken"
 import { Message } from "@arco-design/web-vue";
 import { postLogOutApi, getUserInfoApi } from "@/api/user/user_api"
 import type { Themes } from "md-editor-v3"
+import { getSiteInfoApi, type SiteInfoType } from "@/api/setting/setting_api";
 export interface userStoreInfoType {
   user_name: string
   nick_name: string
@@ -17,7 +18,7 @@ export const useStoreConfig = defineStore(
   "storeConfig",
   () => {
     const collapsed = ref(false); //折叠
-    const theme = ref(true);//主题
+    let theme = ref<boolean>(true);//主题
     let userInfo: userStoreInfoType = {
       user_name: "",
       nick_name: "",
@@ -27,6 +28,24 @@ export const useStoreConfig = defineStore(
       avatar: "image/user1.jpg",
       exp: 0
     }
+    let siteInfo = reactive<SiteInfoType>({
+      created_at: "2024-12-19",
+      bei_an: "xxxx",
+      title: "",
+      qq_image: "",
+      version: 8.1,
+      email: "1411797501@qq.com",
+      wechat_image: "",
+      name: "伟",
+      job: "go和rust后端开发",
+      addr: "广东广州",
+      slogan: "我不知道",
+      slogan_en: "FengFeng",
+      web: "XXX",
+      bilibili_url: "https://space.bilibili.com/151431628?spm_id_from=333.1007.0.0",
+      gitee_url: "https://gitee.com/fengweizhujin",
+      github_url: "https://github.com/"
+    })
     const themeString = (): Themes => {
       return theme.value ? "light" : "dark"
     }
@@ -39,7 +58,7 @@ export const useStoreConfig = defineStore(
       document.documentElement.style.colorScheme = themeString()//滚动条颜色
       document.body.setAttribute('arco-theme', themeString()) //主题颜色
       //本地缓存持久化
-      localStorage.setItem("theme", JSON.stringify(theme))
+      localStorage.setItem("theme", JSON.stringify(theme.value))
     };
     const loadTheme = () => {
       let val = themeString()
@@ -101,7 +120,7 @@ export const useStoreConfig = defineStore(
       //清掉token
       clearUserInfo()
     }
-    //清楚token
+    //清除token
     const clearUserInfo = () => {
       userInfo = {
         user_name: "",
@@ -113,6 +132,20 @@ export const useStoreConfig = defineStore(
         exp: 0
       }
       localStorage.removeItem("userInfo")
+    }
+    const loadSiteInfo = async () => {
+      let val = sessionStorage.getItem('siteInfo')
+      if (val != null) {
+        try {
+          siteInfo = JSON.parse(val)
+          return
+        } catch (e) {
+          sessionStorage.removeItem('siteInfo')
+        }
+      }
+      let res = await getSiteInfoApi()
+      siteInfo = res.data
+      sessionStorage.setItem('siteInfo', JSON.stringify(siteInfo))
     }
     const isLogin = (): boolean => {
       return userInfo.role !== 0
@@ -126,6 +159,6 @@ export const useStoreConfig = defineStore(
     const isVisitor = (): boolean => {
       return userInfo.role === 3
     }
-    return { collapsed, setCollapsed, theme, setTheme, loadTheme, userInfo, setToken, loadToken, logOut, isLogin, isAdmin, isVisitor, themeString, isGeneral };
+    return { collapsed, siteInfo, setCollapsed, theme, setTheme, loadTheme, userInfo, setToken, loadToken, logOut, isLogin, isAdmin, isVisitor, themeString, isGeneral, loadSiteInfo };
   }
 );

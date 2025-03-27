@@ -27,6 +27,11 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/view/web/chat.vue'),
       },
       {
+        path: 'article/:id',
+        name: 'article',
+        component: () => import('@/view/web/article.vue'),
+      },
+      {
         path: 'doc',
         name: 'doc',
         component: () => import('@/view/web/doc.vue'),
@@ -83,7 +88,7 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: 'article',
-        name: 'article',
+        name: 'article_mgr',
         meta: { title: '文章管理', isVisitor: false, isAdmin: true, isLogin: true },
         children: [
           {

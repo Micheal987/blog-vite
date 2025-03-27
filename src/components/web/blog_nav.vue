@@ -51,8 +51,8 @@ onUnmounted(() => {
     <div class="blog_nav_container">
       <div class="left">
         <div class="log">
-          <div class="slogan">伟的博客</div>
-          <div class="en_slog">FengFeng</div>
+          <div class="slogan">{{ store.siteInfo.slogan }}</div>
+          <div class="en_slog">{{ store.siteInfo.slogan_en }}</div>
         </div>
         <div class="nav">
           <template v-for="item in navList">
@@ -85,6 +85,7 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   position: fixed;
+  top: 0;
   transform: all 0.3s;
   color: var(--nav_text_color);
   z-index: 100;

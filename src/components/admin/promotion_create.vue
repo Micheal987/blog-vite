@@ -17,8 +17,8 @@ const props = defineProps<{
 }>()
 //emits
 const emits = defineEmits<{
-  (e:'update',visible:boolean):void
-  (e:'ok',value:boolean):void
+  (e: 'update', visible: boolean): void
+  (e: 'ok', value: boolean): void
 }>()
 //default
 
@@ -49,7 +49,6 @@ const beforeOpen = () => {
 //创建菜单
 const okHandler = async () => {
   let val = await formRef.value.validate() //验证规则为undefined代表验证通过
-  console.log('ok', val)
   if (val) return false //有值代表校验不通过
   let res
   if (editId.value) {
@@ -69,7 +68,6 @@ const okHandler = async () => {
 //emits--updateImage
 const updateImage = (val: string) => {
   form.images = val
-  console.log('updateImage', val)
 }
 </script>
 <template>

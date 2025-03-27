@@ -4,16 +4,23 @@ import { dateFormat } from '@/utils/date'
 import { IconClockCircle } from '@arco-design/web-vue/es/icon'
 interface Props {
   data: ArticleUpdateType & ArticleDataType
+  preview?: boolean
 }
 const props = defineProps<Props>()
 </script>
 <template>
-  <div class="blog_article_item">
+  <div :class="{ blog_article_item: true, preview: props.preview }">
     <div class="cover">
       <a-image :src="'http://127.0.0.1:8000/' + props.data.banner_url"></a-image>
     </div>
     <div class="info">
-      <div class="title">{{ props.data.title }}</div>
+      <div class="title">
+        <template v-if="props.data.ID === ''">
+          {{ props.data.title }}
+        </template>
+        <RouterLink :to="{ name: 'article', params: { id: props.data.ID } }" v-html="props.data.title"></RouterLink>
+        <!-- <a v-else :href="`/article/${props.data.ID}`" v-html="props.data.title"></a> -->
+      </div>
       <div class="abstract">
         <a-typography-paragraph
           :ellipsis="{
@@ -52,13 +59,16 @@ const props = defineProps<Props>()
 </template>
 <style lang="scss">
 .blog_article_item {
-  width: 600px;
+  width: 100%;
   padding: 20px;
   display: flex;
   background-color: var(--color-fill-2);
   border-radius: 5px;
-  transform: scale(0.7);
-  transform-origin: left top;
+  &.preview {
+    width: 600px;
+    transform: scale(0.7);
+    transform-origin: left top;
+  }
 
   .cover {
     width: 30%;
@@ -87,6 +97,13 @@ const props = defineProps<Props>()
     .title {
       font-weight: 600;
       font-size: 16px;
+      em {
+        color: red;
+        margin-right: 2px;
+      }
+      a {
+        text-decoration: none;
+      }
     }
     .abstract {
       .arco-typography {

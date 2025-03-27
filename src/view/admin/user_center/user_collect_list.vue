@@ -2,12 +2,7 @@
 import Blog_table from '@/components/admin/blog_table.vue'
 import { reactive, ref } from 'vue'
 import type { filterOptionType } from '@/components/admin/blog_table.vue'
-import {
-  getArticleCollectApi,
-  type ArticleType,
-  getArticleCategory,
-  type ArticleUpdateType,
-} from '@/api/article/article_api'
+import { getArticleCollectApi, type ArticleType, getArticleCategory } from '@/api/article/article_api'
 import Mock from 'mockjs'
 import { getTagOptionsApi } from '@/api/tags/tag_api'
 import type { PageParamType } from '@/api/axios'
@@ -48,14 +43,6 @@ const filterGroup: filterOptionType[] = [
 ]
 
 const blogTableRef = ref() //父组件 ref
-const articleConentenVisible = ref(false) //
-const articleUpdateId = ref<string | undefined>(undefined) //
-
-//编辑正文
-const editArticleCoenten = (record: ArticleType) => {
-  articleConentenVisible.value = true
-  articleUpdateId.value = record.ID
-}
 
 //删除
 //emit 传idList的
@@ -161,7 +148,7 @@ const colorList = [
   }
 
   .article_title {
-    strong {
+    em {
       color: red;
     }
   }

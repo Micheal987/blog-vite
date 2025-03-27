@@ -42,7 +42,7 @@ const props = defineProps<Props>()
     }
   }
   .body {
-    padding: 20px;
+    padding: 0;
   }
 }
 </style>

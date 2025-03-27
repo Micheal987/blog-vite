@@ -22,9 +22,7 @@ const emits = defineEmits<{
   (e: 'updateImage', value: string): void
 }>()
 
-const valueInput = (value: string) => {
-  console.log(value)
-}
+const valueInput = (value: string) => {}
 const setHeader = {
   token: store.userInfo.token,
 }
@@ -36,11 +34,9 @@ const imageSuccessEnet = (file: FileItem) => {
   }
   Message.success(response.msg)
   imageStr.value = response.data[0].file_name as any
-  console.log(file)
 }
 //watch方法
 watch(imageStr, () => {
-  console.log(imageStr.value)
   emits('updateImage', imageStr.value)
 })
 </script>

@@ -141,7 +141,6 @@ const add = () => {
 }
 //emit --emit
 const edit = (record: RecordType<any>) => {
-  console.log(record)
   // Object.assign(recordData, record)
   visible.value = true
 }

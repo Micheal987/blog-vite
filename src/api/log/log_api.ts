@@ -39,13 +39,15 @@ export interface RemoveListRequest {
   ip: string
 }
 
+//log_v2_list
 export const getLogList = (params: LogRequestType) => {
-  return ApiRequest.getRequest<ResponseResult<ListDateType<LogType>>>('log_v2_list', { params: params })
+  return ApiRequest.getRequest<ResponseResult<ListDateType<LogType>>>('/log_v2_list', { params: params })
 }
 
+//log_v2
 export const getReadLogListApi = (id: number) => {
-  return ApiRequest.getRequest<ResponseResult<string>>('log_v2', { params: { id: id } })
+  return ApiRequest.getRequest<ResponseResult<string>>('/log_v2', { params: { id: id } })
 }
 export const removeLogListApi = (params: RemoveListRequest) => {
-  return ApiRequest.deleteRequest<ResponseResult<string>>('log_v2', { params: params })
+  return ApiRequest.deleteRequest<ResponseResult<string>>('/log_v2', { params: params })
 }

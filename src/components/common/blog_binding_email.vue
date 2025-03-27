@@ -31,7 +31,6 @@ const close = () => {
 }
 const next = async () => {
   let val = await formRef.value.validateField(['email'])
-  console.log(val)
   if (val) return
   let res = await postUserBindingEmailApi(form)
   if (res.code) {

@@ -53,11 +53,13 @@ export interface ArticleDataType {
     collects_count: number
     created_at: string
 }
-export interface ArticleRequest extends PageParamType {
-    tags: string
+export interface ArticleparamType extends PageParamType {
+    date?: string
+    tags?: string
+    category?: string
 }
-export const getArticleListApi = (params: PageParamType) => {
-    return ApiRequest.getRequest<ResponseResult<ListDateType<ArticleType[]>>>('/article_list', { params: params })
+export const getArticleListApi = (params: ArticleparamType) => {
+    return ApiRequest.getRequest<ResponseResult<ListDateType<ArticleType>>>('/article_list', { params: params })
 }
 // Promise<ResponseResult<optionType[]>>
 export const getArticleCategory1 = (params?: PageParamType) => {
@@ -67,14 +69,14 @@ export const getArticleCategory: (params?: PageParamType) => Promise<ResponseRes
 export interface ArticleUpdateType {
     title: string
     abstract?: string
-    content: string
+    content?: string
     category: string
     source?: string
     link?: string
     banner_id?: number
     banner_url?: string
     tags?: string[]
-    id?: string
+    ID?: string
 }
 export const putArticleUpdateApi = (params: ArticleUpdateType) => {
     return ApiRequest.putRequest<ResponseResult<string>>('/article_update', {}, params)
@@ -88,8 +90,19 @@ export const getArticleTagsApi1 = (params?: PageParamType) => {
     return ApiRequest.getRequest<ResponseResult<string[]>>('/article_tags', { params: params })
 }
 export const getArticleApi = (id: string) => {
-    return ApiRequest.getRequest<ResponseResult<string>>('/article_detail/' + id, {})
+    return ApiRequest.getRequest<ResponseResult<string>>(`/article/content/${id}`, {})
 }
 export const getArticleCollectApi = (params?: PageParamType) => {
     return ApiRequest.getRequest<ResponseResult<ListDateType<ArticleType>>>('/article/collects/list', { params: params })
+}
+export interface ArticleCalendarType {
+    data: string
+    count: number
+
+}
+export const getArticleCalendarApi = () => {
+    return ApiRequest.getRequest<ResponseResult<ArticleCalendarType[]>>('/article_calendar', {})
+}
+export const getArticleDetailApi = (id: string) => {
+    return ApiRequest.getRequest<ResponseResult<ArticleType>>(`/article_detail/${id}`, {})
 }

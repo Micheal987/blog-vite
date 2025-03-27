@@ -10,7 +10,7 @@ import {
 } from '@/api/chat/caht_api'
 import { getSettingInfoApi } from '@/api/setting/setting_api'
 import { Message } from '@arco-design/web-vue'
-import { nextTick, reactive, ref } from 'vue'
+import { nextTick, onUnmounted, reactive, ref } from 'vue'
 import { IconFile, IconImage, IconRefresh } from '@arco-design/web-vue/es/icon'
 import { dateTimeFormat } from '@/utils/date'
 import { MdEditor, MdPreview } from 'md-editor-v3'
@@ -139,9 +139,11 @@ const websocketConnect = () => {
   socket.value.onclose = function (ev) {
     console.log('onclose: ', ev)
     socket.value = undefined
-    Message.error('连接断开')
   }
 }
+onUnmounted(() => {
+  socket.value?.close()
+})
 </script>
 <template>
   <div class="blog_chat_group_component">

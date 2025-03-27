@@ -14,6 +14,7 @@ import Blog_article_update from '@/components/common/blog_article_update.vue'
 import Blog_article_drawer from '@/components/common/blog_article_drawer.vue'
 import Blog_article_content_drawer from '@/components/common/blog_article_content_drawer.vue'
 import type { PageParamType } from '@/api/axios'
+import { articleTagcolorList } from '@/global/index'
 //props
 interface Props {
   isUser?: boolean
@@ -64,7 +65,7 @@ const recordData = reactive<ArticleUpdateType>({
   link: '',
   banner_id: 0,
   tags: [],
-  id: '',
+  ID: '',
 })
 
 const blogTableRef = ref() //父组件 ref
@@ -93,7 +94,7 @@ const editRecordData = (record: ArticleType) => {
   recordData.link = record.link
   recordData.banner_id = record.banner_id
   recordData.tags = record.tags
-  recordData.id = record.ID
+  recordData.ID = record.ID
   recordData.banner_url = record.banner_url
 }
 //emit--update事件
@@ -104,25 +105,9 @@ const visibleUpdate = (val: boolean) => {
 //删除
 //emit 传idList的
 const removes = (idList: number[]) => {
-  console.log('数组id', idList)
   //删除操作
 }
-//颜色
-const colorList = [
-  'red',
-  'orangered',
-  'orange',
-  'gold',
-  'lime',
-  'green',
-  'cyan',
-  'blue',
-  'arcoblue',
-  'purple',
-  'pinkpurple',
-  'magenta',
-  'gray',
-]
+
 //emit-add
 const add = (val: boolean) => {
   createVisible.value = val
@@ -181,7 +166,7 @@ const add = (val: boolean) => {
       <!-- tags -->
       <template #tags="{ record }: { record: ArticleType }">
         <div class="article_tags_col">
-          <a-tag v-for="item in record.tags" :color="colorList[Mock.Random.integer(0, 12)]">{{ item }}</a-tag>
+          <a-tag v-for="item in record.tags" :color="articleTagcolorList[Mock.Random.integer(0, 12)]">{{ item }}</a-tag>
         </div>
       </template>
       <!-- title -->
@@ -223,7 +208,7 @@ const add = (val: boolean) => {
   }
 
   .article_title {
-    strong {
+    em {
       color: red;
     }
   }

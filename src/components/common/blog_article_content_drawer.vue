@@ -9,7 +9,6 @@ import { getArticleApi, putArticleUpdateApi } from '@/api/article/article_api.ts
 import { Message } from '@arco-design/web-vue'
 import Blog_article_update from '@/components/common/blog_article_update.vue'
 
-const text = ref(' Editor')
 const store = useStoreConfig()
 const updateVisible = ref<boolean>(false)
 //props
@@ -37,10 +36,6 @@ const createArticle = async () => {
     Message.warning('文章的标题不能为空')
     return false
   }
-  if ((data.content as string) === '') {
-    Message.warning('文章的内容不能为空')
-    return false
-  }
   let res = await putArticleUpdateApi(data)
   if (res.code) {
     Message.error(res.msg)
@@ -61,7 +56,7 @@ const obtain = async () => {
     return
   }
   data.content = res.data
-  data.id = props.id
+  data.ID = props.id
 }
 
 const openmodal = () => {
@@ -93,7 +88,7 @@ watch(
       @cancel="emits('update:visible', false)">
       <template #title> Title </template>
       <div>
-        <MdEditor v-model="text" :on-upload-img="onUploadImg" :theme="store.themeString()" />
+        <MdEditor v-model="data.content" :on-upload-img="onUploadImg" :theme="store.themeString()" />
       </div>
       <template #footer>
         <a-button @click="emits('update:visible', false)">取消</a-button>

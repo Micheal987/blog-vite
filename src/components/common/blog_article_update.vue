@@ -64,7 +64,7 @@ const form = reactive<ArticleUpdateType & ArticleDataType>({
   link: '',
   banner_id: 0,
   tags: [],
-  id: '',
+  ID: '',
   look_count: 0,
   comment_count: 0,
   digg_count: 0,
@@ -152,7 +152,6 @@ const cancel = () => {
         </a-form-item>
         <!-- 文章的分类 -->
         <a-form-item field="abstract" label="文件分类" :validate-trigger="['blur']">
-          {{ TagList }}
           <a-select allow-create v-model="form.category" :options="categoryList"></a-select>
         </a-form-item>
         <!-- 文章的标签 -->
@@ -191,17 +190,6 @@ const cancel = () => {
         <a-form-item field="source" label="文章来源" :validate-trigger="['blur']">
           <a-input v-model="form.source" placeholder="文章来源" :auto-size="{ minRows: 4, maxRows: 10 }"></a-input>
         </a-form-item>
-        <!-- 文章内容 required -->
-        <a-form-item
-          field="content"
-          label="文章内容"
-          :rules="[{ required: true, message: '请输入文章内容' }]"
-          :validate-trigger="['blur']">
-          <a-textarea
-            v-model="form.content"
-            placeholder="请输入文章内容"
-            :auto-size="{ minRows: 10, maxRows: 15 }"></a-textarea>
-        </a-form-item>
         <!-- 文章的预览 -->
         <a-form-item
           field="source"
@@ -209,7 +197,7 @@ const cancel = () => {
           label="文章预览"
           :validate-trigger="['blur']"
           content-class="preview_body">
-          <Blog_article_item :data="form" />
+          <Blog_article_item :data="form" preview />
         </a-form-item>
       </a-form>
     </a-modal>

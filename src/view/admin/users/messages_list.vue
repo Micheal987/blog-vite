@@ -1,9 +1,5 @@
 <script lang="ts" setup>
-import {
-  type MessageParams,
-  type MessageRecordType,
-  type MessageType,
-} from '@/api/user/message_api'
+import { type MessageParams, type MessageRecordType, type MessageType } from '@/api/user/message_api'
 import BlogMessageList from '@/components/common/blog_message_list.vue'
 import { reactive, ref } from 'vue'
 import { getMessageUserApi, getMessageUserInfoApi, postMessageRecordApi } from '@/api/user/message_api'
@@ -41,7 +37,6 @@ const messageRecordList = async (id: number) => {
   messageUserData.count = res.data.count
 }
 const messageCheck = (data: MessageType) => {
-  console.log(data)
   userId.value = data.user_id
   messageRecordList(data.user_id)
 }
@@ -60,11 +55,19 @@ const messageUserCheck = async (data: MessageType) => {
   <div class="message_list_view">
     <div class="user_list_menu">
       <div class="head">
-        <a-input-search placeholder="搜索用户名称" @search="infoMessageList" @keydown="infoMessageList"></a-input-search>
+        <a-input-search
+          placeholder="搜索用户名称"
+          @search="infoMessageList"
+          @keydown="infoMessageList"></a-input-search>
       </div>
       <BlogMessageList :data="messageData.list" @check="messageCheck" />
       <div class="page">
-        <a-pagination :total="messageData.count" @change="infoMessageList" v-model:current="params.page" :page-size="params.limit" simple />
+        <a-pagination
+          :total="messageData.count"
+          @change="infoMessageList"
+          v-model:current="params.page"
+          :page-size="params.limit"
+          simple />
       </div>
     </div>
     <div class="user_menu" v-if="messageUserData.list">

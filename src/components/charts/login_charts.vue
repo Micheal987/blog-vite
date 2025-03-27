@@ -18,7 +18,6 @@ onMounted(() => {
   const charst_color1 = getComputedStyle(document.body).getPropertyValue('--charts_color1')
   const charst_color2 = getComputedStyle(document.body).getPropertyValue('--charts_color2')
   const charst_color3 = getComputedStyle(document.body).getPropertyValue('--charts_color3')
-  console.log(bg)
   option = {
     color: [charst_color1, charst_color2],
     title: {

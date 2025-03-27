@@ -1,30 +1,56 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { dateFormat } from '@/utils/date'
+import { useStoreConfig } from '@/store'
+import { onUnmounted, ref } from 'vue'
+const store = useStoreConfig()
+let timer: number | undefined = undefined
+let countDown = ref('')
+const countDownFunc = () => {
+  let date = store.siteInfo.created_at
+  let oldTime = new Date(date).getTime()
+  let nowTime = new Date().getTime()
+  let _day = (nowTime - oldTime) / 1000 / (60 * 60 * 24)
+  let day = ~~_day
+  let hour = ~~((_day - day) * 24)
+  let minute = ~~((_day - day - hour / 24) * 24 * 60)
+  let second = ~~((_day - day - hour / 24 - minute / 24 / 60) * 24 * 60 * 60)
+  countDown.value = `${day}天${hour}小时${minute}分${second}秒`
+}
+const dateNow = () => {
+  countDownFunc()
+  timer = setInterval(countDownFunc as TimerHandler, 1000)
+}
+dateNow()
+onUnmounted(() => {
+  clearInterval(timer)
+})
+</script>
 <template>
   <div class="blog_footer">
     <div class="blog_footer_container">
       <div class="left">
         <div class="version">
           <span>Version</span>
-          <span>8.1</span>
+          <span>{{ store.siteInfo.version }}</span>
         </div>
         <div class="date">
-          <span class="create_site_date">2024-12-19</span>
-          <span class="site_runing_date">网站已运行30天</span>
+          <span class="create_site_date">{{ dateFormat(store.siteInfo.created_at) }}</span>
+          <span class="site_runing_date">网站已运行:{{ countDown }}</span>
         </div>
         <div class="beian">
-          <img src="/image/icon/qq.png" alt="" />
-          <a href="" target="_blank">备案号:xxx</a>
+          <img src="/image/icon/beian.png" alt="" />
+          <a href="" target="_blank">备案号:{{ store.siteInfo.bei_an }}</a>
         </div>
       </div>
       <div class="right">
-        <a href="" target="_blank">
-          <img src="/image/icon/qq.png" alt="" />
+        <a :href="store.siteInfo.github_url" target="_blank">
+          <img src="/image/icon/github.png" alt="" />
         </a>
-        <a href="" target="_blank">
-          <img src="/image/icon/qq.png" alt="" />
+        <a :href="store.siteInfo.gitee_url" target="_blank">
+          <img src="/image/icon/gitee.png" alt="" />
         </a>
-        <a href="" target="_blank">
-          <img src="/image/icon/qq.png" alt="" />
+        <a :href="store.siteInfo.bilibili_url" target="_blank">
+          <img src="/image/icon/bilibili.png" alt="" />
         </a>
       </div>
     </div>

@@ -132,7 +132,6 @@ const initFilter = async () => {
         break
       case 'function':
         let res = await (item.source as filterFn)()
-        console.log(res)
         source = res.data
         break
     }
@@ -176,7 +175,6 @@ const removeIdsDate = async (idList: number[]) => {
   //接口都是按_分取第一部分即index为0
   let path = routes.name as string
   let url = path.split('_')
-  console.log(url, 'url')
   let res = await defaultDeleteApi(url[0], idList)
   if (res.code) {
     Message.error(res.msg)
@@ -202,7 +200,6 @@ const infoList = async (p?: PageParamType & any) => {
   if (p) {
     Object.assign(params, p)
   }
-  console.log(p, params)
   loading.value = true //loading
   const res = await props.url(params)
   loading.value = false //loading 关闭

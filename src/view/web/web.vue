@@ -1,4 +1,8 @@
-<script setup lang="ts"></script>
+<script lang="ts" setup>
+import { useStoreConfig } from '@/store'
+const store = useStoreConfig()
+store.loadSiteInfo()
+</script>
 <template>
   <RouterView class="web_view" />
 </template>

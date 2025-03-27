@@ -31,7 +31,6 @@ const createUser = async () => {
   if (val) return false
   let res = await postCreateUserApi(form)
   Message.success(res.msg)
-  console.log(res)
   if (res.code != 0) {
     Message.error(res.msg)
     return

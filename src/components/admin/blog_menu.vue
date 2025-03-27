@@ -59,7 +59,7 @@ const menuList: MenuType[] = [
     key: '2',
     title: '文章管理',
     icon: IconUser,
-    name: 'article',
+    name: 'article_mgr',
     child: [
       {
         key: '2-1',
@@ -163,7 +163,6 @@ const router = useRouter()
 const selectKeys = ref([route.name])
 const openKeys = ref([route.matched[1].name])
 const clickMenu = (name: string) => {
-  console.log('n', name)
   router.push({
     name: name,
   })

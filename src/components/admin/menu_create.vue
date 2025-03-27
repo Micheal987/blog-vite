@@ -76,7 +76,6 @@ const okHandler = async () => {
     })
   }
   form.image_sort_list = imageSortIdList
-  console.log('imageSortIdList', imageSortIdList)
   let res
   if (editId.value) {
     res = await putMenuUpdateApi(editId.value as number, form)

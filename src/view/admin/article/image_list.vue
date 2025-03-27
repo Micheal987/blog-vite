@@ -42,7 +42,6 @@ const actionGroups = ref<actionOptionType[]>([
   {
     label: '批量拉黑',
     callback: async (idList: (string | number)[]): Promise<boolean> => {
-      console.log(idList)
       return true
     },
   },
@@ -81,7 +80,6 @@ const imagesUploadSuccessEvent = (fileItem: FileItem) => {
 }
 //
 const beforeOpen = () => {
-  console.log(fileList.value)
   fileList.value = []
 }
 </script>

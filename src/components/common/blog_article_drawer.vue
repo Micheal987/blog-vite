@@ -122,7 +122,7 @@ obtain()
       @cancel="emits('update:visible', false)">
       <template #title> Title </template>
       <div>
-        <MdEditor v-model="text" :on-upload-img="onUploadImg" :theme="store.themeString()" />
+        <MdEditor v-model="data.content" :on-upload-img="onUploadImg" :theme="store.themeString()" />
       </div>
       <template #footer>
         <a-button @click="emits('update:visible', false)">取消</a-button>
