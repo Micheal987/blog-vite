@@ -22,7 +22,7 @@ export const getSiteInfoApi = () => {
     return ApiRequest.getRequest<ResponseResult<SiteInfoType>>("/setting/site", {})
 }
 export const putSiteInfoUpdateApi = (data: SiteInfoType) => {
-    return ApiRequest.putRequest<ResponseResult<string>>('setting/site', {}, data)
+    return ApiRequest.putRequest<ResponseResult<string>>('/setting/site', {}, data)
 }
 export interface EmailType {
     host: string

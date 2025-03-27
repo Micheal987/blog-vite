@@ -25,9 +25,9 @@ export interface LogList {
 }
 
 export const getLogList = (params: LogRequestType) => {
-  return ApiRequest.getRequest<ResponseResult<ListRequest<LogList>>>('log', { params: params })
+  return ApiRequest.getRequest<ResponseResult<ListRequest<LogList>>>('/log', { params: params })
 }
 
 export const deleteLogListApi = (params: LogRequestType) => {
-  return ApiRequest.deleteRequest<ResponseResult<ListRequest<LogList[]>>>('log', { params: params })
+  return ApiRequest.deleteRequest<ResponseResult<ListRequest<LogList[]>>>('/log', { params: params })
 }

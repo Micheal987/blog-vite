@@ -60,7 +60,7 @@ export interface CreateUserRequest {
     role: number
 }
 export const postCreateUserApi = (params: CreateUserRequest) => {
-    return ApiRequest.postRequest<ResponseResult<CreateUserRequest>>("user_create", {}, params)
+    return ApiRequest.postRequest<ResponseResult<CreateUserRequest>>("/user_create", {}, params)
 }
 export interface UpdateUserRequest {
     nick_name: string
@@ -68,7 +68,7 @@ export interface UpdateUserRequest {
     role: number
 }
 export const putUpdateUserApi = (data: UpdateUserRequest) => {
-    return ApiRequest.putRequest<ResponseResult<UpdateUserRequest>>("user_role", {}, data)
+    return ApiRequest.putRequest<ResponseResult<UpdateUserRequest>>("/user_role", {}, data)
 }
 export interface userInfoUpdateType {
     link: string,

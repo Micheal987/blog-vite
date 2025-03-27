@@ -14,12 +14,9 @@ onMounted(() => {
   let color = '#000000'
   let inRangeColor = ['#ebedf0', '#c6e48b', '#7bc96f', '#32af4a', '#1a792c', '#0f5e1e', '#0f491a', '#02340c']
   let borderColor = '#fff'
-  let textColor = '#555555'
 
   if (!props.theme) {
-    console.log('xxxx')
     color = '#5a5a5a'
-    textColor = '#f0eeee'
     inRangeColor = ['#404148', '#c6e48b', '#7bc96f', '#32af4a', '#1a792c', '#0f5e1e', '#0f491a', '#02340c']
     borderColor = '#222429'
   }

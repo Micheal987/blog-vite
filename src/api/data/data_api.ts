@@ -36,5 +36,5 @@ export interface WeatherType {
     humidity_float?: string
 }
 export const getWeatherApi = () => {
-    return ApiRequest.getRequest<ResponseResult<WeatherType>>('/wether', {})
+    return ApiRequest.getRequest<ResponseResult<WeatherType>>('/weather', {})
 }

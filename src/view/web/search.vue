@@ -105,7 +105,7 @@ listInfo()
             <div class="article_list">
               <div class="item" v-for="item in data.list">
                 <div class="top">
-                  <img :src="'http://127.0.0.1:8000/' + item.banner_url" alt="" />
+                  <img :src="item.banner_url" alt="" />
                 </div>
                 <div class="bottom">
                   <div class="title">

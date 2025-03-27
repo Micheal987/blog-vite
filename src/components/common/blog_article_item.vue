@@ -11,7 +11,7 @@ const props = defineProps<Props>()
 <template>
   <div :class="{ blog_article_item: true, preview: props.preview }">
     <div class="cover">
-      <a-image :src="'http://127.0.0.1:8000/' + props.data.banner_url"></a-image>
+      <a-image :src="props.data.banner_url"></a-image>
     </div>
     <div class="info">
       <div class="title">

@@ -8,12 +8,12 @@ const serverConfig = (url: string): ServerOptions => {
         proxy: {
             '/api': {
                 target: Serverurl,
-                rewrite: (path) => path.replace(/^\/api/, ''),
+                // rewrite: (path) => path.replace(/^\/api/, ''),
                 changeOrigin: true,
             },
             '/uploads': {
                 target: Serverurl,
-                rewrite: (path) => path.replace(/^\/uploads/, ''),
+                // rewrite: (path) => path.replace(/^\/uploads/, ''),
                 changeOrigin: true,
             },
             '/ws': {

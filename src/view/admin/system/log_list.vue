@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { getLogList, getReadLogListApi, type LogRequestType, type LogType } from '@/api/log/log_api'
 import Blog_table from '@/components/admin/blog_table.vue'
-import type { RecordType } from '@/components/admin/blog_table.vue'
 import { reactive, ref, h, nextTick, createApp } from 'vue'
 import { Tag } from '@arco-design/web-vue'
 import VueJsonPretty from 'vue-json-pretty'
@@ -140,8 +139,7 @@ const add = () => {
   visible.value = true
 }
 //emit --emit
-const edit = (record: RecordType<any>) => {
-  // Object.assign(recordData, record)
+const edit = () => {
   visible.value = true
 }
 

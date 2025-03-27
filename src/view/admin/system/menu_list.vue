@@ -88,11 +88,7 @@ const removes = (idList: (string | number)[]) => {
       @remove="removes">
       <template #banners="{ record }: { record: MenuType }">
         <div class="menu_column_image">
-          <a-image
-            v-for="item in record.banners"
-            height="50px"
-            :key="item.id"
-            :src="'http://127.0.0.1:8000/' + item.path"></a-image>
+          <a-image v-for="item in record.banners" height="50px" :key="item.id" :src="item.path"></a-image>
         </div>
       </template>
     </Blog_table>

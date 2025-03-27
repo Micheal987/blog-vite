@@ -9,8 +9,8 @@ export interface FeedBackCreateType {
     email: string
 }
 export const postFeedBackCreateApi = (data: FeedBackCreateType) => {
-    return ApiRequest.postRequest<ResponseResult<string>>('feedback', {}, data)
+    return ApiRequest.postRequest<ResponseResult<string>>('/feedback', {}, data)
 }
 export const getFeedBackListApi = (params?: PageParamType) => {
-    return ApiRequest.getRequest<ResponseResult<ListDateType<FeedBackType>>>('feedback_list', { params })
+    return ApiRequest.getRequest<ResponseResult<ListDateType<FeedBackType>>>('/feedback_list', { params })
 }

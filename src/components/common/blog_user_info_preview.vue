@@ -20,7 +20,7 @@ const props = defineProps<Props>()
     <a-link class="link_button" :href="props.data.link"><IconGithub></IconGithub></a-link>
     <div class="head">
       <div class="avatar">
-        <a-avatar :size="60" :image-url="'http://127.0.0.1:8000/' + props.data.avatar"></a-avatar>
+        <a-avatar :size="60" :image-url="props.data.avatar"></a-avatar>
       </div>
       <div class="nick_name">{{ props.data.nickName }}</div>
     </div>

@@ -10,7 +10,6 @@ import type { ArticleUpdateType } from '@/api/article/article_api.ts'
 import { postArticleCreateApi } from '@/api/article/article_api.ts'
 import { Message } from '@arco-design/web-vue'
 
-const text = ref('#  Editor')
 const store = useStoreConfig()
 const updateVisible = ref<boolean>(false)
 

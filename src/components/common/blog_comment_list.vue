@@ -69,7 +69,7 @@ const deleteComment = async (record: CommentType) => {
       :author="item.user.nick_name"
       :content="item.content"
       :datetime="dateTimeFormat(item.created_at)"
-      :avatar="'http://127.0.0.1:8000/' + item.user.avatar"
+      :avatar="item.user.avatar"
       v-for="item in props.data">
       <template #actions>
         <span class="action" @click="DiggCount(item)"> <IconMessage /> digg {{ item.digg_count }}</span>

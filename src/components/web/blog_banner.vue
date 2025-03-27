@@ -72,7 +72,8 @@ watch(
       </div>
     </div>
     <a-carousel auto-play indicator-type="dot" show-arrow="hover">
-      <a-carousel-item v-for="image in data.banners">
+      <a-carousel-item>
+        <!-- v-for="image in data.banners" 类型问题 -->
         <img class="banner_image" src="/image/default_banner.png" />
       </a-carousel-item>
     </a-carousel>

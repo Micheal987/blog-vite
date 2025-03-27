@@ -24,7 +24,7 @@ const checkItem = (record: MessageType) => {
       v-for="item in props.data"
       :key="item.user_id">
       <div class="avatar">
-        <img :src="'http://127.0.0.1:8000/' + item.avatar" alt="" />
+        <img :src="item.avatar" alt="" />
       </div>
       <div class="nick_name">
         <a-typography-paragraph :ellipsis="{ rows: 2, showTooltip: true }"

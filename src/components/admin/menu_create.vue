@@ -148,7 +148,7 @@ const okHandler = async () => {
           <a-select v-model="form.imageIdList" multiple placeholder="选择banners图" allow-clear>
             <a-option v-for="item in imageList" :key="item.id" :value="item.id">
               <div class="banners_image_div">
-                <img height="40px" :src="'http://127.0.0.1:8000/' + item.path" alt="" />
+                <img height="40px" :src="item.path" alt="" />
                 <span>{{ item.name }}</span>
               </div>
             </a-option>

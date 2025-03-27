@@ -39,7 +39,7 @@ export const uploadImageApi = (file: File): Promise<ResponseResult<string>> => {
   return new Promise((resolve, reject) => {
     const form = new FormData()
     form.set('image', file)
-    return ApiRequest.postRequest('/image', { headers: { 'Content-Type': 'multipart/form-data' } }, form)
+    return ApiRequest.postRequest('/api/image', { headers: { 'Content-Type': 'multipart/form-data' } }, form)
       .then((res: any) => resolve(res)).catch(err => reject(err))
     // useAxios.post('/api/images', form, {
     //   headers: {

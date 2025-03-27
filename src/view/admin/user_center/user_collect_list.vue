@@ -84,7 +84,7 @@ const colorList = [
       :default-params="params"
       @remove="removes">
       <template #banner_url="{ record }: { record: ArticleType }">
-        <a-image :src="'http://127.0.0.1:8000/' + record.banner_url" height="50px"></a-image>
+        <a-image :src="record.banner_url" height="50px"></a-image>
       </template>
       <!-- data图标 -->
       <template #data="{ record }: { record: ArticleType }">

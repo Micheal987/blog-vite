@@ -167,16 +167,13 @@ const cancel = () => {
             allow-clear>
             <a-option v-for="item in imageIdList" :key="item.id" :value="item.id">
               <div class="banners_image_div">
-                <img height="30px" :src="'http://127.0.0.1:8000/' + item.path" alt="" />
+                <img height="30px" :src="item.path" alt="" />
                 <span>{{ item.name }}</span>
               </div>
             </a-option>
             <template #label="{ data }">
               <!-- 请求问题 -->
-              <img
-                :src="'http://127.0.0.1:8000/' + coverSrc(data.value)?.value"
-                style="height: 40px; border-radius: 5px"
-                alt="" />
+              <img :src="coverSrc(data.value)?.value" style="height: 40px; border-radius: 5px" alt="" />
               <span style="margin-left: 10px">{{ data.label }}</span>
             </template>
           </a-select>

@@ -1,9 +1,7 @@
 <script lang="ts" setup>
 import Blog_table from '@/components/admin/blog_table.vue'
 import { getImageListApi, type ImageListData, type ImagesUploadType } from '@/api/image/image_api.ts'
-
 import { h, ref } from 'vue'
-import type { actionOptionType } from '@/components/admin/blog_table.vue'
 import { Message, Tag, type FileItem } from '@arco-design/web-vue'
 import { useStoreConfig } from '@/store'
 import type { ResponseResult } from '@/api/axios'
@@ -37,15 +35,6 @@ const columns = [
   { title: '操作', slotName: 'action' },
 ]
 const fileList = ref<FileItem[]>([])
-//操作组
-const actionGroups = ref<actionOptionType[]>([
-  {
-    label: '批量拉黑',
-    callback: async (idList: (string | number)[]): Promise<boolean> => {
-      return true
-    },
-  },
-])
 
 const visible = ref(false) //modal开关
 const blogTableRef = ref() //父组件 ref
@@ -107,10 +96,9 @@ const beforeOpen = () => {
       :limit="10"
       @add="visibleUpdate"
       no-edit
-      :actionGroup="actionGroups"
       @remove="removes">
       <template #path="{ record }: { record: ImageListData }">
-        <a-image :src="'http://127.0.0.1:8000/' + record.path" height="50px"></a-image>
+        <a-image :src="record.path" height="50px"></a-image>
       </template>
       <template #action_left="{ record }: { record: ImageListData }">
         <a :href="record.path" :download="record.name" style="margin-right: 10px">

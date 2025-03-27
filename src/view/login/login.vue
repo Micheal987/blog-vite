@@ -62,7 +62,7 @@ init(route.query)
 </template>
 <style lang="scss">
 .blog_login {
-  background: url('/image/bg.jpg') 50% / cover no-repeat;
+  background: url('/image/pg2.png') 50% / cover no-repeat;
   width: 100%;
   height: 100vh;
 

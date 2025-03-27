@@ -8,12 +8,12 @@ const helpList = [
   {
     column: 'Access Key 和 Secret Key',
     abs: '获取或者找到你的Access Key和Secret Key,可以先登录进入你的帐号,点击“个人面板”,面板中点击“密锁管理”',
-    content: `<img src="http://127.0.0.1:8000/uploads/file/key1.png" alt="" />`,
+    content: `<img src="https://oi2ix6x26.qnssl.com/attachments/download/678462/001573d73ceee8a5c1d210f56655ab5/" alt="" />`,
   },
   {
     column: '桶信息',
     abs: '登录之后前往控制台，找到资源管理-存储空间-新建存储空间即空间的名称',
-    content: `<img src="http://127.0.0.1:8000/uploads/file/key2.png" alt="" />`,
+    content: `<img src="https://dn-odum9helk.qbox.me/FquFNwzzY3wS3Rw5XfVE2uKpB_i2/" alt="" />`,
   },
   {
     column: '域名',
@@ -23,7 +23,7 @@ const helpList = [
   {
     column: '地区',
     abs: '选择离你最近的区域并填写地区的代码',
-    content: `<img src="http://127.0.0.1:8000/uploads/file/key3.png" alt="" />`,
+    content: `<img src="https://dn-odum9helk.qbox.me/FkR0Yx8Jqw54vYO64ZwMyQkae9ZZ" alt="" />`,
   },
   {
     column: '图片前缀',

@@ -25,7 +25,7 @@ export const useStoreConfig = defineStore(
       user_id: 0,
       role: 0,
       token: "",
-      avatar: "image/user1.jpg",
+      avatar: "",
       exp: 0
     }
     let siteInfo = reactive<SiteInfoType>({

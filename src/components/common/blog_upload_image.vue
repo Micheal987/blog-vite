@@ -22,7 +22,7 @@ const emits = defineEmits<{
   (e: 'updateImage', value: string): void
 }>()
 
-const valueInput = (value: string) => {}
+const valueInput = () => {}
 const setHeader = {
   token: store.userInfo.token,
 }

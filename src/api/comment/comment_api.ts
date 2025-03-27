@@ -40,7 +40,7 @@ export interface CommentType {
     apply_show: boolean //是否显示回复的组件
 }
 export const getCommentListApi = (id: string) => {
-    return ApiRequest.getRequest<ResponseResult<ListDateType<CommentType>>>('comment_list', { params: { article_id: id } })
+    return ApiRequest.getRequest<ResponseResult<ListDateType<CommentType>>>('/comment_list', { params: { article_id: id } })
 }
 export const DeleteCommentApi = (id: number) => {
     return ApiRequest.deleteRequest<ResponseResult<string>>(`/comment/${id}`, {})
