@@ -106,3 +106,9 @@ export const getArticleCalendarApi = () => {
 export const getArticleDetailApi = (id: string) => {
     return ApiRequest.getRequest<ResponseResult<ArticleType>>(`/article_detail/${id}`, {})
 }
+export const psotArticleDiggApi = (id: string) => {
+    return ApiRequest.postRequest<ResponseResult<string>>(`/digg/article/${id}`, {})
+}
+export const psotArticleColleApi = (id: string) => {
+    return ApiRequest.postRequest<ResponseResult<string>>(``, {}, id)
+}

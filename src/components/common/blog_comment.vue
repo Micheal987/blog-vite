@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { reactive, watch } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import { getCommentListApi, postCommentCreateApi } from '@/api/comment/comment_api'
 import type { CommentType, CommentAddType } from '@/api/comment/comment_api'
 import type { ListDateType } from '@/api/axios'
@@ -52,11 +52,19 @@ watch(
   },
   { immediate: true },
 )
+const textareaRef = ref()
+const focus = () => {
+  textareaRef.value.focus()
+}
+defineExpose({
+  focus,
+})
 </script>
 <template>
   <div class="blog_comment_list_components">
     <div class="add_comment">
       <a-textarea
+        ref="textareaRef"
         placeholder="输入评论内容"
         @keyup.enter.ctrl="createComment"
         v-model="addCommentForm.comment"

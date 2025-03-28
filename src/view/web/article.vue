@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { getArticleDetailApi, type ArticleType } from '@/api/article/article_api'
+import { getArticleDetailApi, psotArticleDiggApi, type ArticleType } from '@/api/article/article_api'
 import Blog_comment from '@/components/common/blog_comment.vue'
 import Blog_user_info_preview from '@/components/common/blog_user_info_preview.vue'
 import Blog_banner from '@/components/web/blog_banner.vue'
@@ -13,6 +13,8 @@ import { MdPreview, MdCatalog } from 'md-editor-v3'
 import 'md-editor-v3/lib/preview.css'
 import { articleTagcolorList } from '@/global'
 import Blog_title from '@/components/common/blog_title.vue'
+import { IconThumbUpFill, IconStarFill, IconDoubleUp, IconMessage } from '@arco-design/web-vue/es/icon'
+import { Message } from '@arco-design/web-vue'
 const store = useStoreConfig()
 const route = useRoute()
 let isFixed = ref(false)
@@ -69,6 +71,34 @@ const scroll = () => {
   }
 }
 window.addEventListener('scroll', scroll)
+const goTop = () => {
+  document.documentElement.scrollTo({
+    top: 700 - 60,
+    behavior: 'smooth',
+  })
+}
+const blogCommentRef = ref()
+const goComment = () => {
+  let box = document.querySelector('xx') as HTMLElement
+  if (!box) return
+  let top = box.offsetHeight
+  document.documentElement.scrollTo({
+    top: top - 60,
+    behavior: 'smooth',
+  })
+  setTimeout(() => {
+    blogCommentRef.value.focus()
+  }, 500)
+}
+//点赞最简单
+const articleDigg = async () => {
+  let res = await psotArticleDiggApi(id as string)
+  if (res.code) {
+    Message.error(res.msg)
+    return
+  }
+  Message.success(res.msg)
+}
 </script>
 <template>
   <div class="article_views">
@@ -92,7 +122,7 @@ window.addEventListener('scroll', scroll)
             <div class="pre">上一篇: <a href="">xxx</a></div>
             <div class="next">下一篇: <a href="">xxx</a></div>
           </div>
-          <Blog_comment :article-id="id as string"></Blog_comment>
+          <Blog_comment ref="blogCommentRef" :article-id="id as string"></Blog_comment>
         </div>
         <aside>
           <Blog_user_info_preview :data="userInfo"></Blog_user_info_preview>
@@ -106,7 +136,12 @@ window.addEventListener('scroll', scroll)
                 :editor-id="data.ID"></MdCatalog>
             </Blog_title>
           </div>
-          <div class="blog_article_action"></div>
+          <div class="blog_article_action">
+            <IconThumbUpFill @click="articleDigg"></IconThumbUpFill>
+            <IconStarFill></IconStarFill>
+            <IconDoubleUp @click="goTop"></IconDoubleUp>
+            <IconMessage @click="goComment"></IconMessage>
+          </div>
         </aside>
       </div>
     </main>
@@ -180,6 +215,31 @@ window.addEventListener('scroll', scroll)
             position: fixed;
             top: 80px;
             width: 300px;
+          }
+        }
+        .blog_article_action {
+          margin-top: 20px;
+          background-color: var(--color-bg-1);
+          border-radius: 10px;
+          height: 50px;
+          display: flex;
+          align-items: center;
+          > svg {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            color: var(--color-text-1);
+            cursor: pointer;
+
+            &:hover {
+              color: var(--active);
+            }
+
+            &.active {
+              color: var(--active);
+            }
           }
         }
       }

@@ -2,6 +2,7 @@ import type { ServerOptions } from "vite"
 const serverConfig = (url: string): ServerOptions => {
     const Serverurl = url
     const wsServerurl = url.replace("http", "ws")
+    console.log("pai", Serverurl)
     const server: ServerOptions = {
         host: '0.0.0.0',
         port: 80,
