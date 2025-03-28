@@ -5,7 +5,7 @@ export interface CommentArticleType {
     id: string
     count: number
 }
-export const getcommentArticleListApi = (params: PageParamType) => {
+export const getCommentArticleListApi = (params: PageParamType) => {
     return ApiRequest.getRequest<ResponseResult<ListDateType<CommentArticleType>>>('/comment', { params })
 }
 export interface commentUserType {

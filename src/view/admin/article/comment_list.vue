@@ -3,7 +3,7 @@ import type { ListDateType, PageParamType } from '@/api/axios'
 import type { CommentArticleType } from '@/api/comment/comment_api'
 import { reactive, ref } from 'vue'
 import { IconDelete } from '@arco-design/web-vue/es/icon'
-import { getcommentArticleListApi } from '@/api/comment/comment_api'
+import { getCommentArticleListApi } from '@/api/comment/comment_api'
 import Blog_comment from '@/components/common/blog_comment.vue'
 import { useRouter, useRoute } from 'vue-router'
 const router = useRouter()
@@ -15,7 +15,7 @@ const articleListData = reactive<ListDateType<CommentArticleType>>({
 })
 const articleParams = reactive<PageParamType>({})
 const articleList = async () => {
-  let res = await getcommentArticleListApi(articleParams)
+  let res = await getCommentArticleListApi(articleParams)
   articleListData.list = res.data.list
   articleListData.count = res.data.count
 }

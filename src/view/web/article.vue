@@ -7,13 +7,17 @@ import Blog_footer from '@/components/web/blog_footer.vue'
 import Blog_nav from '@/components/web/blog_nav.vue'
 import { useStoreConfig } from '@/store'
 import { dateFormat } from '@/utils/date'
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { MdPreview } from 'md-editor-v3'
+import { MdPreview, MdCatalog } from 'md-editor-v3'
 import 'md-editor-v3/lib/preview.css'
 import { articleTagcolorList } from '@/global'
+import Blog_title from '@/components/common/blog_title.vue'
 const store = useStoreConfig()
 const route = useRoute()
+let isFixed = ref(false)
+let top = ref(977 - 70)
+const scrollElement = document.documentElement
 const id = route.params.id
 let data = reactive<ArticleType>({
   ID: '',
@@ -57,6 +61,14 @@ const banners = {
   banners: data.banner_url,
   slogan: data.title,
 }
+const scroll = () => {
+  if ((document.documentElement.scrollTop as number) >= top.value) {
+    isFixed.value = true
+  } else {
+    isFixed.value = false
+  }
+}
+window.addEventListener('scroll', scroll)
 </script>
 <template>
   <div class="article_views">
@@ -74,7 +86,7 @@ const banners = {
           </div>
           <article>
             {{ data.content }}
-            <MdPreview v-model="data.content" :theme="store.themeString()"></MdPreview>
+            <MdPreview :editor-id="data.ID" v-model="data.content" :theme="store.themeString()"></MdPreview>
           </article>
           <div class="next_pre">
             <div class="pre">上一篇: <a href="">xxx</a></div>
@@ -84,7 +96,16 @@ const banners = {
         </div>
         <aside>
           <Blog_user_info_preview :data="userInfo"></Blog_user_info_preview>
-          <div class="blog_article_dict"></div>
+          <div :class="{ article_actionts: true, isFixed: isFixed }">
+            <Blog_title title="文章目录" class="blog_article_dict">
+              <MdCatalog
+                :scroll-element="scrollElement"
+                :theme="store.themeString()"
+                :offset-top="80"
+                :scroll-element-offset-top="80"
+                :editor-id="data.ID"></MdCatalog>
+            </Blog_title>
+          </div>
           <div class="blog_article_action"></div>
         </aside>
       </div>
@@ -149,6 +170,18 @@ const banners = {
       }
       aside {
         width: 300px;
+        .blog_article_dict {
+          margin-top: 20px;
+        }
+        .article_actionts {
+          margin-top: 20px;
+          position: relative;
+          &.isFixed {
+            position: fixed;
+            top: 80px;
+            width: 300px;
+          }
+        }
       }
     }
   }
