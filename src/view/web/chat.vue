@@ -3,6 +3,7 @@ import Blog_chat_group from '@/components/common/blog_chat_group.vue'
 import Blog_nav from '@/components/web/blog_nav.vue'
 </script>
 <template>
+  <!-- bug 必须滚动到指定位置 -->
   <div class="chat_view">
     <Blog_nav></Blog_nav>
     <main>

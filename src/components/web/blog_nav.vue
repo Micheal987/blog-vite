@@ -12,22 +12,9 @@ interface Props {
 }
 const props = defineProps<Props>()
 const { noScroll = false } = props
+const isShow = ref(true)
 const store = useStoreConfig()
 const navList = ref<MenuNameType[]>([])
-const listInfo = async () => {
-  const val = sessionStorage.getItem('navList')
-  if (val !== null) {
-    try {
-      navList.value = JSON.parse(val)
-      return
-    } catch (e) {}
-  }
-  let res = await getMenuNameApi()
-  navList.value = res.data
-  sessionStorage.setItem('navList', JSON.stringify(navList.value))
-}
-listInfo()
-const isShow = ref(true)
 const scrollFn = () => {
   let top = document.documentElement.scrollTop
   if (top >= 200) {
@@ -45,6 +32,19 @@ onUnmounted(() => {
     window.removeEventListener('scroll', scrollFn)
   }
 })
+const listInfo = async () => {
+  const val = sessionStorage.getItem('navList')
+  if (val !== null) {
+    try {
+      navList.value = JSON.parse(val)
+      return
+    } catch (e) {}
+  }
+  let res = await getMenuNameApi()
+  navList.value = res.data
+  sessionStorage.setItem('navList', JSON.stringify(navList.value))
+}
+listInfo()
 </script>
 <template>
   <div :class="{ blog_nav: true, isShow: isShow }">
