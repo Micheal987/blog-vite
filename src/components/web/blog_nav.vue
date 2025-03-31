@@ -1,12 +1,12 @@
 :
 <script lang="ts" setup>
-import { IconSearch } from '@arco-design/web-vue/es/icon'
 import Blog_theme from '../common/blog_theme.vue'
 import { useStoreConfig } from '@/store'
 import Blog_user_menu_doption from '@/components/common/blog_user_menu_doption.vue'
 import { getMenuNameApi } from '@/api/menu/menu_api'
 import type { MenuNameType } from '@/api/menu/menu_api'
 import { onUnmounted, ref } from 'vue'
+import Blog_search from './blog_search.vue'
 interface Props {
   noScroll?: boolean
 }
@@ -26,6 +26,7 @@ const scrollFn = () => {
 if (!noScroll) {
   isShow.value = false
   window.addEventListener('scroll', scrollFn)
+  scrollFn()
 }
 onUnmounted(() => {
   if (!noScroll) {
@@ -61,7 +62,7 @@ listInfo()
           </template>
         </div>
         <div class="search">
-          <IconSearch></IconSearch>
+          <Blog_search></Blog_search>
         </div>
       </div>
       <div class="right">

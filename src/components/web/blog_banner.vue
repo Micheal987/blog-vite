@@ -16,7 +16,7 @@ const data = reactive<BlogBannerType>({
   slogan: '',
   abstract: [],
   banner_time: 0,
-  banners: [],
+  banners: [{ id: 1, path: '/image/default_banner.png' }],
 })
 const listInfo = async () => {
   if (props.data) {
@@ -84,6 +84,7 @@ watch(
   width: 100%;
   height: 700px;
   position: relative;
+  background-color: var(--color-fill-2);
   .head {
     position: absolute;
     left: 50%;

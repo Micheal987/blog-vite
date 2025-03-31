@@ -12,7 +12,7 @@ import Blog_footer from '@/components/web/blog_footer.vue'
 import Blog_nav from '@/components/web/blog_nav.vue'
 import { useStoreConfig } from '@/store'
 import { dateFormat } from '@/utils/date'
-import { reactive, ref } from 'vue'
+import { onUnmounted, reactive, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { MdPreview, MdCatalog } from 'md-editor-v3'
 import 'md-editor-v3/lib/preview.css'
@@ -24,8 +24,9 @@ const store = useStoreConfig()
 const route = useRoute()
 let isFixed = ref(false)
 let top = ref(977 - 70)
+const isShowMd = ref(false)
 const scrollElement = document.documentElement
-const id = route.params.id
+let id = ref(route.params.id as string)
 let data = reactive<ArticleType>({
   ID: '',
   created_at: '',
@@ -51,10 +52,11 @@ let data = reactive<ArticleType>({
   is_digg: false,
 })
 const listInfo = async () => {
-  let res = await getArticleDetailApi(id as string)
+  isShowMd.value = false
+  let res = await getArticleDetailApi(id.value)
   Object.assign(data, res.data)
+  isShowMd.value = true
 }
-listInfo()
 const userInfo = {
   avatar: data.user_avatar,
   nickName: data.user_nick_name,
@@ -78,6 +80,9 @@ const scroll = () => {
   }
 }
 window.addEventListener('scroll', scroll)
+onUnmounted(() => {
+  window.removeEventListener('scroll', scroll)
+})
 const goTop = () => {
   document.documentElement.scrollTo({
     top: 700 - 60,
@@ -86,7 +91,7 @@ const goTop = () => {
 }
 const blogCommentRef = ref()
 const goComment = () => {
-  let box = document.querySelector('xx') as HTMLElement
+  let box = document.querySelector('.add_comment') as HTMLElement
   if (!box) return
   let top = box.offsetHeight
   document.documentElement.scrollTo({
@@ -99,7 +104,7 @@ const goComment = () => {
 }
 //点赞最简单
 const articleDigg = async () => {
-  let res = await psotArticleDiggApi(id as string)
+  let res = await psotArticleDiggApi(id.value)
   if (res.code) {
     Message.error(res.msg)
     return
@@ -113,7 +118,11 @@ const articleDigg = async () => {
 }
 //收藏
 const articleCollect = async () => {
-  let res = await psotArticleColleApi(id as string)
+  if (!store.isLogin()) {
+    Message.warning('请登录')
+    return
+  }
+  let res = await psotArticleColleApi(id.value)
   if (res.code) {
     Message.error(res.msg)
     return
@@ -126,6 +135,14 @@ const articleCollect = async () => {
   }
   Message.success(res.msg)
 }
+watch(
+  () => route.params,
+  () => {
+    id.value = route.params.id as string
+    listInfo()
+  },
+  { immediate: true, deep: true },
+)
 </script>
 <template>
   <div class="article_views">
@@ -143,7 +160,7 @@ const articleCollect = async () => {
           </div>
           <article>
             {{ data.content }}
-            <MdPreview :editor-id="data.ID" v-model="data.content" :theme="store.themeString()"></MdPreview>
+            <MdPreview :editor-id="id" v-model="data.content" :theme="store.themeString()"></MdPreview>
           </article>
           <div class="next_pre">
             <div class="pre">上一篇: <a href="">xxx</a></div>
@@ -152,15 +169,16 @@ const articleCollect = async () => {
           <Blog_comment ref="blogCommentRef" :article-id="id as string"></Blog_comment>
         </div>
         <aside>
-          <Blog_user_info_preview :data="userInfo"></Blog_user_info_preview>
+          <Blog_user_info_preview :data="userInfo" class="blog_user_info_preview"></Blog_user_info_preview>
           <div :class="{ article_actionts: true, isFixed: isFixed }">
             <Blog_title title="文章目录" class="blog_article_dict">
               <MdCatalog
+                v-if="isShowMd"
                 :scroll-element="scrollElement"
                 :theme="store.themeString()"
                 :offset-top="80"
                 :scroll-element-offset-top="80"
-                :editor-id="data.ID"></MdCatalog>
+                :editor-id="id"></MdCatalog>
             </Blog_title>
           </div>
           <div class="blog_article_action">
@@ -232,8 +250,15 @@ const articleCollect = async () => {
       }
       aside {
         width: 300px;
+        .blog_user_info_preview {
+          margin-bottom: 20px;
+        }
         .blog_article_dict {
           margin-top: 20px;
+          .body {
+            max-height: calc(100vh - 400px);
+            overflow: auto;
+          }
         }
         .article_actionts {
           margin-top: 20px;

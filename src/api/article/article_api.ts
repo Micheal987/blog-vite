@@ -114,3 +114,13 @@ export const psotArticleDiggApi = (id: string) => {
 export const psotArticleColleApi = (ID: string) => {
     return ApiRequest.postRequest<ResponseResult<string>>(`/article/collects`, { params: { ID } },)
 }
+export interface ArticleSearchType {
+    id: string
+    title: string
+    key: string
+    slug: string
+    body: string
+}
+export const getArticleSearchApi = (params?: PageParamType) => {
+    return ApiRequest.getRequest<ResponseResult<ListDateType<ArticleSearchType>>>("/article/text", { params })
+}
