@@ -22,6 +22,8 @@ export interface ArticleType {
     link: string
     banner_id: number
     banner_url: string
+    is_collect?: boolean
+    is_digg?: boolean,
     tags: string[]
 }
 export interface ArticleItemType {
@@ -109,6 +111,6 @@ export const getArticleDetailApi = (id: string) => {
 export const psotArticleDiggApi = (id: string) => {
     return ApiRequest.postRequest<ResponseResult<string>>(`/digg/article/${id}`, {})
 }
-export const psotArticleColleApi = (id: string) => {
-    return ApiRequest.postRequest<ResponseResult<string>>(``, {}, id)
+export const psotArticleColleApi = (ID: string) => {
+    return ApiRequest.postRequest<ResponseResult<string>>(`/article/collects`, { params: { ID } },)
 }

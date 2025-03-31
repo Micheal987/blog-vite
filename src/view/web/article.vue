@@ -1,5 +1,10 @@
 <script lang="ts" setup>
-import { getArticleDetailApi, psotArticleDiggApi, type ArticleType } from '@/api/article/article_api'
+import {
+  getArticleDetailApi,
+  psotArticleColleApi,
+  psotArticleDiggApi,
+  type ArticleType,
+} from '@/api/article/article_api'
 import Blog_comment from '@/components/common/blog_comment.vue'
 import Blog_user_info_preview from '@/components/common/blog_user_info_preview.vue'
 import Blog_banner from '@/components/web/blog_banner.vue'
@@ -42,6 +47,8 @@ let data = reactive<ArticleType>({
   banner_id: 0,
   banner_url: '',
   tags: [],
+  is_collect: false,
+  is_digg: false,
 })
 const listInfo = async () => {
   let res = await getArticleDetailApi(id as string)
@@ -98,6 +105,26 @@ const articleDigg = async () => {
     return
   }
   Message.success(res.msg)
+  data.digg_count++
+  data.is_digg = true
+  setTimeout(() => {
+    data.is_digg = false
+  }, 2000)
+}
+//收藏
+const articleCollect = async () => {
+  let res = await psotArticleColleApi(id as string)
+  if (res.code) {
+    Message.error(res.msg)
+    return
+  }
+  data.is_collect = !data.is_collect
+  if (!data.is_collect) {
+    data.collects_count--
+  } else {
+    data.collects_count++
+  }
+  Message.success(res.msg)
 }
 </script>
 <template>
@@ -137,8 +164,8 @@ const articleDigg = async () => {
             </Blog_title>
           </div>
           <div class="blog_article_action">
-            <IconThumbUpFill @click="articleDigg"></IconThumbUpFill>
-            <IconStarFill></IconStarFill>
+            <IconThumbUpFill :class="{ active: data.is_digg }" @click="articleDigg"></IconThumbUpFill>
+            <IconStarFill :class="{ active: data.is_collect }" @click="articleCollect"></IconStarFill>
             <IconDoubleUp @click="goTop"></IconDoubleUp>
             <IconMessage @click="goComment"></IconMessage>
           </div>
