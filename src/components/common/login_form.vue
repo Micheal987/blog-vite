@@ -18,7 +18,6 @@ const props = defineProps<{
 }>()
 const emits = defineEmits<{
   (e: 'offEject', value: boolean): void
-  (e: 'close', value: boolean): void
 }>()
 const loginEmails = async () => {
   let val = await formRef.value.validate()
@@ -28,7 +27,6 @@ const loginEmails = async () => {
   if (res.data != null) {
     Message.success(res.msg)
     emits('offEject', false)
-    emits('close', false)
   }
 }
 //ref

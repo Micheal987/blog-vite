@@ -165,7 +165,7 @@ listInfo()
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-top: 80px;
+    padding-top: 60px;
     color: var(--color-text-2);
     .continer {
       width: var(--containter_width);
@@ -200,18 +200,20 @@ listInfo()
       .source {
         margin-top: 20px;
         margin-bottom: 20px;
-        min-height: calc(100vh - 500px);
+        min-height: calc(100vh - 485px);
         .article_list {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
-          gap: 30px 30px;
+          grid-column-gap: 40px;
+          grid-row-gap: 40px;
           .item {
             width: 100%;
             border-radius: 5px;
             overflow: hidden;
+            background-color: var(--color-bg-1);
             color: var(--color-text-2);
             .top {
-              height: 120px;
+              height: 160px;
               width: 100%;
               img {
                 width: 100%;
@@ -220,13 +222,14 @@ listInfo()
               }
             }
             .bottom {
-              padding: 20px;
+              height: 100%;
+              padding: 40px;
               background-color: var(--color-fill-1);
               .title {
                 font-size: 16px;
-                font-weight: 600px;
+                font-weight: 600;
                 em {
-                  color: rgb(230, 107, 107);
+                  color: rgb(228, 59, 59);
                 }
               }
               .abstract {
@@ -249,12 +252,15 @@ listInfo()
         }
         .page {
           display: flex;
-          align-items: center;
           justify-content: center;
+          margin-top: 20px;
+          border-radius: 5px;
+          background-color: var(--color-bg-1);
+          padding: 20px 0;
         }
         .empty {
           width: 100%;
-          min-height: calc(100vh - 500px);
+          min-height: calc(100vh - 485px);
           background-color: var(--color-bg-1);
           display: flex;
           flex-direction: column;

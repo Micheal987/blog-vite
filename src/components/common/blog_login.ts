@@ -14,7 +14,12 @@ export const showLogin = () => {
                 }
             },
             render() {
-                return h(Blog_login, { visible: this.visible as boolean, onClose: this.onClose })
+                return h(Blog_login,
+                    {
+                        visible: this.visible as any,
+                        onClose: this.onClose
+                    }
+                )
             }
         })
         const app = createApp(component)

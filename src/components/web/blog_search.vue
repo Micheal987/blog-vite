@@ -22,11 +22,11 @@ const searchList = async () => {
   data.count = res.data.count
 }
 const goTo = (item: ArticleSearchType) => {
-  window.open(`/article/${item.slug}`, '_blank')
+  window.open(`#/article/${item.slug}`, '_blank')
 }
 </script>
 <template>
-  <a-modal title="全文搜索" :footer="false" v-model:visible="visible">
+  <a-modal title="全文搜索" width="40%" :footer="false" v-model:visible="visible" body-class="blog_search_body">
     <div class="head">
       <a-input-search
         v-model="params.key"
@@ -43,7 +43,7 @@ const goTo = (item: ArticleSearchType) => {
           <div class="content" v-html="item.body"></div>
         </div>
       </div>
-      <div class="footer">共搜索结果10条</div>
+      <div class="footer">共搜索结果{{ data.count }}条</div>
     </template>
   </a-modal>
   <div class="blog_search">
@@ -51,13 +51,10 @@ const goTo = (item: ArticleSearchType) => {
   </div>
 </template>
 <style lang="scss">
-.blog_search {
+.blog_search_body {
   padding: 0;
   .head {
     padding: 20px;
-    em {
-      color: var(--heightColor);
-    }
   }
   .body {
     max-height: 50vh;
@@ -66,12 +63,17 @@ const goTo = (item: ArticleSearchType) => {
     .item {
       padding: 10px 20px;
       cursor: pointer;
+      &:hover {
+        background-color: var(--color-fill-2);
+      }
       .title {
         color: var(--color-text-1);
         margin-bottom: 5px;
-      }
-      &:hover {
-        background-color: var(--color-fill-2);
+        em {
+          color: var(--height_color);
+          font-size: 26px;
+          font-weight: 600;
+        }
       }
     }
   }

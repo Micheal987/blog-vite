@@ -7,10 +7,12 @@ const props = defineProps<{
 }>()
 const emits = defineEmits<{
   (e: 'update', value: boolean): void
+  (e: 'close', value: boolean): void
 }>()
 const loginForm = ref()
 const close = () => {
   emits('update', false)
+  emits('close', false)
   loginForm.value.clearFormRef()
 }
 
