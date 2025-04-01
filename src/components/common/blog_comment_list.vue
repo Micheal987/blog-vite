@@ -6,6 +6,7 @@ import { Message } from '@arco-design/web-vue'
 import { useStoreConfig } from '@/store'
 import { IconMessage, IconDelete } from '@arco-design/web-vue/es/icon'
 import { nextTick, ref } from 'vue'
+import { showMessageRecord } from './blog_message_record'
 const store = useStoreConfig()
 interface Props {
   data: CommentType[]
@@ -62,6 +63,9 @@ const deleteComment = async (record: CommentType) => {
   Message.success(res.msg)
   emits('list')
 }
+const avatarClick = (item: CommentType) => {
+  console.log(item.user_id)
+}
 </script>
 <template>
   <div>
@@ -69,7 +73,6 @@ const deleteComment = async (record: CommentType) => {
       :author="item.user.nick_name"
       :content="item.content"
       :datetime="dateTimeFormat(item.created_at)"
-      :avatar="item.user.avatar"
       v-for="item in props.data">
       <template #actions>
         <span class="action" @click="DiggCount(item)"> <IconMessage /> digg {{ item.digg_count }}</span>
@@ -80,6 +83,11 @@ const deleteComment = async (record: CommentType) => {
           @ok="deleteComment(item)">
           <span class="action"> <IconDelete /> 删除 </span>
         </a-popconfirm>
+      </template>
+      <template #avatar" @click="avatarClick(item)">
+        <a-avatar>
+          <img alt="avatar" :src="item.user.avatar" />
+        </a-avatar>
       </template>
       <a-comment #content :avatar="store.userInfo.avatar" v-if="item.apply_show || item.id === saveID">
         <div class="apply_commen">

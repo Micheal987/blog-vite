@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import Blog_message_record from './blog_message_record.vue'
+import { Modal } from '@arco-design/web-vue'
 interface Props {
   visible: boolean
   userID: number
@@ -7,14 +8,16 @@ interface Props {
 const props = defineProps<Props>()
 const emits = defineEmits<{
   (e: 'update:visible', value: boolean): boolean
+  (e: 'close', value: boolean): boolean
 }>()
 const close = () => {
   emits('update:visible', false)
+  emits('close', false)
 }
 </script>
 <template>
   <div>
-    <a-modal
+    <Modal
       title="聊天"
       width="40%"
       :visible="props.visible"
@@ -22,7 +25,7 @@ const close = () => {
       :footer="false"
       @cancel="close">
       <Blog_message_record :userID="props.userID" />
-    </a-modal>
+    </Modal>
   </div>
 </template>
 <style lang="scss">
