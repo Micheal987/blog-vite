@@ -12,7 +12,7 @@ import Blog_footer from '@/components/web/blog_footer.vue'
 import Blog_nav from '@/components/web/blog_nav.vue'
 import { useStoreConfig } from '@/store'
 import { dateFormat } from '@/utils/date'
-import { onUnmounted, reactive, ref, watch } from 'vue'
+import { onUnmounted, onMounted, reactive, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { MdPreview, MdCatalog } from 'md-editor-v3'
 import 'md-editor-v3/lib/preview.css'
@@ -79,6 +79,21 @@ const scroll = () => {
     isFixed.value = false
   }
 }
+onMounted(() => {
+  let hash = route.hash
+  if (hash !== '') {
+    let dom = document.querySelector(hash)
+    if (dom) {
+      setTimeout(() => {
+        let top = dom.getBoundingClientRect().top
+        document.documentElement.scrollTo({
+          top: top - 60,
+          behavior: 'smooth',
+        })
+      }, 200)
+    }
+  }
+})
 window.addEventListener('scroll', scroll)
 onUnmounted(() => {
   window.removeEventListener('scroll', scroll)
@@ -152,7 +167,7 @@ watch(
       <div class="containter">
         <div class="article_containter">
           <div class="head">
-            <div class="title">{{ data.title }}</div>
+            <div class="title" :id="data.title">{{ data.title }}</div>
             <div class="date">发布的时间:{{ dateFormat(data.created_at) }}</div>
             <div class="tag">
               <a-tag :color="articleTagcolorList[index]" v-for="(item, index) in data.tags">{{ item }}</a-tag>
