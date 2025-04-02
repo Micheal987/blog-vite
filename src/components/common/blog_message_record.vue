@@ -5,6 +5,7 @@ import { postMessageRecordApi, postMessageUserPublishApi } from '@/api/user/mess
 import type { ListDateType } from '@/api/axios'
 import { Message } from '@arco-design/web-vue'
 import { IconRefresh } from '@arco-design/web-vue/es/icon'
+import { CheckboxGroup, Checkbox, Button, Textarea } from '@arco-design/web-vue'
 interface Props {
   userID: number
   NickName?: string
@@ -36,6 +37,9 @@ const messagePublish = async () => {
   if (res.code) Message.error(res.msg)
   Message.success(res.msg)
   infoRecordData()
+  defineExpose({
+    infoRecordData,
+  })
   nextTick(() => {
     setTimeout(() => {
       let dom = document.querySelector('.record_list')
@@ -79,23 +83,23 @@ watch(
     <div class="head" v-if="isHead">
       <div class="title">{{ props.NickName }}聊天记录</div>
       <div class="manage">
-        <a-checkbox v-model="isManage">管理模式</a-checkbox>
+        <Checkbox v-model="isManage">管理模式</Checkbox>
         <IconRefresh @click="flush" style="cursor: pointer; margin-left: 5px"></IconRefresh>
-        <a-button
+        <Button
           v-if="isManage && selectIDList.length"
           type="primary"
           status="danger"
           @click="removeCaht"
           style="margin-left: 10px"
-          >删除</a-button
-        >
+          >删除
+        </Button>
       </div>
     </div>
     <div :class="{ record_list: true, isHead: isHead }">
-      <a-checkbox-group v-model="selectIDList">
+      <CheckboxGroup v-model="selectIDList">
         <div class="user_record_menu">
           <div :class="{ messages: true, isMe: item.isMe, isManage: isManage }" v-for="item in messageRecordData.list">
-            <a-checkbox :value="item.rev_user_id"></a-checkbox>
+            <Checkbox :value="item.rev_user_id"></Checkbox>
             <div class="avatar">
               <img :src="item.send_user_avatar" alt="" />
             </div>
@@ -109,16 +113,16 @@ watch(
             </div>
           </div>
         </div>
-      </a-checkbox-group>
+      </CheckboxGroup>
     </div>
     <div class="message_record">
-      <a-textarea
+      <Textarea
         placeholder="请输入聊天内容"
         v-model="MessagePublishData.conent"
         auto-size
         style="height: 100%"
-        @keyup.enter.ctrl="messagePublish"></a-textarea>
-      <a-button type="primary" @click="messagePublish">回复</a-button>
+        @keyup.enter.ctrl="messagePublish"></Textarea>
+      <Button type="primary" @click="messagePublish">回复</Button>
     </div>
   </div>
 </template>

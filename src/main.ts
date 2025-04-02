@@ -8,6 +8,7 @@ import { router } from "./router"
 import ArcoVue from '@arco-design/web-vue'
 import '@arco-design/web-vue/dist/arco.css'
 import "font-awesome/css/font-awesome.min.css"
+import "nprogress/nprogress.css";
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
 const app = createApp(App)

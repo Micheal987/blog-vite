@@ -64,7 +64,11 @@ const deleteComment = async (record: CommentType) => {
   emits('list')
 }
 const avatarClick = (item: CommentType) => {
-  console.log(item.user_id)
+  if(store.userInfo.user_id ===item.user_id){
+    Message.warning("不能与自己聊天的")
+    return
+  }
+  showMessageRecord(item.user_id,item.user.nick_name)
 }
 </script>
 <template>
@@ -84,8 +88,8 @@ const avatarClick = (item: CommentType) => {
           <span class="action"> <IconDelete /> 删除 </span>
         </a-popconfirm>
       </template>
-      <template #avatar" @click="avatarClick(item)">
-        <a-avatar>
+      <template #avatar">
+        <a-avatar @click="avatarClick(item)">
           <img alt="avatar" :src="item.user.avatar" />
         </a-avatar>
       </template>

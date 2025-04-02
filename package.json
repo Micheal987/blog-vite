@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/nprogress": "^0.2.3",
     "add": "^2.0.6",
     "axios": "^1.7.9",
     "dayjs": "^1.11.13",
@@ -17,6 +18,7 @@
     "font-awesome": "^4.7.0",
     "md-editor-v3": "^5.4.1",
     "mockjs": "^1.1.0",
+    "nprogress": "^0.2.0",
     "pinia": "^3.0.1",
     "pinia-plugin-persistedstate": "^4.2.0",
     "sass": "^1.85.0",

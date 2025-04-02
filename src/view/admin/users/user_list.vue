@@ -9,6 +9,7 @@ import User_create from '@/components/admin/user_create.vue'
 import { Message } from '@arco-design/web-vue'
 import { roleOption } from '@/global/role'
 import Blog_message_record_modal from '@/components/common/blog_message_record_modal.vue'
+import { showMessageRecord } from '@/components/common/blog_message_record'
 
 // blog_table父组件 a-table 显示的字段--头部
 const columns = [
@@ -92,11 +93,8 @@ const removes = (idList: number[]) => {
   console.log('数组id', idList)
   //删除操作
 }
-const messageVisible = ref(false)
-const userID = ref(0)
-const checkMessage = (rescord: UserInfoType) => {
-  messageVisible.value = true
-  userID.value = rescord.id
+const checkMessage = (record: UserInfoType) => {
+  showMessageRecord(record.id, record.nick_name)
 }
 </script>
 <template>
@@ -116,7 +114,6 @@ const checkMessage = (rescord: UserInfoType) => {
       </a-form>
     </a-modal>
     <User_create v-model:visible="visible" @update="visibleUpdate" @ok="createOk"></User_create>
-    <Blog_message_record_modal v-model:visible="messageVisible" :userID="userID"></Blog_message_record_modal>
     <Blog_table
       :url="getUserListApi"
       :columns="columns"

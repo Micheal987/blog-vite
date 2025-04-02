@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@types/nprogress':
+        specifier: ^0.2.3
+        version: 0.2.3
       add:
         specifier: ^2.0.6
         version: 2.0.6
@@ -29,6 +32,9 @@ importers:
       mockjs:
         specifier: ^1.1.0
         version: 1.1.0
+      nprogress:
+        specifier: ^0.2.0
+        version: 0.2.0
       pinia:
         specifier: ^3.0.1
         version: 3.0.1(typescript@5.7.3)(vue@3.5.13(typescript@5.7.3))
@@ -758,6 +764,9 @@ packages:
   '@types/node@22.13.2':
     resolution: {integrity: sha512-Z+r8y3XL9ZpI2EY52YYygAFmo2/oWfNSj4BCpAXE2McAexDk8VcnBMGC9Djn9gTKt4d2T/hhXqmPzo4hfIXtTg==}
 
+  '@types/nprogress@0.2.3':
+    resolution: {integrity: sha512-k7kRA033QNtC+gLc4VPlfnue58CM1iQLgn1IMAU8VPHGOj7oIHPp9UlhedEnD/Gl8evoCjwkZjlBORtZ3JByUA==}
+
   '@types/trusted-types@2.0.7':
     resolution: {integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==}
 
@@ -1397,6 +1406,9 @@ packages:
 
   normalize-wheel-es@1.2.0:
     resolution: {integrity: sha512-Wj7+EJQ8mSuXr2iWfnujrimU35R2W4FAErEyTmJoJ7ucwTn2hOUSsRehMb5RSYkxXGTM7Y9QpvPmp++w5ftoJw==}
+
+  nprogress@0.2.0:
+    resolution: {integrity: sha512-I19aIingLgR1fmhftnbWWO3dXc0hSxqHQHQb3H8m+K3TnEn/iSeTZZOyvKXWqQESMwuUVnatlCnZdLBZZt2VSA==}
 
   number-precision@1.6.0:
     resolution: {integrity: sha512-05OLPgbgmnixJw+VvEh18yNPUo3iyp4BEWJcrLu4X9W05KmMifN7Mu5exYvQXqxxeNWhvIF+j3Rij+HmddM/hQ==}
@@ -2515,6 +2527,8 @@ snapshots:
     dependencies:
       undici-types: 6.20.0
 
+  '@types/nprogress@0.2.3': {}
+
   '@types/trusted-types@2.0.7':
     optional: true
 
@@ -3183,6 +3197,8 @@ snapshots:
   node-releases@2.0.19: {}
 
   normalize-wheel-es@1.2.0: {}
+
+  nprogress@0.2.0: {}
 
   number-precision@1.6.0: {}
 

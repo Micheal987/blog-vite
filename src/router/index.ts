@@ -2,6 +2,8 @@ import { createRouter, createWebHashHistory } from "vue-router"
 import { routes } from "./routes"
 import { useStoreConfig } from "@/store"
 import { Message } from "@arco-design/web-vue"
+import NProgress from "nprogress"; // 导入 nprogress模块
+
 const router = createRouter({
     history: createWebHashHistory(),
     routes: routes
@@ -28,5 +30,9 @@ router.beforeEach(async (to, form) => {
         router.push({ name: form.name })
         return
     }
+    NProgress.start();//开启进度条
+})
+router.afterEach(() => {
+    NProgress.done()//完成进度条
 })
 export { router }

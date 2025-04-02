@@ -1,7 +1,10 @@
 import { h, createApp, defineComponent, ref } from "vue"
 import Blog_message_record_modal from "./blog_message_record_modal.vue"
 const visible = ref<undefined | boolean>(undefined)
-export const showMessageRecord = (userID: number) => {
+const nickNameRef = ref("")
+const userIDRef = ref(0)
+const messageRecordRef = ref()
+export const showMessageRecord = (userID: number, nickNanme: string) => {
     if (visible.value === undefined) {
         const component = defineComponent({
             setup() {
@@ -10,11 +13,19 @@ export const showMessageRecord = (userID: number) => {
                 }
                 return {
                     visible,
-                    onClose
+                    onClose,
+                    nickNameRef,
+                    userIDRef,
                 }
             },
             render() {
-                return h(Blog_message_record_modal, { visible: this.visible as boolean, userID: userID, onClose: this.onClose })
+                return h(Blog_message_record_modal, {
+                    visible: this.visible as boolean,
+                    userID: this.userIDRef,
+                    nickNanme: this.nickNameRef,
+                    ref: messageRecordRef,
+                    onClose: this.onClose
+                })
             }
         })
         const app = createApp(component)
@@ -22,5 +33,10 @@ export const showMessageRecord = (userID: number) => {
         app.mount(div)
         document.body.appendChild(div)
     }
+    if (userID === userIDRef.value) {
+        messageRecordRef.value.dateInfo()
+    }
     visible.value = true
+    nickNameRef.value = nickNanme
+    userIDRef.value = userID
 }
