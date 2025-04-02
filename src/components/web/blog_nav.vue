@@ -61,9 +61,7 @@ listInfo()
             <a :href="item.path" v-else>{{ item.title }}</a>
           </template>
         </div>
-        <div class="search">
-          <Blog_search></Blog_search>
-        </div>
+        <Blog_search></Blog_search>
       </div>
       <div class="right">
         <div class="login" v-if="!store.isLogin()">
@@ -129,8 +127,7 @@ listInfo()
           margin-right: 40px;
         }
       }
-      .search {
-        margin-right: 10px;
+      .blog_search {
         svg {
           cursor: pointer;
         }

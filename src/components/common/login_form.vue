@@ -6,8 +6,7 @@ import { getLoginQQApi, postLoginEmailApi } from '@/api/user/user_api'
 import { Message } from '@arco-design/web-vue'
 import { useStoreConfig } from '@/store'
 import { useRoute } from 'vue-router'
-
-const route = useRoute()
+import { FormItem, Form, Button, Input, InputPassword } from '@arco-design/web-vue'
 const store = useStoreConfig()
 const form = reactive({
   user_name: '',
@@ -18,7 +17,7 @@ const props = defineProps<{
   qqRedirectPath?: string
 }>()
 const emits = defineEmits<{
-  offEject: [value: boolean]
+  (e: 'offEject', value: boolean): void
 }>()
 const loginEmails = async () => {
   let val = await formRef.value.validate()
@@ -41,6 +40,7 @@ defineExpose({
 })
 //
 const loginQQ = async () => {
+  const route = useRoute()
   const res = await getLoginQQApi()
   if (res.code) {
     Message.warning(res.msg)
@@ -64,30 +64,30 @@ const loginQQ = async () => {
 </script>
 <template>
   <div>
-    <a-form
+    <Form
       class="blog_login_form"
       ref="formRef"
       :model="form"
       :label-col-props="{ span: 0 }"
       :wrapper-col-props="{ span: 24 }">
       <div class="title">用户登录</div>
-      <a-form-item
+      <FormItem
         field="user_name"
         label="用户名称"
         :rules="[{ required: true, message: '用户名称错误' }]"
         :validate-trigger="['blur']">
-        <a-input v-model="form.user_name" placeholder="请输入用户名称">
+        <Input v-model="form.user_name" placeholder="请输入用户名称">
           <template #prefix>
             <IconUser></IconUser>
           </template>
-        </a-input>
-      </a-form-item>
-      <a-form-item
+        </Input>
+      </FormItem>
+      <FormItem
         field="password"
         label="用户密码"
         :rules="[{ required: true, message: '密码称错误' }]"
         :validate-trigger="['blur']">
-        <a-input-password
+        <InputPassword
           v-model="form.password"
           placeholder="请输入密码"
           :defaultVisibility="true"
@@ -96,9 +96,9 @@ const loginQQ = async () => {
           <template #prefix>
             <IconLock></IconLock>
           </template>
-        </a-input-password>
-      </a-form-item>
-      <a-button type="primary" status="success" @click="loginEmails">登录</a-button>
+        </InputPassword>
+      </FormItem>
+      <Button type="primary" status="success" @click="loginEmails">登录</Button>
       <div class="other_login">
         <div class="label">第三方登录</div>
         <div class="icon">
@@ -107,7 +107,7 @@ const loginQQ = async () => {
           </a>
         </div>
       </div>
-    </a-form>
+    </Form>
   </div>
 </template>
 <style lang="scss">

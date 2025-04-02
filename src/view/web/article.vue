@@ -20,6 +20,7 @@ import { articleTagcolorList } from '@/global'
 import Blog_title from '@/components/common/blog_title.vue'
 import { IconThumbUpFill, IconStarFill, IconDoubleUp, IconMessage } from '@arco-design/web-vue/es/icon'
 import { Message } from '@arco-design/web-vue'
+import { showLogin } from '@/components/common/blog_login'
 const store = useStoreConfig()
 const route = useRoute()
 let isFixed = ref(false)
@@ -135,6 +136,7 @@ const articleDigg = async () => {
 const articleCollect = async () => {
   if (!store.isLogin()) {
     Message.warning('请登录')
+    showLogin()
     return
   }
   let res = await psotArticleColleApi(id.value)

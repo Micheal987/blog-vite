@@ -40,7 +40,7 @@ watch(
       <Blog_article_item v-for="item in data.list" :data="item as any" />
     </div>
     <div class="page">
-      <a-pagination v-model:current="params.page" @change="listInfo(params)" :total="50" show-total />
+      <a-pagination v-model:current="params.page" @change="listInfo(params)" :total="data.count" show-total />
     </div>
   </div>
 </template>
