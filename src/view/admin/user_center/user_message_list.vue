@@ -1,10 +1,11 @@
 <script lang="ts" setup>
 import type { ListDateType } from '@/api/axios'
-import { postUserListByMeApi, type MessageType } from '@/api/user/message_api'
+import { getMessageUserListByMeApi, type MessageType } from '@/api/user/message_api'
 import Blog_message_record from '@/components/common/blog_message_record.vue'
 import { router } from '@/router'
 import { useRoute } from 'vue-router'
 import { reactive, ref, watch } from 'vue'
+import Blog_message_list from '@/components/common/blog_message_list.vue'
 const route = useRoute()
 const messageData = reactive<ListDateType<MessageType>>({
   list: [],
@@ -14,7 +15,7 @@ const userID = ref<number>(Number(route.query.user_id))
 let nick_name = ref<string>('')
 const infoMessageList = async () => {
   //改下struct结构
-  let res = await postUserListByMeApi()
+  let res = await getMessageUserListByMeApi()
   messageData.list = res.data.list
   messageData.count = res.data.count
   if (isNaN(userID.value)) {
@@ -40,7 +41,7 @@ const messageUserCheck = (data: MessageType) => {
 <template>
   <div class="user_message_list_view">
     <div class="user_menu" v-if="messageData.list">
-      <BlogMessageList @check="messageUserCheck" :data="messageData.list" />
+      <Blog_message_list @check="messageUserCheck" :data="messageData.list" />
     </div>
     <Blog_message_record :isHead="true" :userID="userID" :NickName="nick_name"></Blog_message_record>
   </div>

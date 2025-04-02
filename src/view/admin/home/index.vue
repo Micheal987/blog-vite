@@ -121,7 +121,7 @@ const goLink = (record: quickEntryType) => {
               <span class="content">
                 <a-typography-paragraph
                   :ellipsis="{
-                    rows: 1,
+                    rows: 2,
                     showTooltip: true,
                     css: true,
                   }"

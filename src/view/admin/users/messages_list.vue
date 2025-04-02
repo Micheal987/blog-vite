@@ -1,54 +1,114 @@
 <script lang="ts" setup>
 import { type MessageParams, type MessageRecordType, type MessageType } from '@/api/user/message_api'
 import BlogMessageList from '@/components/common/blog_message_list.vue'
-import { reactive, ref } from 'vue'
-import { getMessageUserApi, getMessageUserInfoApi, postMessageRecordApi } from '@/api/user/message_api'
+import { reactive, ref, watch } from 'vue'
+import { getMessageUserApi, getMessageUserListByUserApi, getMessageUserRecordApi } from '@/api/user/message_api'
 import type { ListDateType } from '@/api/axios'
+import { Notification } from '@arco-design/web-vue'
+import { useRoute } from 'vue-router'
+import { router } from '@/router'
 
 const params = reactive<MessageParams>({
   page: 1,
-  limit: 1,
+  limit: 10,
   nick_name: undefined,
 })
 const messageData = reactive<ListDateType<MessageType>>({
   list: [],
   count: 0,
 })
-let userId = ref(0)
+let messageUserData = reactive<ListDateType<MessageType>>({
+  list: [],
+  count: 0,
+})
+const user1 = ref<number>(0)
+const user2 = ref<number>(0)
 const infoMessageList = async () => {
   //改下struct结构
   let res = await getMessageUserApi(params)
+  if (res.code) {
+    Notification.error({
+      title: res.msg,
+      content: '当前权限无法获取用户消息列表',
+    })
+    return
+  }
   messageData.list = res.data.list
   messageData.count = res.data.count
 }
 infoMessageList()
 
-let messageUserData = reactive<ListDateType<MessageType>>({
-  list: [],
-  count: 0,
-})
-const messageRecordList = async (id: number) => {
-  //改下struct结构
-  let params = {
-    user_id: id,
-  }
-  let res = await getMessageUserInfoApi(params)
-  messageUserData.list = res.data.list
-  messageUserData.count = res.data.count
-}
-const messageCheck = (data: MessageType) => {
-  userId.value = data.user_id
-  messageRecordList(data.user_id)
-}
 let messageRecordData = reactive<ListDateType<MessageRecordType>>({
   list: [],
   count: 0,
 })
-const messageUserCheck = async (data: MessageType) => {
-  //函数发送人的id和接收人的id
-  let res = await postMessageRecordApi(data.user_id)
-  messageRecordData.list = res.data.list
+const checkUser1 = async (user1ID: number) => {
+  messageRecordData.list = []
+  messageUserData.list = []
+  user1.value = user1ID
+  let res = await getMessageUserListByUserApi(user1ID)
+  messageUserData.list = res.data.list
   messageUserData.count = res.data.count
+}
+const route = useRoute()
+watch(
+  () => route.query.send_user_id,
+  () => {
+    const user1ID = Number(route.query.send_user_id)
+    if (isNaN(user1ID)) {
+      return
+    }
+    checkUser1(user1ID)
+  },
+  { immediate: true },
+)
+
+const messageCheck = (data: MessageType) => {
+  user1.value = data.user_id
+  router.push({
+    query: {
+      send_user_id: user1.value,
+    },
+  })
+}
+
+async function checkUser2(user2ID: number) {
+  user2.value = user2ID
+  messageRecordData.list = []
+  let res = await getMessageUserRecordApi(user1.value, user2.value)
+  // 判断谁算右边 => isMe
+  // 以user1为准
+  const list: MessageRecordType[] = []
+  res.data.list.forEach((item) => {
+    if (item.send_user_id === user1.value) {
+      item.isMe = true
+    } else {
+      item.isMe = false
+    }
+    list.push(item)
+  })
+  messageRecordData.list = list
+  messageRecordData.count = res.data.count
+}
+watch(
+  () => route.query.rev_user_id,
+  () => {
+    const user2ID = Number(route.query.rev_user_id)
+    if (isNaN(user2ID)) {
+      return
+    }
+    checkUser2(user2ID)
+  },
+  { immediate: true },
+)
+
+function messageUserCheck(data: MessageType) {
+  router.push({
+    query: {
+      send_user_id: user1.value,
+      rev_user_id: data.user_id,
+    },
+  })
 }
 </script>
 <template>
@@ -58,7 +118,7 @@ const messageUserCheck = async (data: MessageType) => {
         <a-input-search
           placeholder="搜索用户名称"
           @search="infoMessageList"
-          @keydown="infoMessageList"></a-input-search>
+          @keydown.enter="infoMessageList"></a-input-search>
       </div>
       <BlogMessageList :data="messageData.list" @check="messageCheck" />
       <div class="page">
@@ -73,7 +133,7 @@ const messageUserCheck = async (data: MessageType) => {
     <div class="user_menu" v-if="messageUserData.list">
       <BlogMessageList @check="messageUserCheck" :data="messageUserData.list" />
     </div>
-    <div class="user_record_menu" v-if="messageRecordData.list">
+    <div class="user_record_menu" v-if="messageRecordData.list.length">
       <div :class="{ messages: true, isMe: item.isMe }" v-for="item in messageRecordData.list">
         <div class="avatar">
           <img :src="item.send_user_avatar" alt="" />

@@ -1,11 +1,18 @@
 <script lang="ts" setup>
-import { type MessageRecordType, type MessagePublish, deleteMessageApi } from '@/api/user/message_api'
+import {
+  type MessageRecordType,
+  type MessagePublish,
+  deleteMessageApi,
+  type UserRecordRequestType,
+} from '@/api/user/message_api'
 import { nextTick, reactive, ref, watch } from 'vue'
-import { postMessageRecordApi, postMessageUserPublishApi } from '@/api/user/message_api'
+import { postUserListByMeApi, postMessageUserPublishApi } from '@/api/user/message_api'
 import type { ListDateType } from '@/api/axios'
 import { Message } from '@arco-design/web-vue'
 import { IconRefresh } from '@arco-design/web-vue/es/icon'
 import { CheckboxGroup, Checkbox, Button, Textarea } from '@arco-design/web-vue'
+import { useStoreConfig } from '@/store'
+const store = useStoreConfig()
 interface Props {
   userID: number
   NickName?: string
@@ -23,9 +30,22 @@ const MessagePublishData = reactive<MessagePublish>({
   rev_user_id: props.userID,
 })
 
+const recordData = reactive<UserRecordRequestType>({
+  userID: props.userID,
+  limit: 50,
+})
 const infoRecordData = async () => {
-  let res = await postMessageRecordApi(props.userID)
-  messageRecordData.list = res.data.list
+  let res = await postUserListByMeApi(recordData)
+  const list: MessageRecordType[] = []
+  res.data.list.forEach((item) => {
+    if (item.send_user_id === store.userInfo.user_id) {
+      item.isMe = true
+    } else {
+      item.isMe = false
+    }
+    list.push(item)
+  })
+  messageRecordData.list = list
   messageRecordData.count = res.data.count
 }
 const messagePublish = async () => {
@@ -99,7 +119,7 @@ watch(
       <CheckboxGroup v-model="selectIDList">
         <div class="user_record_menu">
           <div :class="{ messages: true, isMe: item.isMe, isManage: isManage }" v-for="item in messageRecordData.list">
-            <Checkbox :value="item.rev_user_id"></Checkbox>
+            <Checkbox :value="item.id"></Checkbox>
             <div class="avatar">
               <img :src="item.send_user_avatar" alt="" />
             </div>

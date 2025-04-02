@@ -60,14 +60,15 @@ const props = defineProps<Props>()
   flex-direction: column;
   align-items: center;
   position: relative;
+  overflow: hidden;
   &::before {
     position: absolute;
-    width: 40px;
-    height: 40px;
+    width: 100px;
+    height: 100px;
     content: '';
     display: block;
-    top: -6px;
-    right: 0;
+    right: -50px;
+    top: -50px;
     background-color: var(--color-fill-2);
     transform: rotate(45deg);
   }

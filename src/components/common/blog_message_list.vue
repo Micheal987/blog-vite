@@ -19,21 +19,26 @@ const checkItem = (record: MessageType) => {
 </script>
 <template>
   <div class="blog_message_list">
-    <div
-      :class="{ item: true, active: active === item.user_id }"
-      @click="checkItem(item)"
-      v-for="item in props.data"
-      :key="item.user_id">
-      <div class="avatar">
-        <img :src="item.avatar" alt="" />
+    <template v-if="props.data.length">
+      <div
+        :class="{ item: true, active: active === item.user_id }"
+        @click="checkItem(item)"
+        v-for="item in props.data"
+        :key="item.user_id">
+        <div class="avatar">
+          <img :src="item.avatar" alt="" />
+        </div>
+        <div class="nick_name">
+          <a-typography-paragraph :ellipsis="{ rows: 1, showTooltip: true, css: true }"
+            >{{ item.nick_name }}
+          </a-typography-paragraph>
+        </div>
+        <div class="count">{{ item.count }}</div>
       </div>
-      <div class="nick_name">
-        <a-typography-paragraph :ellipsis="{ rows: 2, showTooltip: true }"
-          >{{ item.nick_name }}
-        </a-typography-paragraph>
-      </div>
-      <div class="count">{{ item.count }}</div>
-    </div>
+    </template>
+    <template v-else>
+      <a-empty />
+    </template>
   </div>
 </template>
 <style lang="scss">
