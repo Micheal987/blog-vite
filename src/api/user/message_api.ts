@@ -84,3 +84,6 @@ export interface MessagePublish {
 export const postMessageUserPublishApi = (data: MessagePublish) => {
   return ApiRequest.postRequest<ResponseResult<ListDateType<MessageListType[]>>>('/message/user', {}, data)
 }
+export const deleteMessageApi = (id_List: number[]) => {
+  return ApiRequest.deleteRequest<ResponseResult<string>>('/message', { data: { id_List } })
+}

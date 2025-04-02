@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import type { MessageType } from '@/api/user/message_api'
 import { ref } from 'vue'
-
+import { useRoute } from 'vue-router'
+const route = useRoute()
 interface Props {
   data: MessageType[]
 }
@@ -10,7 +11,7 @@ const props = defineProps<Props>()
 const emits = defineEmits<{
   (e: 'check', value: MessageType): void
 }>()
-let active = ref<number>(0)
+let active = ref<number>(Number(route.query.user_id))
 const checkItem = (record: MessageType) => {
   active.value = record.user_id
   emits('check', record)

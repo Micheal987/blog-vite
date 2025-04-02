@@ -1,13 +1,17 @@
 <script lang="ts" setup>
-import { type MessageRecordType, type MessagePublish } from '@/api/user/message_api'
-import { nextTick, reactive, watch } from 'vue'
+import { type MessageRecordType, type MessagePublish, deleteMessageApi } from '@/api/user/message_api'
+import { nextTick, reactive, ref, watch } from 'vue'
 import { postMessageRecordApi, postMessageUserPublishApi } from '@/api/user/message_api'
 import type { ListDateType } from '@/api/axios'
 import { Message } from '@arco-design/web-vue'
+import { IconRefresh } from '@arco-design/web-vue/es/icon'
 interface Props {
   userID: number
+  NickName?: string
+  isHead?: boolean
 }
 const props = defineProps<Props>()
+const { isHead = false } = props
 let messageRecordData = reactive<ListDateType<MessageRecordType>>({
   list: [],
   count: 0,
@@ -42,6 +46,22 @@ const messagePublish = async () => {
     }, 500)
   })
 }
+const isManage = ref<boolean>(false)
+const selectIDList = ref<number[]>([])
+const flush = () => {
+  Message.success('刷新成功')
+  infoRecordData()
+}
+const removeCaht = async () => {
+  let res = await deleteMessageApi(selectIDList.value)
+  if (res.code) {
+    Message.success(res.msg)
+    return
+  }
+  Message.success(res.msg)
+  selectIDList.value = []
+  infoRecordData()
+}
 watch(
   () => props.userID,
   () => {
@@ -56,22 +76,40 @@ watch(
 </script>
 <template>
   <div class="blog_message_record_component" v-if="props.userID">
-    <div class="record_list">
-      <div class="user_record_menu">
-        <div :class="{ messages: true, isMe: item.isMe }" v-for="item in messageRecordData.list">
-          <div class="avatar">
-            <img :src="item.send_user_avatar" alt="" />
-          </div>
-          <div class="message_main">
-            <div class="message_user">{{ item.send_user_nick_name }}</div>
-            <div class="message_content">
-              <div class="content">
-                <div class="text-message">{{ item.content }}</div>
+    <div class="head" v-if="isHead">
+      <div class="title">{{ props.NickName }}聊天记录</div>
+      <div class="manage">
+        <a-checkbox v-model="isManage">管理模式</a-checkbox>
+        <IconRefresh @click="flush" style="cursor: pointer; margin-left: 5px"></IconRefresh>
+        <a-button
+          v-if="isManage && selectIDList.length"
+          type="primary"
+          status="danger"
+          @click="removeCaht"
+          style="margin-left: 10px"
+          >删除</a-button
+        >
+      </div>
+    </div>
+    <div :class="{ record_list: true, isHead: isHead }">
+      <a-checkbox-group v-model="selectIDList">
+        <div class="user_record_menu">
+          <div :class="{ messages: true, isMe: item.isMe, isManage: isManage }" v-for="item in messageRecordData.list">
+            <a-checkbox :value="item.rev_user_id"></a-checkbox>
+            <div class="avatar">
+              <img :src="item.send_user_avatar" alt="" />
+            </div>
+            <div class="message_main">
+              <div class="message_user">{{ item.send_user_nick_name }}</div>
+              <div class="message_content">
+                <div class="content">
+                  <div class="text-message">{{ item.content }}</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </a-checkbox-group>
     </div>
     <div class="message_record">
       <a-textarea
@@ -87,15 +125,40 @@ watch(
 <style lang="scss">
 .blog_message_record_component {
   width: 100%;
-  height: calc(100vh - 130px);
+  height: calc(100vh - 210px);
+  .head {
+    width: 100%;
+    height: 60px;
+    border-bottom: solid 1px var(--bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    .manage {
+      position: absolute;
+      right: 20px;
+      display: flex;
+      align-items: center;
+    }
+  }
   .record_list {
-    padding: 20px;
     height: calc(100% - 200px);
+    &.isHead {
+      height: calc(100% - 260px);
+    }
     overflow-y: auto;
+    .arco-checkbox-group {
+      width: 100%;
+    }
     .messages {
+      padding: 20px;
       display: flex;
       align-items: center;
       margin-bottom: 20px;
+      position: relative;
+      &:first-child {
+        margin-top: 20px;
+      }
 
       .avatar {
         img {
@@ -171,6 +234,15 @@ watch(
             }
           }
         }
+      }
+      .arco-checkbox {
+        position: absolute;
+        right: -10px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+      &.isManage {
+        background-color: var(--color-fill-1);
       }
     }
   }
