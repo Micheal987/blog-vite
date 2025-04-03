@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { PageParamType } from '@/api/axios'
+import type { ListDateType, PageParamType } from '@/api/axios'
 import {
   getFeedBackListApi,
   postFeedBackCreateApi,
@@ -8,24 +8,27 @@ import {
 } from '@/api/feed_back/feed_back_api'
 import { dateFormat } from '@/utils/date'
 import { Message } from '@arco-design/web-vue'
-import { reactive, ref } from 'vue'
+import { reactive, ref, watch } from 'vue'
 
 let form = reactive<FeedBackCreateType>({
   email: '',
   content: '',
 })
-let list = reactive<FeedBackType[]>([
-  {
-    content: '支持移动端',
-    created_at: '2025-01-02',
-    email: '',
-  },
-])
+let isdata = ref(0)
+let data = reactive<ListDateType<FeedBackType>>({
+  list: [],
+  count: 0,
+})
 const formRef = ref()
-let params = reactive<PageParamType>({})
+let params = reactive<PageParamType>({
+  page: 1,
+  limit: 5,
+})
 const listInfo = async () => {
   let res = await getFeedBackListApi(params)
-  list = res.data.list
+  data.list = res.data.list
+  data.count = res.data.count
+  isdata.value++
 }
 listInfo()
 const sendFeedback = async () => {
@@ -39,6 +42,12 @@ const sendFeedback = async () => {
   Message.success(res.msg)
   Object.assign(form, res.data)
 }
+watch(
+  () => isdata.value,
+  () => {
+    listInfo()
+  },
+)
 </script>
 <template>
   <div class="blog_feed_back">
@@ -74,7 +83,7 @@ const sendFeedback = async () => {
     <div class="feed_back_list">
       <div class="title">反馈列表</div>
       <div class="list">
-        <div class="item" v-for="item in list">
+        <div class="item" v-for="item in data.list">
           <div class="content">
             <a-typography-paragraph
               :ellipsis="{
@@ -89,7 +98,7 @@ const sendFeedback = async () => {
         </div>
       </div>
       <div class="page">
-        <a-pagination :total="50" />
+        <a-pagination v-model:current="params.page" v-model:page-size="params.limit" :total="data.count" />
       </div>
     </div>
   </div>
