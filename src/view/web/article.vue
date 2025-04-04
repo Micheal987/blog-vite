@@ -27,7 +27,7 @@ let isFixed = ref(false)
 let top = ref(977 - 70)
 const isShowMd = ref(false)
 const scrollElement = document.documentElement
-let id = ref(route.params.id as string)
+let id = ref<string>(route.params.id as string)
 let data = reactive<ArticleType>({
   ID: '',
   created_at: '',
@@ -170,20 +170,20 @@ watch(
         <div class="article_containter">
           <div class="head">
             <div class="title" :id="data.title">{{ data.title }}</div>
+            <div class="abstract">{{ data.abstract }}</div>
             <div class="date">发布的时间:{{ dateFormat(data.created_at) }}</div>
             <div class="tag">
               <a-tag :color="articleTagcolorList[index]" v-for="(item, index) in data.tags">{{ item }}</a-tag>
             </div>
           </div>
           <article>
-            {{ data.content }}
-            <MdPreview :editor-id="id" v-model="data.content" :theme="store.themeString()"></MdPreview>
+            <MdPreview :editor-id="data.ID" v-model="data.content" :theme="store.themeString()"></MdPreview>
           </article>
           <div class="next_pre">
             <div class="pre">上一篇: <a href="">xxx</a></div>
             <div class="next">下一篇: <a href="">xxx</a></div>
           </div>
-          <Blog_comment ref="blogCommentRef" :article-id="id as string"></Blog_comment>
+          <Blog_comment ref="blogCommentRef" :article-id="id"></Blog_comment>
         </div>
         <aside>
           <Blog_user_info_preview :data="userInfo" class="blog_user_info_preview"></Blog_user_info_preview>
@@ -195,7 +195,7 @@ watch(
                 :theme="store.themeString()"
                 :offset-top="80"
                 :scroll-element-offset-top="80"
-                :editor-id="id"></MdCatalog>
+                :editor-id="data.ID"></MdCatalog>
             </Blog_title>
           </div>
           <div class="blog_article_action">
@@ -238,6 +238,11 @@ watch(
             font-weight: 600;
             margin-bottom: 20px;
           }
+          .abstract {
+            font-size: 14px;
+            color: var(--color-text-2);
+            margin-bottom: 10px;
+          }
           .date {
             margin-bottom: 10px;
             color: var(--color-text-2);
@@ -271,7 +276,7 @@ watch(
           margin-bottom: 20px;
         }
         .blog_article_dict {
-          margin-top: 20px;
+          margin-top: 30px;
           .body {
             max-height: calc(100vh - 400px);
             overflow: auto;

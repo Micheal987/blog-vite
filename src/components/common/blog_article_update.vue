@@ -151,7 +151,7 @@ const cancel = () => {
             :auto-size="{ minRows: 4, maxRows: 10 }"></a-textarea>
         </a-form-item>
         <!-- 文章的分类 -->
-        <a-form-item field="abstract" label="文件分类" :validate-trigger="['blur']">
+        <a-form-item field="category" label="文件分类" :validate-trigger="['blur']">
           <a-select allow-create v-model="form.category" :options="categoryList"></a-select>
         </a-form-item>
         <!-- 文章的标签 -->

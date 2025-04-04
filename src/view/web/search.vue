@@ -170,6 +170,7 @@ listInfo()
     .continer {
       width: var(--containter_width);
       .head {
+        padding: 20px 0;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -213,11 +214,10 @@ listInfo()
             background-color: var(--color-bg-1);
             color: var(--color-text-2);
             .top {
-              height: 160px;
               width: 100%;
               img {
                 width: 100%;
-                height: 100px;
+                height: 150px;
                 object-fit: cover;
               }
             }

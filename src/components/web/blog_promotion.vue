@@ -12,6 +12,7 @@ promotionInfo()
   <div class="blog_promotion">
     <a-carousel>
       <a-carousel-item auto-play indicator-type="dot" show-arrow="hover" v-for="item in data">
+        {{ 'xxx' + item.images }}
         <a :href="item.href" target="_blank" class="link">
           <img :src="item.images" :alt="item.title" />
         </a>

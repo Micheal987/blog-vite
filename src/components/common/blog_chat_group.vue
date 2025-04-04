@@ -92,7 +92,7 @@ const sendData = () => {
 }
 const websocketConnect = () => {
   // 建立websocket连接
-  socket.value = new WebSocket(`ws://${location.host}/chat`)
+  socket.value = new WebSocket(`/ws/chat`)
   // 接收消息
   socket.value.onmessage = function (event) {
     let _data = event.data

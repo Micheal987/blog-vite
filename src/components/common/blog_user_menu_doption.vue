@@ -11,7 +11,7 @@ const router = useRouter()
 const dpList: menuList[] = [
   { name: 'user_info', title: '个人信息' },
   { name: '', title: '', type: 'line' },
-  { name: 'users_list', title: '用户列表' },
+  { name: 'user_list', title: '用户列表' },
   { name: 'article_list', title: '文章列表' },
   { name: 'log_list', title: '系统日志' },
   { name: '', title: '', type: 'line' },

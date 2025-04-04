@@ -8,13 +8,12 @@ import {
 } from '@/api/feed_back/feed_back_api'
 import { dateFormat } from '@/utils/date'
 import { Message } from '@arco-design/web-vue'
-import { reactive, ref, watch } from 'vue'
+import { reactive, ref } from 'vue'
 
 let form = reactive<FeedBackCreateType>({
   email: '',
   content: '',
 })
-let isdata = ref(0)
 let data = reactive<ListDateType<FeedBackType>>({
   list: [],
   count: 0,
@@ -28,7 +27,6 @@ const listInfo = async () => {
   let res = await getFeedBackListApi(params)
   data.list = res.data.list
   data.count = res.data.count
-  isdata.value++
 }
 listInfo()
 const sendFeedback = async () => {
@@ -42,12 +40,6 @@ const sendFeedback = async () => {
   Message.success(res.msg)
   Object.assign(form, res.data)
 }
-watch(
-  () => isdata.value,
-  () => {
-    listInfo()
-  },
-)
 </script>
 <template>
   <div class="blog_feed_back">
@@ -98,7 +90,11 @@ watch(
         </div>
       </div>
       <div class="page">
-        <a-pagination v-model:current="params.page" v-model:page-size="params.limit" :total="data.count" />
+        <a-pagination
+          v-model:current="params.page"
+          v-model:page-size="params.limit"
+          :total="data.count"
+          @change="listInfo" />
       </div>
     </div>
   </div>
