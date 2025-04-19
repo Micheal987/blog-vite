@@ -1,6 +1,13 @@
 <script lang="ts" setup>
+import { getSiteInfoApi } from '@/api/setting/setting_api'
 import { useStoreConfig } from '@/store'
 const store = useStoreConfig()
+hd()
+async function hd() {
+  let res = await getSiteInfoApi()
+  console.log(res)
+  //siteInfo = res.data
+}
 </script>
 <template>
   <div class="blog_user_card">
@@ -31,11 +38,11 @@ const store = useStoreConfig()
     </div>
     <div class="image">
       <div class="qq">
-        <img :src="store.siteInfo.qq_image" alt="" />
+        <a-image :src="store.siteInfo.wechat_image"></a-image>
         <span>微信</span>
       </div>
       <div class="wechat">
-        <img :src="store.siteInfo.wechat_image" alt="" />
+        <a-image :src="store.siteInfo.qq_image"></a-image>
         <span>qq</span>
       </div>
     </div>
@@ -87,8 +94,9 @@ const store = useStoreConfig()
       flex-direction: column;
       align-items: center;
       img {
-        width: 60px;
-        height: 60px;
+        width: 80px;
+        height: 80px;
+        object-fit: contain;
       }
       span {
         margin-top: 5px;

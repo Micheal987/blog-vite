@@ -177,26 +177,29 @@ watch(
             </div>
           </div>
           <article>
-            <MdPreview :editor-id="data.ID" v-model="data.content" :theme="store.themeString()"></MdPreview>
+            <MdPreview :editor-id="id" v-model="data.content" :theme="store.themeString()"></MdPreview>
           </article>
           <div class="next_pre">
-            <div class="pre">上一篇: <a href="">xxx</a></div>
-            <div class="next">下一篇: <a href="">xxx</a></div>
+            <div class="pre">
+              上一篇: <a :href="`#/article/vVMkP5YBa4bFcawQ4Okl`">{{ id }}</a>
+            </div>
+            <div class="next">
+              下一篇: <a :href="`#/article/${id}`">{{ id }}</a>
+            </div>
           </div>
           <Blog_comment ref="blogCommentRef" :article-id="id"></Blog_comment>
         </div>
         <aside>
           <Blog_user_info_preview :data="userInfo" class="blog_user_info_preview"></Blog_user_info_preview>
           <div :class="{ article_actionts: true, isFixed: isFixed }">
-            <Blog_title title="文章目录" class="blog_article_dict">
-              <MdCatalog
-                v-if="isShowMd"
-                :scroll-element="scrollElement"
-                :theme="store.themeString()"
-                :offset-top="80"
-                :scroll-element-offset-top="80"
-                :editor-id="data.ID"></MdCatalog>
-            </Blog_title>
+            <Blog_title title="文章目录" class="blog_article_dict"> </Blog_title>
+            <MdCatalog
+              v-if="isShowMd"
+              :scroll-element="scrollElement"
+              :theme="store.themeString()"
+              :offset-top="80"
+              :scroll-element-offset-top="80"
+              :editor-id="id"></MdCatalog>
           </div>
           <div class="blog_article_action">
             <IconThumbUpFill :class="{ active: data.is_digg }" @click="articleDigg"></IconThumbUpFill>

@@ -46,7 +46,9 @@ const search = () => {
         </div>
         <div class="right">
           <Blog_card title="独家推广">
-            <Blog_promotion />
+            <template #default>
+              <Blog_promotion />
+            </template>
           </Blog_card>
           <Blog_card title="标签">
             <Blog_tags />

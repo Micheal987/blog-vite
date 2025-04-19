@@ -3,6 +3,7 @@ import { getStatisticApi, type StatisticsType } from '@/api/data/data_api'
 import { useStoreConfig } from '@/store'
 import { IconMessage, IconUser, IconFile, IconArchive } from '@arco-design/web-vue/es/icon'
 import { reactive } from 'vue'
+import Blog_weather from './blog_weather.vue'
 const store = useStoreConfig()
 const StatisticDate = reactive<StatisticsType>({
   user_count: 0,
@@ -23,7 +24,9 @@ statisticList()
   <div class="blog_home_welcome">
     <div class="welcome">
       <div class="title">早安{{ store.userInfo.nick_name }},请开始一天的工作吧</div>
-      <div class="weather">天气天气</div>
+      <div class="weather">
+        <Blog_weather />
+      </div>
       <div class="statistics">
         <span>
           <span><IconMessage /></span>
@@ -62,7 +65,7 @@ statisticList()
 .blog_home_welcome {
   .welcome {
     width: 100%;
-    background-image: url('http://127.0.0.1:8000/uploads/avatar/default.jpg');
+    background-image: url('http://127.0.0.1:8080/uploads/avatar/default.jpg');
     background-repeat: no-repeat;
     background-position: right;
     background-color: var(--color-bg-1);

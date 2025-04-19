@@ -49,6 +49,9 @@ const checkTag = (record: AriticleTagType) => {
 <style lang="scss">
 .blog_tags {
   position: relative;
+  .continter {
+    margin-top: 10px;
+  }
   @keyframes box_move {
     0% {
       left: -20px;
@@ -95,10 +98,12 @@ const checkTag = (record: AriticleTagType) => {
     background-color: var(--color_fill-1);
     &:nth-child(4n + 1),
     &:nth-child(4n + 2) {
+      margin-top: 20px;
       background-color: var(--color_fill-2);
     }
     &:nth-child(4n + 1),
     &:nth-child(4n + 3) {
+      margin-top: 20px;
     }
     a {
       color: var(--color-text-2);

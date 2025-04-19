@@ -39,33 +39,32 @@ const sendFeedback = async () => {
   }
   Message.success(res.msg)
   Object.assign(form, res.data)
+  listInfo()
 }
 </script>
 <template>
   <div class="blog_feed_back">
     <div class="form">
       <a-form ref="formRef" :model="form" :label-col-props="{ span: 0 }" :wrapper-col-props="{ span: 24 }">
-        <a-form-item>
-          <a-input
-            v-model="form.email"
-            field="email"
-            :rules="[
-              { required: true, message: '邮箱不能是空的', type: 'string' },
-              { required: true, message: '邮箱格式不正确', type: 'email' },
-            ]"
-            :validate-trigger="['focus']"
-            placeholder="请输入邮箱"></a-input>
+        <a-form-item
+          field="email"
+          :rules="[
+            { required: true, message: '邮箱不能是空的', type: 'string' },
+            { required: true, message: '邮箱格式不正确', type: 'email' },
+          ]"
+          :validate-trigger="['focus']">
+          <a-input v-model="form.email" placeholder="请输入邮箱"></a-input>
         </a-form-item>
-        <a-form-item>
+        <a-form-item
+          field="content"
+          :rules="[{ required: true, message: '反馈内容不能是空的' }]"
+          :validate-trigger="['focus']">
           <a-textarea
             show-word-limit
             :max-length="160"
             :auto-size="{ maxRows: 5, minRows: 6 }"
             v-model="form.content"
-            field="content"
-            placeholder="请输入反馈内容"
-            :rules="[{ required: true, message: '反馈内容不能是空的' }]"
-            :validate-trigger="['focus']"></a-textarea>
+            placeholder="请输入反馈内容"></a-textarea>
         </a-form-item>
         <a-form-item>
           <a-button type="primary" style="width: 100%" @click="sendFeedback">发布</a-button>
